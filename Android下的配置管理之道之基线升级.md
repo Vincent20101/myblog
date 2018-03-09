@@ -253,18 +253,18 @@ $ git --no-pager ll
 
 下面也是一种简单的git rebase的方式   马哥的淘宝店:https://shop592330910.taobao.com/
 ```text
-#首先checkout到我们的开发分支上dev分支上
+#首先checkout到我们的开发分支上,dev分支上
 
 #然后执行
 git rebase <高通新基线分支r00446.1.135694.1>
 
-这个顺序出来的git log历史 就是 先高通的提交，后面都是我们自己公司的提交。这个顺序是我们想要的一个。
+这个顺序出来的git log历史 就是 先是高通的提交，后面都是我们自己公司的提交。这个顺序是我们想要的。
 ```
 
 如果你分支顺序弄反了，git log的历史也就反过来了。   马哥的淘宝店:https://shop592330910.taobao.com/
 ```text
 
-#首先checkout到  高通 新基线分支
+#首先checkout到  高通新基线分支
 
 #然后执行
 git rebase <我们的开发分支 dev>
@@ -380,12 +380,12 @@ $ git --no-pager ll
 这个时候如果在使用 git rebase -i 5d9c028721b 就会把历史搞成一条直线了。
 
 
-我们在试试   git merge 高通基线分支
+我们在试试 git merge 高通基线分支
 
 ```text
 # 首先我们要checkout到我们的开发dev分支上。然后执行git merge qcom
 $ git --no-pager ll       
-*   e82f092d067 - Merge branch 'qcom' into HEAD                                                    — Minghui Ma (HEAD) - (20 seconds ago)
+*   e82f092d067 - Merge branch 'qcom' into HEAD                                                    — 马哥的淘宝店:https://shop592330910.taobao.com/ (HEAD) - (20 seconds ago)
 |\  
 | * 709f36e60d8 - Commit label r00446.1.135694.1 - Post-CS6 0.0.446.1.135694.1                     — QC Publisher (r00446.1.135694.1, qcom) - (3 days ago) 马哥的淘宝店:https://shop592330910.taobao.com/
 * | b299ad990db - [SHA-1356][CSP]Fix some modem stats free                                         — 研发某某人 (tag: end,dev) - (2 days ago)  马哥的淘宝店:https://shop592330910.taobao.com/
@@ -399,22 +399,22 @@ $ git --no-pager ll
 * | c6ade72c576 - [SHAR-3][AMSS] set modem build env                                               — 研发某某人 - (5 months ago) 马哥的淘宝店:https://shop592330910.taobao.com/
 |/  
 * 5d9c028721b - Commit label r00446.1 - Post-CS6 0.0.446.1                                       — QC Publisher (tag: start, r00446.1) - (10 days ago) 马哥的淘宝店:https://shop592330910.taobao.com/
-* 3a7938edc31 - Commit label r004361.1 - Post-CS5 0.0.4361.1                                     — QC Publisher - (12 days ago)
-* 57ab46a6d39 - Commit label r00425.1 - Post-CS4 0.0.425.1                                       — QC Publisher - (12 days ago)
-* 4969cbee834 - Commit label r00418.2 - Post-CS3 0.0.418.2                                       — QC Publisher - (12 days ago)
-* cc98e139704 - Commit label r004032.1 - Post-CS2 0.0.4032.1                                     — QC Publisher - (12 days ago)
-* a3e87e4a191 - Commit label r004031.1 - Post-CS2 0.0.4031.1                                     — QC Publisher - (12 days ago)
-* 21394e21a15 - Commit label r00391.1 - Post-CS 0.0.391.1                                        — QC Publisher - (12 days ago)
-* 285c683e3de - Commit label r00375.10a - CS 0.0.375.10a                                         — QC Publisher - (12 days ago)
-* f8a82bb4771 - Commit label r00355.2 - Post-CS4 0.0.355.2                                       — QC Publisher - (12 days ago)
-* 2eff551636f - Commit label r00333.1a - Pre-CS3 0.0.333.1a                                      — QC Publisher - (12 days ago)
-* e8e2ffec9aa - Commit label r00322.2 - Pre-CS 0.0.322.2                                         — QC Publisher - (12 days ago)
-* abb243c22ca - Commit label r00304.1 - Pre-CS 0.0.304.1                                         — QC Publisher - (12 days ago)
-* 07404bef2a1 - Commit label r002781.1 - FC 0.0.2781.1                                           — QC Publisher - (12 days ago)
-* c08322001fa - Commit label r00278.1 - FC 0.0.278.1                                             — QC Publisher - (12 days ago)
-* 704b0689e09 - Commit label r00252.1 - FC 0.0.252.1                                             — QC Publisher - (12 days ago)
-* c38db517801 - Commit label r00227.1 - ES3 0.0.227.1                                            — QC Publisher - (12 days ago)
-* 9b84f778a25 - Commit label r00205.1 - ES2 0.0.205.1                                            — QC Publisher - (12 days ago)
+* 3a7938edc31 - Commit label r004361.1 - Post-CS5 0.0.4361.1                                     — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
+* 57ab46a6d39 - Commit label r00425.1 - Post-CS4 0.0.425.1                                       — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
+* 4969cbee834 - Commit label r00418.2 - Post-CS3 0.0.418.2                                       — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
+* cc98e139704 - Commit label r004032.1 - Post-CS2 0.0.4032.1                                     — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
+* a3e87e4a191 - Commit label r004031.1 - Post-CS2 0.0.4031.1                                     — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
+* 21394e21a15 - Commit label r00391.1 - Post-CS 0.0.391.1                                        — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
+* 285c683e3de - Commit label r00375.10a - CS 0.0.375.10a                                         — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
+* f8a82bb4771 - Commit label r00355.2 - Post-CS4 0.0.355.2                                       — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
+* 2eff551636f - Commit label r00333.1a - Pre-CS3 0.0.333.1a                                      — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
+* e8e2ffec9aa - Commit label r00322.2 - Pre-CS 0.0.322.2                                         — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
+* abb243c22ca - Commit label r00304.1 - Pre-CS 0.0.304.1                                         — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
+* 07404bef2a1 - Commit label r002781.1 - FC 0.0.2781.1                                           — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
+* c08322001fa - Commit label r00278.1 - FC 0.0.278.1                                             — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
+* 704b0689e09 - Commit label r00252.1 - FC 0.0.252.1                                             — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
+* c38db517801 - Commit label r00227.1 - ES3 0.0.227.1                                            — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
+* 9b84f778a25 - Commit label r00205.1 - ES2 0.0.205.1                                            — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
 * 7aeffcc4872 - Commit label r00160.1 - ES1 0.0.160.1                                            — QC Publisher - (12 days ago)马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
@@ -427,6 +427,249 @@ $ git --no-pager ll
 同样的的采用git rebase的方式 也是需要关系顺序的。  马哥的淘宝店:https://shop592330910.taobao.com/
 
 
+#基线升级 冲突解决策略
+
+
+## 升级冲突之二进制文件冲突解决策略
+
+今天我们来看个 升级有冲突的一个情况  ，这次冲突的文件还是一个二进制的文件。
+
+下面是我们开发分支的最新的提交，暂且叫做dev分支，   
+我们可以看到 Commit label r00455.2 - Post-CS7 0.0.455.2是最新的高通的提交。   
+
+```text
+
+* d15c629 - [SHAR-1651][Drv][WLAN] Modify RF bin for pvt machine                             — 马哥的淘宝店:https://shop592330910.taobao.com/ (HEAD, dev) - (11 days ago)
+* 9818689 - [SHAR-4346][Drv][WLAN] Modify the tmp bdf name to bawlant.bin                    — 马哥的淘宝店:https://shop592330910.taobao.com/ - (4 weeks ago)
+* 87233f6 - [SHAR-4346][Drv][WLAN] Add tmp_bdf file to compitable dvt machine                — 马哥的淘宝店:https://shop592330910.taobao.com/ - (5 weeks ago)
+* eab031d - [SHAR-1651][Drv][WLAN] Modify RF bdf bin for PVT product                         — 马哥的淘宝店:https://shop592330910.taobao.com/ - (5 weeks ago)
+* e7caad1 - [SHAR-1651][Drv][WLAN] Modify for RF bin to optimize power test                  — 马哥的淘宝店:https://shop592330910.taobao.com/ - (6 weeks ago)
+* 269c0a7 - [SHAR-1651][Drv][WLAN] Modify RF bin file of 20171227 for factory test           — 马哥的淘宝店:https://shop592330910.taobao.com/ - (2 months ago)
+* bbcda88 - [SHAR-1651][Drv][WLAN] Replace bin for RF 20171226 optimize parameters           — 马哥的淘宝店:https://shop592330910.taobao.com/ - (2 months ago)
+* b621875 - [SHAR-1651][Drv][WLAN] Modify for RF test bin                                    — 马哥的淘宝店:https://shop592330910.taobao.com/ - (3 months ago)
+* 881b1c0 - [SHAR-223] WLAN RF paremeters update                                             — 马哥的淘宝店:https://shop592330910.taobao.com/ - (4 months ago)
+* 53b284b - Commit label r00455.2 - Post-CS7 0.0.455.2                                       — QC Publisher - (4 weeks ago)
+* 18cd798 - Commit label r00446.1 - Post-CS6 0.0.446.1                                       — QC Publisher - (6 weeks ago)
+* 6b5ada6 - Commit label r004361.1 - Post-CS5 0.0.4361.1                                     — QC Publisher - (6 weeks ago)
+* b86ba16 - Commit label r00425.1 - Post-CS4 0.0.425.1                                       — QC Publisher - (6 weeks ago)
+* 2dd6908 - Commit label r00418.2 - Post-CS3 0.0.418.2                                       — QC Publisher - (6 weeks ago)
+* 9c2aea2 - Commit label r004031.1 - Post-CS2 0.0.4031.1                                     — QC Publisher - (6 weeks ago)
+* 62976a7 - Commit label r00391.1 - Post-CS 0.0.391.1                                        — QC Publisher - (6 weeks ago)
+* 0c2bf63 - Commit label r00375.10a - CS 0.0.375.10a                                         — QC Publisher - (6 weeks ago)
+* 5409905 - Commit label r00355.2 - Post-CS4 0.0.355.2                                       — QC Publisher - (6 weeks ago)
+* 089bfa5 - Commit label r00333.1a - Pre-CS3 0.0.333.1a                                      — QC Publisher - (6 weeks ago)
+* c70ada6 - Commit label r00322.2 - Pre-CS 0.0.322.2                                         — QC Publisher - (6 weeks ago)
+* 41de9fd - Commit label r00304.1 - Pre-CS 0.0.304.1                                         — QC Publisher - (6 weeks ago)
+* b31005a - Commit label r00278.1 - FC 0.0.278.1                                             — QC Publisher - (6 weeks ago)
+* 380080c - Commit label r00252.1 - FC 0.0.252.1                                             — QC Publisher - (6 weeks ago)
+* d0f5347 - Commit label r00227.1 - ES3 0.0.227.1                                            — QC Publisher - (6 weeks ago)
+* cd51300 - Commit label r00205.1 - ES2 0.0.205.1                                            — QC Publisher - (6 weeks ago)
+* 39aae3a - Commit label r00160.1 - ES1 0.0.160.1                                            — QC Publisher - (6 weeks ago)
+
+
+```
+
+这次高通释放了一个新的基线了。叫做Post-CS8了Commit label r00461.1 - Post-CS8 0.0.461.1。   
+
+```text
+
+* b43884c - Commit label r00461.1 - Post-CS8 0.0.461.1                                       — QC Publisher (r00461.1) - (2 weeks ago)
+* 53b284b - Commit label r00455.2 - Post-CS7 0.0.455.2                                       — QC Publisher (r00455.2) - (4 weeks ago)
+* 18cd798 - Commit label r00446.1 - Post-CS6 0.0.446.1                                       — QC Publisher (r00446.1) - (6 weeks ago)
+* 6b5ada6 - Commit label r004361.1 - Post-CS5 0.0.4361.1                                     — QC Publisher - (6 weeks ago)
+* b86ba16 - Commit label r00425.1 - Post-CS4 0.0.425.1                                       — QC Publisher - (6 weeks ago)
+* 2dd6908 - Commit label r00418.2 - Post-CS3 0.0.418.2                                       — QC Publisher - (6 weeks ago)
+* 9c2aea2 - Commit label r004031.1 - Post-CS2 0.0.4031.1                                     — QC Publisher - (6 weeks ago)
+* 62976a7 - Commit label r00391.1 - Post-CS 0.0.391.1                                        — QC Publisher - (6 weeks ago)
+* 0c2bf63 - Commit label r00375.10a - CS 0.0.375.10a                                         — QC Publisher - (6 weeks ago)
+* 5409905 - Commit label r00355.2 - Post-CS4 0.0.355.2                                       — QC Publisher - (6 weeks ago)
+* 089bfa5 - Commit label r00333.1a - Pre-CS3 0.0.333.1a                                      — QC Publisher - (6 weeks ago)
+* c70ada6 - Commit label r00322.2 - Pre-CS 0.0.322.2                                         — QC Publisher - (6 weeks ago)
+* 41de9fd - Commit label r00304.1 - Pre-CS 0.0.304.1                                         — QC Publisher - (6 weeks ago)
+* b31005a - Commit label r00278.1 - FC 0.0.278.1                                             — QC Publisher - (6 weeks ago)
+* 380080c - Commit label r00252.1 - FC 0.0.252.1                                             — QC Publisher - (6 weeks ago)
+* d0f5347 - Commit label r00227.1 - ES3 0.0.227.1                                            — QC Publisher - (6 weeks ago)
+* cd51300 - Commit label r00205.1 - ES2 0.0.205.1                                            — QC Publisher - (6 weeks ago)
+* 39aae3a - Commit label r00160.1 - ES1 0.0.160.1                                            — QC Publisher - (6 weeks ago)
+
+
+```
+
+高通一般都是一次给一个提交的，例如最新的 r00461.1 对应 Post-CS8。     
+从中我们也可以看出高通的一些命名方式，先是从  ES1 ， ES2 ， ES3，    
+然后是FC，  然后是 Pre CS阶段， 然后是CS阶段，后面是Post CS阶段。   
+
+其中标签的命令也是有规律的，  r00160.1， r00205.1 等等，基本上数字是增大的顺序来的。   
+每个提交高通都会打上对应的一个TAG标签，命名也就是r00205.1这样的。
+
+
+1.首先我们checkout到dev分支上
+
+```bash
+
+git checkout dev
+```
+
+2.然后执行git rebase r00461.1  
+我们这次采用简单的git rebase方式。通常使用的是git rebase --onto new start end的方式
+```text
+$ git rebase r00461.1                                                             
+First, rewinding head to replay your work on top of it...
+Applying: [SHAR-223] WLAN RF paremeters update
+Using index info to reconstruct a base tree...  
+
+M         wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin   
+
+Falling back to patching base and 3-way merge...
+warning: Cannot merge binary files: wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin (HEAD vs. [SHAR-223] WLAN RF paremeters update)
+
+Auto-merging wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin
+CONFLICT (content): Merge conflict in wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin
+
+error: Failed to merge in the changes.
+
+Patch failed at 0001 [SHAR-223] WLAN RF paremeters update
+
+The copy of the patch that failed is found in: .git/rebase-apply/patch
+
+When you have resolved this problem, run "git rebase --continue".
+If you prefer to skip this patch, run "git rebase --skip" instead.
+To check out the original branch and stop rebasing, run "git rebase --abort".
+
+
+```
+3.解决二进制文件的冲突
+
+非常不幸的是我们第一个patch就有冲突了。我们可以通过git status查看哪个文件冲突了
+
+```text
+$ git st                                                                                                         
+rebase in progress; onto b43884c
+You are currently rebasing.
+  (fix conflicts and then run "git rebase --continue")
+  (use "git rebase --skip" to skip this patch)
+  (use "git rebase --abort" to check out the original branch)
+
+Unmerged paths:
+  (use "git reset HEAD <file>..." to unstage)
+  (use "git add <file>..." to mark resolution)
+
+	both modified:   wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+```
+通过结果我们发现是一个.bin 文件，这是一个二进制的文件，不是个文本文件。  
+执行git diff是看不到什么差异的。
+```text
+$ git diff  
+diff --cc wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin
+index ed3a8d1,cc2d71d..0000000
+Binary files differ
+
+```
+我们先记录一下这个时候文件的md5值  
+f744a3402e260d7fd330cbc964972a5c  wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin
+
+
+
+我们通过git log查看这个我们这个提交，可以发现确实是修改了这个文件。
+```text
+commit 881b1c0d7d8454656118a2153b98c44f8a477b0f
+Author: 马哥的淘宝店:https://shop592330910.taobao.com/
+Date:   Fri Nov 10 14:31:25 2017 +0800
+
+    [SHAR-223] WLAN RF paremeters update
+    
+    update rf paremeters in bdwlan.bin
+    
+    Change-Id: Ifbd118b8a584b64bf88635725baeeac309ccd99f
+
+diff --git a/wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin b/wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin
+index e641291..cc2d71d 100755
+Binary files a/wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin and b/wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin differ
+
+
+```
+
+此时对于二进制文件的冲突，我们有2种策略，也只能是二选一。     
+要么选择高通最新的r00461.1 提交 中的这个文件，   
+要么选择我们自己这个881b1c0d7d8454656118a2153b98c44f8a477b0f提交 中的这个文件。  
+
+这个时候需要取和研发沟通来决定 选择哪个文件。   （默认此时文件是高通提交中的文件。）
+
+情况（1）此时可以执行
+```bash
+ git co --ours wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin
+
+```  
+来选择 采用高通提交的中的这个文件。
+如果你是选择高通提交中的这个文件，有可能我们的这个patch就会变成一个空提交，也就是说可以不要我们这个提交啦。
+
+```bash
+$ git add wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin                                                  
+
+$ git st                                                                                                         
+rebase in progress; onto b43884c
+You are currently rebasing.
+  (all conflicts fixed: run "git rebase --continue")
+
+nothing to commit, working tree clean
+
+$ git rebase --continue                                                                                          
+Applying: [SHAR-223] WLAN RF paremeters update
+No changes - did you forget to use 'git add'?
+If there is nothing left to stage, chances are that something else
+already introduced the same changes; you might want to skip this patch.
+
+When you have resolved this problem, run "git rebase --continue".
+If you prefer to skip this patch, run "git rebase --skip" instead.
+To check out the original branch and stop rebasing, run "git rebase --abort".
+
+```
+这个时候提示 No changes。
+
+
+情况（2）或者 执行
+
+```bash
+
+git co --theirs wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin
+
+```
+来选择 我们公司自己提交的中的这个文件。  
+
+然后执行 git add
+```bash
+$ git add wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin
+
+
+$ git st                                                                                                         
+rebase in progress; onto b43884c
+You are currently rebasing.
+  (all conflicts fixed: run "git rebase --continue")
+
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	modified:   wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin
+
+```
+此时文件就会变成绿色，然后执行git rebase --continue，继续进行rebase操作即可。
+
+我们提交中的这个文件的md5值  
+6abe9c56383a121c2cbd5e6d4c88accd  wlan/halphy_tools/host/bdfUtil/qca61x0/bdf/bdwlan.bin
+
+
+通过操作 git checkout --ours来选择高通提交  
+通过执行 git checkout --theirs 选择我们直接的提交
+
+
+  
+## 升级冲突之文本文件冲突解决策略
+
+下次介绍，这个比较简单
 
 
 更多精彩请关注
