@@ -3,6 +3,10 @@ awk学习之cookbook技巧.md
 
 马哥的淘宝店:https://shop592330910.taobao.com/
 
+#Awk One-Liners Explained, Part I: File Spacing, Numbering and Calculations
+
+##1.Line Spacing
+
 1.每行后面都加上一个空行
 ```bash
 awk '1; { print "" }'       #马哥的淘宝店:https://shop592330910.taobao.com/
@@ -72,6 +76,8 @@ awk '{ print; print "\n" }'  #马哥的淘宝店:https://shop592330910.taobao.co
 
 ``` 
 首先是打印一整行内容，然后再打印一个换行。 #马哥的淘宝店:https://shop592330910.taobao.com/
+
+##2.Numbering and Calculations
 
 5、为每个文件的内容添加行号
 ```bash
@@ -415,6 +421,102 @@ awk '$NF > 4'  #马哥的淘宝店:https://shop592330910.taobao.com/
 
 
 
+#Awk One-Liners Explained, Part II: Text Conversion and Substitution
+
+
+##3. Text Conversion and Substitution
+
+21.将Windows/dos格式的换行(CRLF)转成Unix格式(LF)
+```bash
+
+awk '{ sub(/\r$/,""); print }'
+
+```
+这条语句使用了sub(regex,repl,[string])函数。此函数将匹配regex的string替换成repl，  
+如果没有提供string参数，  则$0将会被默认使用。$0的含义在上一篇已经介绍过，代表整行。
+这句话其实是将行结尾的‘\r’删除，然后打印，print语句会在行后自动添加一个ORS，也就是\n。
+
+
+22.将Unix格式的换行(LF)换成Windows/dos格式(CRLF)
+```bash
+awk '{ sub(/$/,"\r"); print }'
+```
+这个技巧也是使用了sub(regex, repl, [string]) 函数，这个和上面那个刚好是相反的。
+这次是替换行结尾$替换成\r，也就是CR。然后打印，print语句会在行后自动添加一个ORS，也就是\n。
+这样就使得每行都以\r\n结尾了。
+
+23.在Windows下，将Unix格式的换行换成Windows/dos格式的换行符
+```bash
+
+awk 1
+
+```
+这条语句不是在所有情况下都可以用，要视使用的awk版本是不是能识别Unix格式的换行而定。  
+如果能，那么它会读出每个句子，然后输出并用CRLF结束。1其实就是{ print }的简写形式。
+
+24.在Windows下，将Windows/dos格式的换行换成unix格式的换行符
+```bash
+gawk -v BINMODE="w" '1'
+
+```
+理论上来说,在DOS系统下面这一行程序应该转换CRLFs 为 LFs。
+标准的GUN文档中提到：在DOS下，awk(和许多其他文本程序)默认将行尾"\r\n“f翻译为"\n"在input时候，将"\n"翻译为"\r\n"在output时候。
+一个特别的变量"BINMODE”可以控制这个输出。
+
+我的测试结果显示这个转换并不能完成，所以我认为BINMODE模式并不一定是正确的。所以使用tr更保险一些。
+```bash
+tr -d \r
+
+```
+tr程序可以转换一个设定的字符为另外一个。 使用-d选项是删除所有字符并且不做任何转换。  
+在上面的用法用， '\r' (CR)字符将被删除。 CRLFs 成将会转换为LFs。
+
+25.删除行首的空白字符（空格和制表符）
+```bash
+awk '{ sub(/^[ \t]+/, ""); print }'
+
+```
+这里也使用了sub函数，他是把’ ^[ \t]+ ‘ 都替换为空，这个正则表达式匹配开头的空格/制表符一次或多次。
+
+26.删除行首和行末的空格
+```bash
+awk '{ gsub(/^[ \t]+|[ \t]+$/, ""); print }'
+
+```
+这里使用了一个新的函数gsub（），这个是全局替换，就是会替换多次，只要有匹配上就会替换。
+
+如果仅仅是要删除字段间的空格，你可以这样 
+```bash
+
+awk '{ $1=$1; print }'
+
+```
+这是条很取巧的语句，看起来是什么也没作，其实不是这样的。  
+awk会在给字段重新赋值的时候对$0重新进行构建，用OFS也就是单个空格分隔所有字段，这样以来所有的多余的空格就消失了。 
+
+28.在每行首加5个空格
+```bash
+awk '{ sub(/^/, "     "); print }'
+
+```
+这个很简单，就是使用sub函数把每行的开头^替换为5个空格。这样就达到了行首插入5个空格的效果。
+
+29.让内容在79个字符宽的页面上右对齐
+```bash
+
+awk '{ printf "%79s\n", $0 }' 
+
+```
+这里使用了printf函数，格式化输出，这里打印$0代表整行，长度不够79的会在左边补齐空格的。左边补齐就达到了右对齐的效果。
+
+
+30.让内容在79个字符宽的页面上居中对齐
+```bash
+
+awk '{ l=length(); s=int((79-l)/2); printf "%"(s+l)"s\n", $0 }'
+
+```
+这里使用length函数计算行的长度，然后算出中间
 
 
 
@@ -427,3 +529,52 @@ awk '$NF > 4'  #马哥的淘宝店:https://shop592330910.taobao.com/
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```bash
+#==
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#==
+```
