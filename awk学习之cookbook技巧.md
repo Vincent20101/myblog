@@ -429,7 +429,7 @@ awk '$NF > 4'  #马哥的淘宝店:https://shop592330910.taobao.com/
 21.将Windows/dos格式的换行(CRLF)转成Unix格式(LF)
 ```bash
 
-awk '{ sub(/\r$/,""); print }'
+awk '{ sub(/\r$/,""); print }'      #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 这条语句使用了sub(regex,repl,[string])函数。此函数将匹配regex的string替换成repl，  
@@ -439,7 +439,7 @@ awk '{ sub(/\r$/,""); print }'
 
 22.将Unix格式的换行(LF)换成Windows/dos格式(CRLF)
 ```bash
-awk '{ sub(/$/,"\r"); print }'
+awk '{ sub(/$/,"\r"); print }'   #马哥的淘宝店:https://shop592330910.taobao.com/
 ```
 这个技巧也是使用了sub(regex, repl, [string]) 函数，这个和上面那个刚好是相反的。
 这次是替换行结尾$替换成\r，也就是CR。然后打印，print语句会在行后自动添加一个ORS，也就是\n。
@@ -448,7 +448,7 @@ awk '{ sub(/$/,"\r"); print }'
 23.在Windows下，将Unix格式的换行换成Windows/dos格式的换行符
 ```bash
 
-awk 1
+awk 1           #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 这条语句不是在所有情况下都可以用，要视使用的awk版本是不是能识别Unix格式的换行而定。  
@@ -456,7 +456,7 @@ awk 1
 
 24.在Windows下，将Windows/dos格式的换行换成unix格式的换行符
 ```bash
-gawk -v BINMODE="w" '1'
+gawk -v BINMODE="w" '1'      #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 理论上来说,在DOS系统下面这一行程序应该转换CRLFs 为 LFs。
@@ -465,7 +465,7 @@ gawk -v BINMODE="w" '1'
 
 我的测试结果显示这个转换并不能完成，所以我认为BINMODE模式并不一定是正确的。所以使用tr更保险一些。
 ```bash
-tr -d \r
+tr -d \r       #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 tr程序可以转换一个设定的字符为另外一个。 使用-d选项是删除所有字符并且不做任何转换。  
@@ -473,14 +473,14 @@ tr程序可以转换一个设定的字符为另外一个。 使用-d选项是删
 
 25.删除行首的空白字符（空格和制表符）
 ```bash
-awk '{ sub(/^[ \t]+/, ""); print }'
+awk '{ sub(/^[ \t]+/, ""); print }'   #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 这里也使用了sub函数，他是把’ ^[ \t]+ ‘ 都替换为空，这个正则表达式匹配开头的空格/制表符一次或多次。
 
 26.删除行首和行末的空格
 ```bash
-awk '{ gsub(/^[ \t]+|[ \t]+$/, ""); print }'
+awk '{ gsub(/^[ \t]+|[ \t]+$/, ""); print }'  #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 这里使用了一个新的函数gsub（），这个是全局替换，就是会替换多次，只要有匹配上就会替换。
@@ -488,7 +488,7 @@ awk '{ gsub(/^[ \t]+|[ \t]+$/, ""); print }'
 如果仅仅是要删除字段间的空格，你可以这样 
 ```bash
 
-awk '{ $1=$1; print }'
+awk '{ $1=$1; print }'     #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 这是条很取巧的语句，看起来是什么也没作，其实不是这样的。  
@@ -496,7 +496,7 @@ awk会在给字段重新赋值的时候对$0重新进行构建，用OFS也就是
 
 28.在每行首加5个空格
 ```bash
-awk '{ sub(/^/, "     "); print }'
+awk '{ sub(/^/, "     "); print }'   #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 这个很简单，就是使用sub函数把每行的开头^替换为5个空格。这样就达到了行首插入5个空格的效果。
@@ -504,7 +504,7 @@ awk '{ sub(/^/, "     "); print }'
 29.让内容在79个字符宽的页面上右对齐
 ```bash
 
-awk '{ printf "%79s\n", $0 }' 
+awk '{ printf "%79s\n", $0 }'     #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 这里使用了printf函数，格式化输出，这里打印$0代表整行，长度不够79的会在左边补齐空格的。左边补齐就达到了右对齐的效果。
@@ -513,26 +513,26 @@ awk '{ printf "%79s\n", $0 }'
 30.让内容在79个字符宽的页面上居中对齐
 ```bash
 
-awk '{ l=length(); s=int((79-l)/2); printf "%"(s+l)"s\n", $0 }'
+awk '{ l=length(); s=int((79-l)/2); printf "%"(s+l)"s\n", $0 }'     #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
-这里使用length函数计算行的长度，然后算出中间
+这里使用length函数计算行的长度，然后算出中间   #马哥的淘宝店:https://shop592330910.taobao.com/
 
 
 31.替换每行的 "foo" 为 "bar"
 ```bash
 
-awk '{ sub(/foo/,"bar"); print }'
+awk '{ sub(/foo/,"bar"); print }'     #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 这个用到了sub()函数，需要注意的是，这个函数只会替换第一次出现匹配的。需要全部都替换用gsub()函数
 ```bash
-awk '{ gsub(/foo/,"bar"); print }'
+awk '{ gsub(/foo/,"bar"); print }'   #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 其实还有一个函数gensub()也有替换的功能的
 ```bash
-gawk '{ $0 = gensub(/foo/,"bar",4); print }'
+gawk '{ $0 = gensub(/foo/,"bar",4); print }'    #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 这个只会替换第四次出现foo的地方。这个函数原型是gensub(regex, s, h[, t])，
@@ -544,7 +544,7 @@ gawk '{ $0 = gensub(/foo/,"bar",4); print }'
 
 32.替换包含baz的行里面的foo为bar
 ```bash
-awk '/baz/ { gsub(/foo/, "bar") }; { print }'
+awk '/baz/ { gsub(/foo/, "bar") }; { print }'   #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 每个awk的都包含一个pattern-action这样的组合语句的。写法类似"pattern { action statements }"。
@@ -554,7 +554,7 @@ awk '/baz/ { gsub(/foo/, "bar") }; { print }'
 
 32.替换不包含baz的行里面的foo为bar
 ```bash
-awk '!/baz/ { gsub(/foo/, "bar") }; { print }'
+awk '!/baz/ { gsub(/foo/, "bar") }; { print }' #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 这用法正好和上个是相反的。!/baz/表示不包含baz的行。!让搜到baz的返回为假
@@ -562,7 +562,7 @@ awk '!/baz/ { gsub(/foo/, "bar") }; { print }'
 
 34.把"scarlet" 或者 "ruby" 或者 "puce" 替换为 "red".
 ```bash
-awk '{ gsub(/scarlet|ruby|puce/, "red"); print}'
+awk '{ gsub(/scarlet|ruby|puce/, "red"); print}'  #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 这个用法没上面特别的，还是用到了gsub()函数，这里用sub()就不对了，这里主要的就是
@@ -571,7 +571,7 @@ awk '{ gsub(/scarlet|ruby|puce/, "red"); print}'
 35.反转打印文件的行(类似命令"tac").
 ```bash
 
-awk '{ a[i++] = $0 } END { for (j=i-1; j>=0;) print a[j--] }'
+awk '{ a[i++] = $0 } END { for (j=i-1; j>=0;) print a[j--] }' #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 这个就是倒着打印文件的每一行，类似命令tac。
@@ -580,7 +580,7 @@ awk '{ a[i++] = $0 } END { for (j=i-1; j>=0;) print a[j--] }'
 
 36.把以反斜线 \ 结束的行和下面一行链接到一行。
 ```bash
-awk '/\\$/ { sub(/\\$/,""); getline t; print $0 t; next }; 1'
+awk '/\\$/ { sub(/\\$/,""); getline t; print $0 t; next }; 1'  #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 在某些编程语言中，行太长 可以拆成2行的，就是以反斜线来表示的。反斜线表示链接这一行和下一行内容。  
@@ -595,7 +595,7 @@ awk '/\\$/ { sub(/\\$/,""); getline t; print $0 t; next }; 1'
 
 37.打印，排序登陆的所有用户
 ```bash
-awk -F ":" '{ print $1 | "sort" }' /etc/passwd
+awk -F ":" '{ print $1 | "sort" }' /etc/passwd      #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 这里我们用到了awk的-F选项，这个是设置内部字段分隔符，也就每行按照那个字符来分割，
@@ -604,25 +604,25 @@ awk -F ":"等价于awk 'BEGIN { FS=":" }'
 
 38.打印第二个字段，然后是第一个字段
 ```bash
-awk '{ print $2, $1 }' file
+awk '{ print $2, $1 }' file     #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 这个没什么讲的，很简单的。
  
 39.交换第一个字段和第二个字段，然后是打印每行
 ```bash
-awk '{ temp = $1; $1 = $2; $2 = temp; print }'
+awk '{ temp = $1; $1 = $2; $2 = temp; print }'   #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 
 40.删除第二个字段，然后打印每行
 ```bash
-awk '{ $2 = ""; print }'
+awk '{ $2 = ""; print }'   #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ``` 
 41.逆序一行的所有字段，然后打印整行
 ```bash
-awk '{ for (i=NF; i>0; i--) printf("%s ", $i); printf ("\n") }'
+awk '{ for (i=NF; i>0; i--) printf("%s ", $i); printf ("\n") }'   #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ``` 
 注意这个这倒着打印文件不一样，这个是倒序每一行的所有字段的。
@@ -630,7 +630,7 @@ awk '{ for (i=NF; i>0; i--) printf("%s ", $i); printf ("\n") }'
 
 42.删除重复行 (类似 "uniq")
 ```bash
-awk 'a != $0; { a = $0 }'
+awk 'a != $0; { a = $0 }'   #马哥的淘宝店:https://shop592330910.taobao.com/
 ```
 注意这个a != $0;是省略了action的，其实是a != $0 { print };
 开始第一行肯定不满足条件 a != $0的，所以执行后面的 把第一行内容先赋值给变量a。
@@ -639,14 +639,14 @@ awk 'a != $0; { a = $0 }'
 
 43.删除重复不连续的行
 ```bash
-awk '!a[$0]++'
+awk '!a[$0]++'      #马哥的淘宝店:https://shop592330910.taobao.com/
 ```
 把每一行保存到索引数组a中，第一次a[]++整个会是0的。但是a[]此时已经是1了。
 下次再有同样的行a[]++就会非0值啦。
 
 ```bash
 
-awk '!($0 in a) { a[$0]; print }'
+awk '!($0 in a) { a[$0]; print }'  #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 
@@ -654,7 +654,7 @@ awk '!($0 in a) { a[$0]; print }'
 44.把每5行用逗号相连.
 ```bash
 
-awk 'ORS=NR%5?",":"\n"'
+awk 'ORS=NR%5?",":"\n"'    #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 如果行号NR能被5整除，重新赋值ORS的值
@@ -666,21 +666,21 @@ awk 'ORS=NR%5?",":"\n"'
 
 45.打印文件前10行(模拟命令"head -10").
 ```bash
-awk 'NR < 11'
+awk 'NR < 11'      #马哥的淘宝店:https://shop592330910.taobao.com/
 ```
 NR是行号，这里pattern是 'NR < 11' 表示行号小于11，也就是小于等于10行的行都会打印。
 这里省略了action，省略了就是{print}
 
 上面这个有一点不好的就是超过10行的行还会继续循环下去，只是什么都不做而已。下面给个更好的解决方法。
 ```bash
-awk '1; NR == 10 { exit }'
+awk '1; NR == 10 { exit }'  #马哥的淘宝店:https://shop592330910.taobao.com/
 ```
 这就是当行号等于10行就exit，退出了。
 
 
 46.打印文件第一行(模拟命令 "head -1").
 ```bash
-awk 'NR > 1 { exit }; 1'
+awk 'NR > 1 { exit }; 1'   #马哥的淘宝店:https://shop592330910.taobao.com/
 
 ```
 
@@ -694,9 +694,290 @@ awk '{ y=x "\n" $0; x=$0 }; END { print y }'
 如果仔细看的话，不难发现这个写法是很不高效的，因为它不停的进行赋值和字符串连接，只为了找到最后一行！所以，如果你想要输出文件的最后两行，tail -n 2是最好的选择。
 
 
+48.打印文件最后1行 (模拟命令 "tail -1")
+```bash
+awk 'END { print }'   #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+这个可能工作，也可能不工作，这在有些版本的awk上不是我们想用的结果。这个取决于变量$0是否在输入结束后被重置。
+
+兼容的写法
+```bash
+awk '{ rec=$0 } END{ print rec }'  #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+这个也有效率的问题，使用tail -1是最好的选择
+
+
+49.打印匹配正则表达式的某行 "/regex/" (模拟命令 "grep").
+```bash
+awk '/regex/'      #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+这里使用'/regex/'作为pattern，省略了action，如果当前行匹配这个正则表达式，结果是true，就会执行后面的
+action，就是{print}，相当于打印整行内容。
+
+50. 打印不匹配正则表达式的某行 "/regex/" (模拟命令 "grep -v").
+```bash
+awk '!/regex/'   #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+！这个感叹号会把结果置为相反的。这里就是表示不匹配。
+
+51.打印匹配模式的行的上一行，而非当前行
+```bash
+awk '/regex/ { print x }; { x=$0 }'   #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+这个类似grep -B 1
+
+这里有2个 pattern-action， 
+{ x=$0 } 这一组是总是会执行的，总是把当前行内容保存到变量x中
+/regex/ { print x } 这一组是只有在匹配到regex时候才会执行后面的action的，
+这里是打印x变量内容。x变量此时保存的还是上次的结果，也就是当前匹配行的上一行的内容。
+
+如果是第一行就匹配了，直接执行{ print x }，但是此时x还是空值的。
+
+如果是第一行不匹配，然后接着执行 { x=$0 } ，这个时候x保存第一行内容。
+然后是第二行，如果匹配，就执行{ print x }，也就是打印了第一行的内容。其他的依次类推。
+
+
+```bash
+
+awk '/regex/ { print (x=="" ? "match on line 1" : x) }; { x=$0 }'  #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+这个无非就是加了个判断x是不是空值，因为第一行就匹配的时候x是空的。
+
+52.打印匹配模式的下一行.
+```bash
+awk '/regex/ { getline; print }'   #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+这里使用了getline函数取得下一行的内容并输出。getline的作用是将$0的内容置为下一行的内容，
+并同时更新NR，NF，FNR变量。如果匹配的是最后一行，getline会出错，$0不会被更新，最后一行会被打印。
+
+这个类似grep -A 1
+
+
+53.打印匹配AAA或者BBB或者CCC的行.
+```bash
+awk '/AAA|BBB|CCC/'   #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+这里用到竖线 | 符号，类似or的意思
+
+54.打印包含"AAA"  "BBB",  "CCC" 先后顺序要对.
+```bash
+
+awk '/AAA.*BBB.*CCC/' #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+
+55.打印行长度大于64的行.
+```bash
+awk 'length > 64'   #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+56.打印行长度小于64的行.
+```bash
+awk 'length < 64'   #马哥的淘宝店:https://shop592330910.taobao.com/
+```
+57.打印匹配regex的行开始到文件结尾的之间的行.
+```bash
+awk '/regex/,0'    #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+这里用到了'pattern1, pattern2'  这样的模式匹配，表示一个区间的。熟悉vim的都知道。
+这个两个模式区间都是闭区间的。也就是包括pattern1的行，结束也是包括pattern2的行的。
+
+58.打印 第8到第12行(包括).
+
+```bash
+awk 'NR==8,NR==12'  #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+NR表示行号，使用==来判断相等，
+
+59.打印第52行.
+```bash
+awk 'NR==52'     #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+这样会影响效率，52行之后的照样会循环一下，但是上面都不做。
+好的做法是52行后之间退出循环。
+```bash
+
+awk 'NR==52 { print; exit }'  #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+60.打印连个正则表达式匹配的行之间的行(包括).
+```bash
+awk '/Iowa/,/Montana/'     #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+这里再次用到了区间匹配模式"pattern1,pattern2"
+
+
+##5. Selective Deletion of Certain Lines
+
+这里只有一个技巧
+
+61.删除所有空白行
+```bash
+
+awk NF         #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+这里用到了特殊变量NF，表示当前行的字段数
+字段数如果是0表明是空行呗，0表示false，所有后面省略的action就不会执行啦。
+字段数如果不是0就表明整行有内容。就打印。
+
+还有另外一个实现
+```bash
+awk '/./'     #马哥的淘宝店:https://shop592330910.taobao.com/
+
+```
+模式/./会匹配一个字符，空行当然是不会被匹配上的啦。   #马哥的淘宝店:https://shop592330910.taobao.com/
+
+
+#String Creation
+
+1.创建一个固定长度的字符串.
+```bash
+awk 'BEGIN { while (a++<513) s=s "x"; print s }'
+
+```
+这个段程序用BEGIN这个特殊的匹配模式让后面的代码在awk试图读入任何东西前就执行。在里面是一个被执行了513次的循环，每次循环中“x”都被添加到变量s的最后。循环结束后，s的内容被输出。因为这段代码只有这一句，所以awk在执行完BEGIN模式语句后就退出了。
+这段循环代码不仅仅可用在BEGIN中，你可以在awk的任何代码段里面使用，包括END。
+
+很不幸这段代码不是最有效率的，这是一个线性的解决方案
+```
+
+function rep(str, num,     remain, result) {
+    if (num < 2) {
+        remain = (num == 1)
+    } else {
+        remain = (num % 2 == 1)
+        result = rep(str, (num - remain) / 2)
+    }
+    return result result (remain ? str  : "")
+}
+```
+
+该函数同样用到三元运算a?b:c，而定义的该函数的内部又不停的调用函数本身，达到循环的目的。而前面的if……else语句主要用业说明remain是一个奇数。而通过下面的语句调用该函数：
+```bash
+awk 'BEGIN { s = rep("x", 513) }'
+
+```
+
+
+```bash
 
 
 
+#Another way to make n copies of a string s:
+
+function repeat(n, s      , str)
+{
+   str = sprintf("%*s", n, " "); # make n spaces
+   gsub(/ /, s, str); # replace space with s
+   return str;
+}
+
+#Another idiom I sometimes use is this to make a string of "-" to underline another string:
+
+ul = str; # copy the string
+gsub(/./, "-", ul); # replace each char with "-"
+print str; # print the string
+print ul; # underline it
+
+
+
+```
+
+2.在某个位置插入指定长度的字符串
+```bash
+
+gawk --re-interval 'BEGIN{ while(a++<49) s=s "x" }; { sub(/^.{6}/,"&" s) }; 1'
+
+```
+这段代码只能在gawk下使用，因为它用到了interval expression，即这里的{6}，作用是让前一个字符.匹配多次。.{6}便可以匹配6个任意字符。gawk使用interval expression需要用到参数-re-interval。
+
+同前一例一样，首先在BEGIN段里面，建立了一个49个字符长的字符串放在变量s里。接下来是对每一行，进行替换，&这里代表的是匹配的字符串部分，所以sub的结果是将每一行第7个字符开始的内容替换成了s。然后是逐行输出。
+
+如果不是gawk，需要这样写
+```bash
+
+awk 'BEGIN{ while(a++<49) s=s "x" }; { sub(/^....../,"&" s) }; 1
+
+```
+
+其输出结果为从每行的第六个字符开始，连续输出49个x，然后再接着输出原来的行第七个字符及其以后的内容。如果每行不足七个字符时，该行输出的值不变。
+
+注意：上面语句中的点并不是点本身的意思，而是代码任意一个字符，有点类似于bash脚本中用到字段?所代表的意思
+
+
+#Array Creation
+
+3.利用一个字符串创建一个数组.
+```bash
+split("Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec", month, " ")
+
+```
+
+
+4.建立一个索引数组.
+```bash
+
+for (i=1; i<=12; i++) mdigit[month[i]] = i
+
+```
+
+5.打印第5个字段是 "abc123" 的那一行.
+```bash
+
+awk '$5 == "abc123"'
+
+```
+```bash
+awk '{ if ($5 == "abc123") { print $0 } }'
+
+```
+
+6.打印第5个字段不等于 "abc123"的行.
+```bash
+
+awk '$5 != "abc123"'
+
+```
+```bash
+awk '{ if ($5 != "abc123") { print $0 } }'
+
+```
+```bash
+awk '!($5 == "abc123")'
+
+```
+
+7.打印第7个字段匹配某个正则表达式的行.
+```bash
+
+awk '$7  ~ /^[a-f]/'
+
+```
+这里用到了～波浪符号，这里表示$7 是否匹配 后面的正则表达式/^[a-f]/'
+
+下面这表示不匹配
+```bash
+awk '$7 !~ /^[a-f]/'
+
+
+```
+```bash
+awk '$7 ~ /^[^a-f]/'
+
+```
 
 
 
