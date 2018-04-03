@@ -979,6 +979,424 @@ awk '$7 ~ /^[^a-f]/'
 
 ```
 
+# 10 Awk Tips, Tricks and Pitfalls
+
+
+## Be idiomatic!
+假设想打印某些匹配的行，一般会这样写awk代码：
+```bash
+awk '{if ($0 ~ /pattern/) print $0}'
+
+```
+不过这里有几点需要注意的，这个结构和我们平常使用awk结构是不一样的，我通常的结构是这样的：
+```bash
+condition { actions }
+```
+所以上面的可以很清楚的改写为下面这样：
+```bash
+awk '$0 ~ /pattern/ {print $0}'
+```
+/pattern/ 是和这个等价的 $0 ~ /pattern/
+print是和print $0语句一个意思的。默认省略了$0.
+
+```bash
+awk '/pattern/'
+``` 
+如果是这样的没有action的，默认是print $0的。
+
+如果你只是想按照某些条件来打印文件的某行可以像下面这样
+```bash
+
+awk '(NR%2 && /pattern/) || (!(NR%2) && /anotherpattern/)'
+```
+这里省略了action部分，除非你想要的action不是print $0，你就要明确的给出action了。
+
+
+```bash
+awk 1
+awk '"a"'   # single quotes are important!
+```
+上面这2个都是打印源文件的每一行，每一行都没有做任何改变的。
+  
+如果你想操作修改输出的某些行，但是你还想打印出所有的行，你可以像这样 
+```bash
+awk '{sub(/pattern/,"foobar")}1'
+```
+
+```bash
+
+awk 'NR % 6'            # prints all lines except those divisible by 6
+awk 'NR > 5'            # prints from line 6 onwards (like tail -n +6, or sed '1,5d')
+awk '$2 == "foo"'       # prints lines where the second field is "foo"
+awk 'NF >= 6'           # prints lines with 6 or more fields
+awk '/foo/ && /bar/'    # prints lines that match /foo/ and /bar/, in any order
+awk '/foo/ && !/bar/'   # prints lines that match /foo/ but not /bar/
+awk '/foo/ || /bar/'    # prints lines that match /foo/ or /bar/ (like grep -e 'foo' -e 'bar')
+awk '/foo/,/bar/'       # prints from line matching /foo/ to line matching /bar/, inclusive
+awk 'NF'                # prints only nonempty lines (or: removes empty lines, where NF==0)
+awk 'NF--'              # removes last field and prints the line
+awk '$0 = NR" "$0'      # prepends line numbers (assignments are valid in conditions)
+
+```
+
+
+```bash
+
+awk 'NR==FNR { # some actions; next} # other condition {# other actions}' file1 file2
+
+```
+
+```bash
+# prints lines that are both in file1 and file2 (intersection)
+awk 'NR==FNR{a[$0];next} $0 in a' file1 file2
+
+```
+
+```bash
+# use information from a map file to modify a data file
+awk 'NR==FNR{a[$1]=$2;next} {$3=a[$3]}1' mapfile datafile
+
+```
+
+```bash
+# replace each number with its difference from the maximum
+awk 'NR==FNR{if($0>max) max=$0;next} {$0=max-$0}1' file file
+
+```
+## Pitfall: shorten pipelines
+
+
+```bash
+
+somecommand | head -n +1 | grep foo | sed 's/foo/bar/' | tr '[a-z]' '[A-Z]' | cut -d ' ' -f 2
+
+somecommand | awk 'NR>1 && /foo/{sub(/foo/,"bar"); print toupper($2)}'
+
+```
+
+## Print lines using ranges
+
+
+```bash
+# prints lines from /beginpat/ to /endpat/, inclusive
+awk '/beginpat/,/endpat/'
+
+```
+
+有时候我们像打印匹配某2个条件之间的某些行，不包括匹配的那个行
+```bash
+# prints lines from /beginpat/ to /endpat/, not inclusive
+awk '/beginpat/,/endpat/{if (!/beginpat/&&!/endpat/)print}'
+
+# prints lines from /beginpat/ to /endpat/, not including /beginpat/
+awk '/beginpat/,/endpat/{if (!/beginpat/)print}'
+
+```
+
+```bash
+# prints lines from /beginpat/ to /endpat/, not inclusive
+awk '/endpat/{p=0};p;/beginpat/{p=1}'
+
+# prints lines from /beginpat/ to /endpat/, excluding /endpat/
+awk '/endpat/{p=0} /beginpat/{p=1} p'
+
+# prints lines from /beginpat/ to /endpat/, excluding /beginpat/
+awk 'p; /endpat/{p=0} /beginpat/{p=1}'
+
+
+# prints lines from /beginpat/ to /endpat/, inclusive
+awk '/beginpat/{p=1};p;/endpat/{p=0}'
+```
+上面这个例子都是在遇到/beginpat/的行的时候把p设置为1.遇到/endpat/的行的时候把p设置为0.
+
+## Split file on patterns
+
+有个文件内容如下，我们想把匹配/^FOO/的行找出来，然后创建一些文件，out1，out2.
+out1里面保存前4行。out2里面保存line5，line6这2行。
+```text
+line1
+line2
+line3
+line4
+FOO1
+line5
+line6
+FOO2
+line7
+line8
+FOO3
+line9
+line10
+line11
+FOO4
+line12
+FOO5
+line13
+
+```
+
+```bash
+# first way, works with all versions of awk
+awk -v n=1 '/^FOO[0-9]*/{close("out"n);n++;next} {print > "out"n}' file
+
+```
+"-v n=1" 是告诉awk把变量n初始值为1.
+```bash
+# another way, needs GNU awk
+LC_ALL=C gawk -v RS='FOO[0-9]*\n' -v ORS= '{print > "out"NR}' file
+
+```
+
+## Locale-based pitfalls
+```text
+-rw-r--r-- 1 waldner users 46592 2003-09-12 09:41 file1
+-rw-r--r-- 1 waldner users 11509 2008-10-07 17:42 file2
+-rw-r--r-- 1 waldner users 11193 2008-10-07 17:41 file3
+-rw-r--r-- 1 waldner users 19073 2008-10-07 17:45 file4
+-rw-r--r-- 1 waldner users 36332 2008-10-07 17:03 file5
+-rw-r--r-- 1 waldner users 33395 2008-10-07 16:53 file6
+-rw-r--r-- 1 waldner users 54272 2008-09-18 16:20 file7
+-rw-r--r-- 1 waldner users 20573 2008-10-07 17:50 file8
+
+```
+
+```bash
+$ LC_ALL=en_US.utf8 awk --re-interval '{sub(/^([^[:space:]]+[[:space:]]+){3}/,"")}1' file
+-rw-r--r-- 1 waldner users 46592 2003-09-12 09:41 file1
+-rw-r--r-- 1 waldner users 11509 2008-10-07 17:42 file2
+-rw-r--r-- 1 waldner users 11193 2008-10-07 17:41 file3
+-rw-r--r-- 1 waldner users 19073 2008-10-07 17:45 file4
+-rw-r--r-- 1 waldner users 36332 2008-10-07 17:03 file5
+-rw-r--r-- 1 waldner users 33395 2008-10-07 16:53 file6
+-rw-r--r-- 1 waldner users 54272 2008-09-18 16:20 file7
+-rw-r--r-- 1 waldner users 20573 2008-10-07 17:50 file8
+
+```
+
+```bash
+$ LC_ALL=C awk --re-interval '{sub(/^([^[:space:]]+[[:space:]]+){3}/,"")}1' file
+users 46592 2003-09-12 09:41 file1
+users 11509 2008-10-07 17:42 file2
+users 11193 2008-10-07 17:41 file3
+users 19073 2008-10-07 17:45 file4
+users 36332 2008-10-07 17:03 file5
+users 33395 2008-10-07 16:53 file6
+users 54272 2008-09-18 16:20 file7
+users 20573 2008-10-07 17:50 file8
+
+```
+
+```bash
+$ echo 'èòàù' | LC_ALL=en_US.utf8 awk '/[a-z]/'
+èòàù
+
+```
+
+
+## Parse CSV
+
+解析csv格式文件，这种格式文件都是逗号分割的一个一个字段，我们可以设置FS=','，字段的前后可能会有空格
+，这些空格是我们不需要的，最后需要去掉这些空格。
+```text
+    field1  ,   field2   , field3   , field4
+
+```
+
+变量 FS 可以是一个正则表达式,例如 FS='^ *| *, *| *$'. 但是呢这个有可能有问题的:
+
+* 实际的分割后的数据可能对应 字段1 ... 字段NF 或者 字段2 ... 字段NF, 这取决于这一行开头是否有空格;
+* 出于某种原因把FS赋值为正则的，如果字段中包含了空格可能导致不确定的结果。
+
+变量FS是field-separator，字段分隔符的意思。
+
+对于这个例子，我们最好的做法是设置FS=","，然后移除字段前后的空格。
+```bash
+# FS=','
+for(i=1;i<=NF;i++){
+  gsub(/^ *| *$/,"",$i);
+  print "Field " i " is " $i;
+}
+
+```
+
+另外一种格式的csv文件：
+```text
+"field1","field2","field3","field4"
+```
+这个是每个字段都包含了双引号。这个我们可以简单的设置FS='^"|","|"$' (或者 FS='","|"')
+这个需要注意的是我们最后取的字段的位置是2, 3 ... NF-1.
+
+我们还可以扩展FS，让他可以处理到空格的：
+```text
+   "field1"  , "field2",   "field3" , "field4"
+```
+FS可以设置为：FS='^ *"|" *, *"|" *$'，注意字段的位置我们这里是2 ... NF-1 是我们需要的。
+当然你也可以把FS设置为：FS=',',然后手动处理多余的空格和双引号等字符。
+```bash
+
+# FS=','
+for(i=1;i<=NF;i++){
+  gsub(/^ *"|" *$/,"",$i);
+  print "Field " i " is " $i;
+}
+
+```
+
+另外一种特别的格式的csv文件：
+```bash
+
+ field1, "field2,with,commas"  ,  field3  ,  "field4,foo"
+
+```
+这个是有的字段有双引号，有的字段没有，而且中间可能有空格。
+```bash
+$0=$0",";                                  # yes, cheating
+while($0) {
+  match($0,/[^,]*,| *"[^"]*" *,/);            
+  sf=f=substr($0,RSTART,RLENGTH);          # save what matched in sf
+  gsub(/^ *"?|"? *,$/,"",f);               # remove extra stuff
+  print "Field " ++c " is " f;
+  sub(sf,"");                              # "consume" what matched
+}
+
+```
+
+## Pitfall: validate an IPv4 address
+
+
+检查ipv4地址：
+```bash
+
+awk -F '[.]' 'function ok(n){return (n>=0 && n<=255)} {exit (ok($1) && ok($2) && ok($3) && ok($4))}'
+
+```
+上面的没有对字母进行验证。像传入这样的 '123b.44.22c.3' 也能验证通过。
+
+```bash
+awk -F '[.]' 'function ok(n) {
+  return (n ~ /^([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])$/)
+}
+{exit (ok($1) && ok($2) && ok($3) && ok($4))}'
+
+```
+
+## Check whether two files contain the same data
+```bash
+awk '!($0 in a) {c++;a[$0]} END {exit(c==NR/2?0:1)}' file1 file2
+
+```
+
+## Pitfall: contexts and variable types in awk
+
+```text
+1,2,3,,5,foo
+1,2,3,0,5,bar
+1,2,3,4,5,baz
+
+```
+
+```bash
+
+awk -F ',' -v OFS=',' '{if ($4) $6="X"}1'
+
+```
+这个我们是想把某行第四个字段不是空的情况的行里面的第6个字段复制为X。但是这3行只有最后一行被赋值了。
+倒数第二行没有赋值。这是怎么回事呢？难道0是个空字符吗？
+
+在awk中，只有数字和字符串2中类型的数据。awk会把看起来像数字的当成数字，其他的当成字符串。
+这个"if ($4)"没有给出确定的上下文，它可以测试任何类型的数据。  
+在第一行 $4是一个空字符串，所以这里if里面是false。   
+在第二行 $4 是 ”0“，这个看起来是个数字，所以awk把它当成数字0 了。而不是字符串"0"，所以if也是false。  
+
+幸运的是我们有方法来告诉awk数据是上面类型。
+* 我们可以在$4后面跟上一个空的双引号来告诉awk我们想让这个当成字符串来使用。后面追加个空字符串原来是值是不变的。
+* 我们还有可以在$4上加上0来告诉awk我们要把它作为数字来使用，加个0原来的数值是不变的。
+
+```bash
+awk -F ',' -v OFS=',' '{if ($4"") $6="X"}1'   # the "" forces awk to evaluate the variable as a string
+```
+
+另外一个典型的问题就是下面这个：
+```bash
+
+awk '/foo/{tot++} END{print tot}'
+
+```
+这个是计算包含/foo/行的个数的，但是如果没有一行匹配，最后是会打印个空字符串的。而不是打印个0.
+
+```bash
+awk '/foo/{tot++} END{print tot+0}'
+```
+和上面说的一样。我们可以给一个变量加上一个0，让awk把它作为数字来使用。
+
+
+## Pulling out things
+
+假设有这样一段文本。我们像提取出=something=之间的内容的
+```bash
+Yesterday I was walking in =the street=, when I saw =a
+black dog=. There was also =a cat= hidden around there. =The sun= was shining, and =the sky= was blue.
+I entered =the
+music
+shop= and I bought two CDs. Then I went to =the cinema= and watched =a very nice movie=.
+End of the story.
+
+```
+
+```bash
+awk -v RS='=' '!(NR%2)'
+# awk -v RS='=' '!(NR%2){gsub(/\n/," ");print}'    # if you want to reformat embedded newlines
+
+```
+这里我们设置了RS为‘=’,这样我们可以打印偶数的。
+
+对于这样的<tag>something</tag>.格式的数据。使用gnu awk可以这样做：
+```bash
+
+gawk -v RS='</?tag>' 'RT=="</tag>"'
+
+```
+或者
+```bash
+
+gawk -v RS='</?tag>' '!(NR%2)'
+
+```
+
+RS          The input record separator, by default a newline.
+
+RT          The record terminator.  Gawk sets RT to the input text that matched the character or regular expression specified by RS.
+
+```bash
+gawk -v RS='[0-9]+' 'RT{print RT}'
+
+```
+改进版，检查RT是否是null。
+```bash
+gawk -v RS='--[0-9]+--' 'RT{gsub(/--/,"",RT);print RT}'
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
