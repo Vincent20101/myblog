@@ -862,8 +862,146 @@ tar -xvf test.tar  # 从tar文件test.tar中提取内容。如果tar文件是从
 
 
 # 第5 章 理解shell
+本章内容  
+ 探究shell的类型  
+ 理解shell的父/子关系  
+ 别出心裁的子shell用法  
+ 探究内建的shell命令  
+
+
+## shell 的类型
+/bin/bash  
+/bin/sh  
+/bin/dash--
+
+
+
+
+
+## 进程列表
+
+```
+
+(pwd ; ls ; cd /etc ; pwd ; cd ; pwd ; ls)
+
+```
+
+```
+{ pwd ; ls ; cd /etc ; pwd ; cd ; pwd ; ls ; echo $BASH_SUBSHELL; }
+```
+小括号进程列表会在一个子shell中执行。花括号的不会。
+
+```
+sleep 3000&
+```
+使用 & 把一个命令放到后台执行。通过jobs可以列出后台进程。  
+fg和bg的使用  
+
+
+## 内建命令/外部命令
+
+```
+which ps
+
+type -a ps
+
+
+```
+
+命令历史 history  
+使用 ！！ 快速执行上次的命令
+使用 ！数字  快速执行history历史中对应标号的那个命令  
+
+
+
+alias命令
+
+```
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias grep='grep --color=auto'
+alias l='ls -CF'
+alias la='ls -A'
+
+
+```
+
+
 # 第6 章 使用Linux 环境变量
-# 第7 章 理解Linux 文件权限
+本章内容  
+ 什么是环境变量  
+ 创建自己的局部变量  
+ 删除环境变量  
+ 默认shell环境变量  
+ 设置PATH环境变量  
+ 定位环境文件  
+ 数组变量  
+
+
+## 什么是环境变量
+
+bash shell用一个叫作环境变量（environment variable）的特性来存储有关shell会话和工作环  
+境的信息（这也是它们被称作环境变量的原因）。这项特性允许你在内存中存储数据，以便程序  
+或shell中运行的脚本能够轻松访问到它们。  
+
+在bash shell中，环境变量分为两类：全局变量, 局部变量  
+
+可以使用env或printenv命令
+```
+$ printenv
+HOSTNAME=server01.class.edu
+SELINUX_ROLE_REQUESTED=
+TERM=xterm
+SHELL=/bin/bash
+HISTSIZE=1000
+[...]
+HOME=/home/Christine
+LOGNAME=Christine
+[...]
+G_BROKEN_FILENAMES=1
+_=/usr/bin/printenv
+```
+
+
+可以用printenv打印单独的某一个，env就不行。  
+```
+$ printenv HOME
+/home/Christine
+$
+$ env HOME
+env: HOME: No such file or directory
+$
+
+```
+也可以使用echo显示变量的,在这种情况下引用某个环境变量的时候，必须在变量前面加上一个美元符（$）。  
+```
+$ echo $HOME
+/home/Christine
+$
+
+```
+
+局部环境变量只能在定义它们的进程中可见。尽管它们是局部的，但是和全局环境变量一样重要.  
+
+set命令会显示为某个特定进程设置的所有环境变量，包括局部变量、全局变量以及用户定义变量.  
+
+命令env、printenv和set之间的差异很细微。  
+set命令会显示出全局变量、局部变量以  及用户定义变量。  
+它还会按照字母顺序对结果进行排序。env和printenv命令同set命  
+令的区别在于前两个命令不会对变量排序，也不会输出局部变量和用户定义变量。在这  
+种情况下，env和printenv的输出是重复的。不过env命令有一个printenv没有的功能，  
+这使得它要更有用一些。  
+
+
+
+
+
+
+
+
+
+
+ 第7 章 理解Linux 文件权限
 # 第8 章 管理文件系统
 # 第9 章 安装软件程序
 # 第10 章 使用编辑器
