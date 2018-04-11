@@ -725,7 +725,7 @@ Part III: Redirections 第三部分  重定向
 stderr，他们都会指向你的终端（terminal）。输入会读取终端中的内容，一般也就是你键盘敲入的内容。并且会把标准输出和标准错误送到终端上显示。
 
 假设你的终端设备是/dev/tty0，下面的截图解释了bash启动时候文件描述符的样子：
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_1.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_1.png)
 
 当bash执行一个命令的时候，他会fork一个子进程（fork查看帮助 man 2 fork），子进程会从父进程继承所有的文件描述符，
 设置好指定的重定向，最后执行该命令（查看man 3 exec）。
@@ -746,7 +746,7 @@ bash打开文件 ‘file’， 并且把文件描述符1 指向这个文件‘fi
 
 下面图片展示了文件描述符的改变：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_2.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_2.png)
 
 通常情况下 命令 ```command n>file``` 将会把文件描述符n 重定向到文件‘file’的。
 
@@ -764,7 +764,7 @@ $ command 2> file            马哥的淘宝店:https://shop592330910.taobao.com
 
 下面图片展示了文件描述符的改变。
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_3.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_3.png)
 
 bash打开文件‘file’来写入，得到这个文件描述符，然后把 文件描述符2 指向 这个文件 ‘file ’，所有 此刻开始所有
 的错误输出都会写入到这个文件‘file’。
@@ -778,7 +778,7 @@ $ command &>file             马哥的淘宝店:https://shop592330910.taobao.com
 
 下面图片展示了文件描述符的改变。
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_4.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_4.png)
 
 你可以看到 标准输出 和标准错误 此刻都指向文件‘file’了。所以呢 此刻所有的写入到stdout和stderr内容都会保存到文件‘file’中了。
 
@@ -790,31 +790,31 @@ $ command >file 2>&1              马哥的淘宝店:https://shop592330910.taoba
 上面是一种更加常见的方法，首先重定向 stdout 到文件file，然后将 stderr 重定向到和 stdout 同样的文件中。
 当 Bash 在命令中遇到多个重定向操作时，它会从左到右依次处理。我们通过图表来依次推导这整个过程。初始时文件描述符表的样子：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_5.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_5.png)
 
 现在 Bash 处理第一组重定向```>file```，我们之前已经解释过，它将使得 stdout 指向文件file：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_6.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_6.png)
 
 接下来，Bash 开始处理第二组重定向```2>&1```，它会把 stderr 重定向到 stdout 所指向的文件：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_7.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_7.png)
 
 这里要注意不要错误的写成：  ```    command >file 2>&1  ``` 这个命令和 ```    $ command 2>&1 >file  ```      是不一样的。千万注意。
 
 重定向的顺序是很重要的，这行命令只会把 stdout 重定向到文件，而 stderr 会继续输出到终端屏幕上。为了理解原因，我们同样来推导依次整个处理过程。
 在执行这个命令初始的时候文件描述符看起来像下面这个图片：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_8.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_8.png)
 
 
 当 Bash 遇到```2>&1```时，它会把 stderr 指向 stdout 对应的文件（这里是终端）：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_9.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_9.png)
 
 紧接着，Bash 看到>file，按照之前我们解释的，它会把 stdout 重定向到文件file：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_10.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_10.png)
 
 
 从上面的图片中可以看出，stdout 指向了文件file，但是 stderr 依然指向终端。所以，一定要注意重定向的书写顺序。
@@ -829,7 +829,7 @@ $ command >file 2>&1              马哥的淘宝店:https://shop592330910.taoba
 ```
 /dev/null是一个特殊的文件，任何写入到该文件的内容都会被丢弃。所以，我们需要做的就是把 stdout 重定向到文件/dev/null。  文件描述符看起来像下面这个图片：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_11.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_11.png)
 
 
 类似的，基于前一条命令，我们可以做到把输出到 stdout 和 stderr 的内容都丢弃：
@@ -842,7 +842,7 @@ $ command &>/dev/null         马哥的淘宝店:https://shop592330910.taobao.co
 ```
 文件描述符看起来像下面这个图片：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_12.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_12.png)
 
 
 5.重定向文件到命令的 stdin
@@ -852,7 +852,7 @@ $ command <file            马哥的淘宝店:https://shop592330910.taobao.com/
 Bash 在执行命令之前，打开文件file准备读入。如果打开文件出错，Bash 会直接返错，不会继续执行命令。
 相反如果打开成功，Bash 会使用打开的文件的文件描述符作为命令的标准输入。此时，文件描述符表的样子为：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_13.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_13.png)
 
 下面是一个例子，假如你想把文件的第一行读入到变量中：
 ```
@@ -958,7 +958,7 @@ $ exec 3<file    马哥的淘宝店:https://shop592330910.taobao.com/
 上面我们再次用到了exec命令，3<file告诉它以只读方式打开文件 file，并将文件描述符 3 指向打开的文件：
 此时，文件描述符表的样子为：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_14.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_14.png)
 
 现在你可以从这个文件描述符3 来读取数据了：
 ```
@@ -982,7 +982,7 @@ $ exec 4>file         马哥的淘宝店:https://shop592330910.taobao.com/
 ```
 这里我们简单的告诉bash 来 打开一个文件，赋值一个文件描述符 4 ，此时，文件描述符表的样子为：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_15.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_15.png)
 
 
 你可以看到，你并不需要按顺序使用文件描述符，可以任意挑选从 0 到 255 之内的所有未被使用的描述符。
@@ -1091,7 +1091,7 @@ tee是一个很方便的命令，它并不是 Bash 的一部分，但是你会�
 
 下面的图片描述了上面命令执行的过程：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_16.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_16.png)
 
 
 17.重定向进程的标准输出到另外一个进程的标准输入
@@ -1100,7 +1100,7 @@ $ command1 | command2   马哥的淘宝店:https://shop592330910.taobao.com/
 ```
 这个就是简单的管道的使用，管道是链接了command1的stdout 到command2的 stdin。
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_17.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_17.png)
 
 
 你可以从中看到 所有   来自命令1的文件描述符1（stdout） 内容 都重定向到了 来自命令2的文件描述符0（stding）
@@ -1115,7 +1115,7 @@ $ command1 2>&1 | command2   马哥的淘宝店:https://shop592330910.taobao.com
 ```
 下面的图片描述了上面命令执行的过程：
  
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_18.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_18.png)
 
 首先是命令1的stderr重定向到stdout， 然后是通过管道 一起 发送给命令2 的stdin。
 
@@ -1149,20 +1149,20 @@ $ command 3>&1 1>&2 2>&3        马哥的淘宝店:https://shop592330910.taobao.
 
 下面我们通过图来展示以上过程，初始的时候是这样的：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_19.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_19.png)
 
 
 首先，执行了3>&1之后，文件描述符3指向 stdout：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_20.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_20.png)
 
 接下来，执行1>&2，文件描述符1指向了 stderr：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_21.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_21.png)
 
 最后，执行2>&3，文件描述符2执向了 stdout：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_22.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_22.png)
 
 
 如果你是一个追求完美的人，可以将文件描述符3关闭：
@@ -1171,7 +1171,7 @@ $ command 3>&1 1>&2 2>&3 3>&-        马哥的淘宝店:https://shop592330910.ta
 ```
 最终的文件描述符图会是这样的：
 
-![这里写图片描述](https://github.com/mageSFC/myblog/blob/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_23.png)
+![这里写图片描述](https://raw.githubusercontent.com/mageSFC/myblog/master/images/bash%E5%AD%A6%E4%B9%A0%E4%B9%8Bcookbook%E6%8A%80%E5%B7%A7_23.png)
 
 最终你可以发现 文件描述符1 和文件描述符2 已经交换了。
 
