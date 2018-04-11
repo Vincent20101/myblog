@@ -929,13 +929,13 @@ alias la='ls -A'
 
 # 第6 章 使用Linux 环境变量
 本章内容  
- 什么是环境变量  
- 创建自己的局部变量  
- 删除环境变量  
- 默认shell环境变量  
- 设置PATH环境变量  
- 定位环境文件  
- 数组变量  
+ 什么是环境变量  
+ 创建自己的局部变量  
+ 删除环境变量  
+ 默认shell环境变量  
+ 设置PATH环境变量  
+ 定位环境文件  
+ 数组变量  
 
 
 ## 什么是环境变量
@@ -981,27 +981,419 @@ $
 
 ```
 
-局部环境变量只能在定义它们的进程中可见。尽管它们是局部的，但是和全局环境变量一样重要.  
+局部环境变量只能在定义它们的进程中可见.  
 
 set命令会显示为某个特定进程设置的所有环境变量，包括局部变量、全局变量以及用户定义变量.  
 
 命令env、printenv和set之间的差异很细微。  
-set命令会显示出全局变量、局部变量以  及用户定义变量。  
-它还会按照字母顺序对结果进行排序。env和printenv命令同set命  
-令的区别在于前两个命令不会对变量排序，也不会输出局部变量和用户定义变量。在这  
-种情况下，env和printenv的输出是重复的。不过env命令有一个printenv没有的功能，  
-这使得它要更有用一些。  
+set命令会显示出全局变量、局部变量以及用户定义变量。  它还会按照字母顺序对结果进行排序。  
+env和printenv命令同set命令的区别在于前两个命令不会对变量排序，也不会输出局部变量和用户定义变量。在这种情况下，env和printenv的输出是重复的。
+
+不过env命令有一个printenv没有的功能，这使得它要更有用一些。
+
+env - run a program in a modified environment  
+env可以用来设置某个环境变量来给某个命令
+
+printenv - print all or part of environment  
+这个仅仅是打印环境变量  
+
+
+## 设置用户定义变量
+
+
+### 设置局部变量
+
+一旦启动了bash shell（或者执行一个shell脚本），就能创建在这个shell进程内可见的局部变
+量了。可以通过等号给环境变量赋值，值可以是数值或字符串
+
+```bash
+
+$ echo $my_variable
+
+$ my_variable=Hello    # 记住，变量名、等号和值之间没有空格，这一点非常重要
+$
+$ echo $my_variable
+Hello
+ 
+
+```
+现在每次引用my_variable 环境变量的值，只要通过$my_variable引用即可。
+
+如果要给变量赋一个含有空格的字符串值，必须用单引号来界定字符串的首和尾。  
+没有单引号的话，bash shell会以为下一个词是另一个要执行的命令
+```bash
+
+$ my_variable=Hello World
+-bash: World: command not found
+$
+$ my_variable="Hello World"
+$
+$ echo $my_variable
+Hello World
+$
+
+```
+
+所有的环境变量名均使用大写字母，这是bash shell的标准惯例。
+如果是你自己创建的局部变量或是shell脚本，请使用小写字母。
+变量名区分大小写。在涉及用户定义的局部变量时坚持使用小写字母，这能够避免重新定义系统环境变量可能带来的灾难。
+
+记住，变量名、等号和值之间没有空格，这一点非常重要
+```bash
+
+$ my_variable = "Hello World"
+-bash: my_variable: command not found
+$
+
+```
+
+设置了局部环境变量后，就能在shell进程的任何地方使用它了。但是，如果生成了另外一个shell，它在子shell中就不可用。 后续我们介绍export让其在子shell中可用。
+```bash
+$ my_variable="Hello World"
+$
+$ bash
+$
+$ echo $my_variable
+$ exit
+exit
+$
+$ echo $my_variable
+Hello World
+$
+```
+在这个例子中生成了一个子shell。在子shell中无法使用用户定义变量my_variable。通过命
+令echo $my_variable所返回的空行就能够证明这一点。当你退出子shell并回到原来的shell时，
+这个局部环境变量依然可用。
+
+类似地，如果你在子进程中设置了一个局部变量，那么一旦你退出了子进程，那个局部环境
+变量就不可用。
+```bash
+
+$ echo $my_child_variable    # 这个是在父shell中执行的
+$ bash                       # 进入子shell
+$
+$ my_child_variable="Hello Little World"  # 在子shell中设置变量值
+$
+$ echo $my_child_variable    # 子shell中可以打印变量值
+Hello Little World
+$
+$ exit
+exit
+$
+$ echo $my_child_variable   # 退出子shell后，这个变量就消失了
+$
+
+```
+当我们回到父shell时，子shell中设置的局部变量就不存在了。
+
+### exprot 设置全局环境变量
+
+创建全局环境变量的方法是先创建一个局部环境变量，然后再把它导出到全局环境中。这个过程通过export命令来完成，变量名前面不需要加$。
+```bash
+$ my_variable="I am Global now"
+$
+$ export my_variable
+$
+$ echo $my_variable
+I am Global now
+$
+$ bash
+$
+$ echo $my_variable
+I am Global now
+$
+$ exit
+exit
+$
+$ echo $my_variable
+I am Global now
+$
+
+
+```
+
+修改子shell中全局环境变量并不会影响到父shell中该变量的值。
+```bash
+
+$ my_variable="I am Global now"
+$ export my_variable
+$
+$ echo $my_variable
+I am Global now
+$
+$ bash
+$
+$ echo $my_variable
+I am Global now
+$
+$ my_variable="Null"
+$
+$ echo $my_variable
+Null
+$
+$ exit
+exit
+$
+$ echo $my_variable
+I am Global now
+$
+
+```
+在定义并导出变量my_variable后，bash命令启动了一个子shell。在这个子shell中能够正
+确显示出全局环境变量my_variable的值。子shell随后改变了这个变量的值。但是这种改变仅在
+子shell中有效，并不会被反映到父shell中。
+
+
+子shell甚至无法使用export命令改变父shell中全局环境变量的值。
+```bash
+
+$ my_variable="I am Global now"
+$ export my_variable
+$
+$ echo $my_variable
+I am Global now
+$
+$ bash
+$
+$ echo $my_variable
+I am Global now
+$
+$ my_variable="Null"
+$
+$ export my_variable
+$
+$ echo $my_variable
+Null
+$
+$ exit
+exit
+$
+$ echo $my_variable
+I am Global now
+$
+
+```
+尽管子shell重新定义并导出了变量my_variable，但父shell中的my_variable变量依然保
+留着原先的值。
+
+
+### unset 删除环境变量
+当然，既然可以创建新的环境变量，自然也能删除已经存在的环境变量。可以用unset命令
+完成这个操作。在unset命令中引用环境变量时，记住不要使用$。
+```bash
+
+$ echo $my_variable
+I am Global now
+$
+$ unset my_variable
+$
+$ echo $my_variable
+$
+
+```
+
+在涉及环境变量名时，什么时候该使用$，什么时候不该使用$，实在让人摸不着头脑。
+记住一点就行了：如果要用到变量，使用$；如果要操作变量，不使用$。这条规则的一
+个例外就是使用printenv显示某个变量的值。
+
+
+在处理全局环境变量时，事情就有点棘手了。如果你是在子进程中删除了一个全局环境变量，
+这只对子进程有效。该全局环境变量在父进程中依然可用。
+```bash
+
+$ my_variable="I am Global now"
+$
+$ export my_variable
+$
+$ echo $my_variable
+I am Global now
+$
+$ bash
+$
+$ echo $my_variable
+I am Global now
+$
+$ unset my_variable
+$
+$ echo $my_variable
+$ exit
+exit
+$
+$ echo $my_variable
+I am Global now
+$
+
+```
+和修改变量一样，在子shell中删除全局变量后，你无法将效果反映到父shell中。
+
+
+## 默认的shell 环境变量
+默认情况下，bash shell会用一些特定的环境变量来定义系统环境。这些变量在你的Linux系
+统上都已经设置好了，只管放心使用。
+```bash
+# bash shell支持的Bourne变量 ，列出了bash shell提供的与Unix Bourne shell兼容的环境变量
+
+CDPATH      冒号分隔的目录列表，作为cd命令的搜索路径
+HOME        当前用户的主目录
+IFS         shell用来将文本字符串分割成字段的一系列字符
+MAIL        当前用户收件箱的文件名（bash shell会检查这个文件，看看有没有新邮件）
+MAILPATH    冒号分隔的当前用户收件箱的文件名列表（bash shell会检查列表中的每个文件，看看有没有新邮件）
+OPTARG      getopts命令处理的最后一个选项参数值
+OPTIND      getopts命令处理的最后一个选项参数的索引号
+PATH        shell查找命令的目录列表，由冒号分隔
+PS1         shell命令行界面的主提示符
+PS2         shell命令行界面的次提示符
+
+
+# bash shell环境变量
+
+BASH                当前shell实例的全路径名
+BASH_ALIASES        含有当前已设置别名的关联数组
+BASH_ARGC           含有传入子函数或shell脚本的参数总数的数组变量
+BASH_ARCV           含有传入子函数或shell脚本的参数的数组变量
+BASH_CMDS           关联数组，包含shell执行过的命令的所在位置
+BASH_COMMAND        shell正在执行的命令或马上就执行的命令
+BASH_ENV            设置了的话，每个bash脚本会在运行前先尝试运行该变量定义的启动文件
+BASH_EXECUTION_STRING 使用bash -c选项传递过来的命令
+BASH_LINENO         含有当前执行的shell函数的源代码行号的数组变量
+BASH_REMATCH        只读数组，在使用正则表达式的比较运算符=~进行肯定匹配（positive match）时， 包含了匹配到的模式和子模式
+BASH_SOURCE         含有当前正在执行的shell函数所在源文件名的数组变量
+BASH_SUBSHELL       当前子shell环境的嵌套级别（初始值是0）
+BASH_VERSINFO       含有当前运行的bash shell的主版本号和次版本号的数组变量
+BASH_VERSION        当前运行的bash shell的版本号
+BASH_XTRACEFD       若设置成了有效的文件描述符（0、1、2），则'set -x'调试选项生成的跟踪输出
+可被重定向。通常用来将跟踪输出到一个文件中
+BASHOPTS            当前启用的bash shell选项的列表
+BASHPID             当前bash进程的PID
+COLUMNS             当前bash shell实例所用终端的宽度
+COMP_CWORD COMP_WORDS变量的索引值，后者含有当前光标的位置
+COMP_LINE           当前命令行
+COMP_POINT          当前光标位置相对于当前命令起始的索引
+COMP_KEY            用来调用shell函数补全功能的最后一个键
+COMP_TYPE           一个整数值，表示所尝试的补全类型，用以完成shell函数补全
+COMP_WORDBREAKS Readline库中用于单词补全的词分隔字符
+COMP_WORDS          含有当前命令行所有单词的数组变量
+COMPREPLY
+COPROC
+含有由shell函数生成的可能填充代码的数组变量
+占用未命名的协进程的I/O文件描述符的数组变量
+DIRSTACK            含有目录栈当前内容的数组变量
+EMACS               设置为't'时，表明emacs shell缓冲区正在工作，而行编辑功能被禁止
+ENV                 如果设置了该环境变量，在bash shell脚本运行之前会先执行已定义的启动文件（仅用于当bash shell以POSIX模式被调用时）
+EUID                当前用户的有效用户ID（数字形式）
+FCEDIT              供fc命令使用的默认编辑器
+FIGNORE             在进行文件名补全时可以忽略后缀名列表，由冒号分隔
+FUNCNAME            当前执行的shell函数的名称
+
+
+FUNCNEST            当设置成非零值时，表示所允许的最大函数嵌套级数（一旦超出，当前命令即被终止）
+GLOBIGNORE          冒号分隔的模式列表，定义了在进行文件名扩展时可以忽略的一组文件名
+GROUPS              含有当前用户属组列表的数组变量
+histchars           控制历史记录扩展，最多可有3个字符
+HISTCMD             当前命令在历史记录中的编号
+HISTCONTROL         控制哪些命令留在历史记录列表中
+HISTFILE            保存shell历史记录列表的文件名（默认是.bash_history）
+HISTFILESIZE        最多在历史文件中存多少行
+HISTTIMEFORMAT      如果设置了且非空，就用作格式化字符串，以显示bash历史中每条命令的时间戳                   
+HISTIGNORE          由冒号分隔的模式列表，用来决定历史文件中哪些命令会被忽略
+HISTSIZE            最多在历史文件中存多少条命令
+HOSTFILE            shell在补全主机名时读取的文件名称
+HOSTNAME            当前主机的名称
+HOSTTYPE            当前运行bash shell的机器
+IGNOREEOF           shell在退出前必须收到连续的EOF字符的数量（如果这个值不存在，默认是1）
+INPUTRC             Readline初始化文件名（默认是.inputrc）
+LANG                shell的语言环境类别
+LC_ALL              定义了一个语言环境类别，能够覆盖LANG变量
+LC_COLLATE          设置对字符串排序时用的排序规则
+LC_CTYPE            决定如何解释出现在文件名扩展和模式匹配中的字符
+LC_MESSAGES         在解释前面带有$的双引号字符串时，该环境变量决定了所采用的语言环境设置
+LC_NUMERIC          决定着格式化数字时采用的语言环境设置
+LINENO              当前执行的脚本的行号
+LINES               定义了终端上可见的行数
+MACHTYPE            用“CPU公司系统”（CPU-company-system）格式定义的系统类型
+MAPFILE             一个数组变量，当mapfile命令未指定数组变量作为参数时，它存储了mapfile所读入的文本
+MAILCHECK           shell查看新邮件的频率（以秒为单位，默认值是60）
+OLDPWD              shell之前的工作目录
+OPTERR              设置为1时，bash shell会显示getopts命令产生的错误
+OSTYPE              定义了shell所在的操作系统
+PIPESTATUS          含有前台进程的退出状态列表的数组变量
+POSIXLY_CORRECT     设置了的话，bash会以POSIX模式启动
+PPID bash shell     父进程的PID
+PROMPT_COMMAND      设置了的话，在命令行主提示符显示之前会执行这条命令
+PROMPT_DIRTRIM      用来定义当启用了\w或\W提示符字符串转义时显示的尾部目录名的数量。被删除的目录名会用一组英文句点替换
+PS3                 select命令的提示符
+PS4                 如果使用了bash的-x选项，在命令行之前显示的提示信息
+PWD                 当前工作目录
+RANDOM              返回一个0～32767的随机数（对其的赋值可作为随机数生成器的种子）
+READLINE_LINE       当使用bind –x命令时，存储Readline缓冲区的内容
+READLINE_POINT      当使用bind –x命令时，表示Readline缓冲区内容插入点的当前位置
+REPLY               read命令的默认变量
+SECONDS             自从shell启动到现在的秒数（对其赋值将会重置计数器）
+SHELL               bash shell的全路径名
+SHELLOPTS           已启用bash shell选项列表，列表项之间以冒号分隔
+SHLVL               shell的层级；每次启动一个新bash shell，该值增加1
+TIMEFORMAT          指定了shell的时间显示格式
+TMOUT               select和read命令在没输入的情况下等待多久（以秒为单位）。默认值为0，表示无限长
+TMPDIR              目录名，保存bash shell创建的临时文件
+UID                 当前用户的真实用户ID（数字形式）
+
+```
+你可能已经注意到，不是所有的默认环境变量都会在运行set命令时列出。尽管这些都是默
+认环境变量，但并不是每一个都必须有一个值
 
 
 
 
 
+## 设置PATH 环境变量
+
+当你在shell命令行界面中输入一个外部命令时 ，shell必须搜索系统来找到对应的程序。
+```bash
+$ echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:
+/sbin:/bin:/usr/games:/usr/local/games
+$
+
+```
+输出中显示了有8个可供shell用来查找命令和程序。PATH中的目录使用冒号分隔。
+如果命令或者程序的位置没有包括在PATH变量中，那么如果不使用绝对路径的话，shell是没
+法找到的。如果shell找不到指定的命令或程序，它会产生一个错误信息：
+```bash
+
+$ myprog
+-bash: myprog: command not found
+$
+
+```
+问题是，应用程序放置可执行文件的目录常常不在PATH环境变量所包含的目录中。解决的办法是保证PATH环境变量包含了所有存放应用程序的目录。
+可以把新的搜索目录添加到现有的PATH环境变量中，无需从头定义。PATH中各个目录之间
+是用冒号分隔的。你只需引用原来的PATH值，然后再给这个字符串添加新目录就行了。可以参
+考下面的例子。
+```bash
+
+$ echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:
+/sbin:/bin:/usr/games:/usr/local/games
+$
+$ PATH=$PATH:/home/christine/Scripts
+$
+$ echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/
+games:/usr/local/games:/home/christine/Scripts
+$
+$ myprog
+The factorial of 5 is 120.
+$
+
+```
+窍门 如果希望子shell也能找到你的程序的位置，一定要记得把修改后的PATH环境变量导出。
 
 
 
+## 定位系统环境变量
 
 
- 第7 章 理解Linux 文件权限
+# 第7 章 理解Linux 文件权限
 # 第8 章 管理文件系统
 # 第9 章 安装软件程序
 # 第10 章 使用编辑器
