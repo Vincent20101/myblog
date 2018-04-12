@@ -488,6 +488,16 @@ o 9aebb83 [SR-886][app]performance optimization:disable iop from xiaomi
 --right-only 选项只会显示右边那个分支的提交，就是只显示shgit/dev_20171101分支的提交。  
 同样的他们的共同起始提交是最后一行那个。 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/ 
 
+
+
+
+![Android下的配置管理之道之git的使用_5.png](https://raw.githubusercontent.com/mageSFC/myblog/master/images/Android%E4%B8%8B%E7%9A%84%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86%E4%B9%8B%E9%81%93%E4%B9%8Bgit%E7%9A%84%E4%BD%BF%E7%94%A8_5.png)
+
+
+
+
+
+
 对于在git diff中使用double dot和triple dot的区别：  
 
 ```
@@ -506,3 +516,29 @@ $ git diff topic...master  (3)
 git diff topic..master  等价 git diff topic master   
 git diff topic...master 等价 git diff $(git merge-base topic master) master     
 ![Android下的配置管理之道之git的使用_4.png](https://raw.githubusercontent.com/mageSFC/myblog/master/images/Android%E4%B8%8B%E7%9A%84%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86%E4%B9%8B%E9%81%93%E4%B9%8Bgit%E7%9A%84%E4%BD%BF%E7%94%A8_4.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
