@@ -501,7 +501,7 @@ o 9aebb83 [SR-886][app]performance optimization:disable iop from xiaomi
 对于在git diff中使用double dot和triple dot的区别：  
 
 ```
-$ git diff topic master    (1)  
+$ git diff topic master    (1)      #欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 $ git diff topic..master   (2)  
 $ git diff topic...master  (3)  
 ```
@@ -513,15 +513,66 @@ $ git diff topic...master  (3)
 我们给个图片就清楚可以看到了： 
 ![Android下的配置管理之道之git的使用_3.png](https://raw.githubusercontent.com/mageSFC/myblog/master/images/Android%E4%B8%8B%E7%9A%84%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86%E4%B9%8B%E9%81%93%E4%B9%8Bgit%E7%9A%84%E4%BD%BF%E7%94%A8_3.png)
 
-git diff topic..master  等价 git diff topic master   
+git diff topic..master  等价 git diff topic master      #欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 git diff topic...master 等价 git diff $(git merge-base topic master) master     
 ![Android下的配置管理之道之git的使用_4.png](https://raw.githubusercontent.com/mageSFC/myblog/master/images/Android%E4%B8%8B%E7%9A%84%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86%E4%B9%8B%E9%81%93%E4%B9%8Bgit%E7%9A%84%E4%BD%BF%E7%94%A8_4.png)
 
 
+# git中HEAD^ 和HEAD~ 区别
+
+What's the difference between HEAD^ and HEAD~ in git
+
+```bash
+       <rev>^, e.g. HEAD^, v1.5.1^0   欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+           A suffix ^ to a revision parameter means the first parent of that commit object.  ^<n> means the <n>th parent (i.e.  <rev>^ is equivalent to <rev>^1). As a special rule,
+           <rev>^0 means the commit itself and is used when <rev> is the object name of a tag object that refers to a commit object.
+
+```
+```bash
+
+       <rev>~<n>, e.g. master~3   欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+           A suffix ~<n> to a revision parameter means the commit object that is the <n>th generation ancestor of the named commit object, following only the first parents. I.e.  <rev>~3
+           is equivalent to <rev>^^^ which is equivalent to <rev>^1^1^1. See below for an illustration of the usage of this form.
+
+```
+
+类似这样的一个符号的 ～  和  ^  都是表示父提交，  
+两个符号 ～～  和 ^^ 都是表示的爷爷提交。  
+
+他们的不同是体现在后面跟上了数字。  
+～2 表示的是上面2层。这个是在层级上的。~2 means up two levels in the hierarchy。  
+^2 表示的第二个父提交。一个^ 表示第一个父提交，两个^表示第二个父提交。^2 means the second parent where a commit has more than one parent (i.e. because it's a merge)  
+这2个符号也可以组合起来使用的。HEAD~2^3 means HEAD's grandparent commit's third parent commit  
 
 
+下面我们看一个提交树状图。从下往上，从左往右。 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+```bash
 
+       Here is an illustration, by Jon Loeliger. Both commit nodes B and C are parents of commit node A. Parent commits are ordered left-to-right.
 
+           G   H   I   J
+            \ /     \ /
+             D   E   F
+              \  |  / \
+               \ | /   |
+                \|/    |
+                 B     C
+                  \   /
+                   \ /
+                    A
+
+           A =      = A^0
+           B = A^   = A^1     = A~1    欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+           C = A^2  = A^2              欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+           D = A^^  = A^1^1   = A~2    欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+           E = B^2  = A^^2              欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+           F = B^3  = A^^3              欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+           G = A^^^ = A^1^1^1 = A~3     欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+           H = D^2  = B^^2    = A^^^2  = A~2^2  欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+           I = F^   = B^3^    = A^^3^    欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+           J = F^2  = B^3^2   = A^^3^2   欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+
+```
 
 
 
