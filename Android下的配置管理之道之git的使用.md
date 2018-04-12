@@ -414,6 +414,7 @@ git log A..B    # 欢迎光临 马哥私房菜 淘宝https://shop592330910.taoba
 
 
 
+
 对于2个分支A和B来说： 
 ```bash
 git log A...B   # 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
@@ -487,3 +488,21 @@ o 9aebb83 [SR-886][app]performance optimization:disable iop from xiaomi
 --right-only 选项只会显示右边那个分支的提交，就是只显示shgit/dev_20171101分支的提交。  
 同样的他们的共同起始提交是最后一行那个。 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/ 
 
+对于在git diff中使用double dot和triple dot的区别：  
+
+```
+$ git diff topic master    (1)  
+$ git diff topic..master   (2)  
+$ git diff topic...master  (3)  
+```
+1.Changes between the tips of the topic and the master branches.  
+2.Same as above.  
+3.Changes that occurred on the master branch since when the topic branch was started off it. 
+第一个和第二个一样，都是比较topic 分支到 master分支在那个最后一个提交处的代码的差异。  
+第三个就是比较两个分支共同起始点那个提交开始，到master结束的那个提交 的差异。  
+我们给个图片就清楚可以看到了： 
+![Android下的配置管理之道之git的使用_3.png](https://raw.githubusercontent.com/mageSFC/myblog/master/images/Android%E4%B8%8B%E7%9A%84%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86%E4%B9%8B%E9%81%93%E4%B9%8Bgit%E7%9A%84%E4%BD%BF%E7%94%A8_3.png)
+
+git diff topic..master  等价 git diff topic master   
+git diff topic...master 等价 git diff $(git merge-base topic master) master     
+![Android下的配置管理之道之git的使用_4.png](https://raw.githubusercontent.com/mageSFC/myblog/master/images/Android%E4%B8%8B%E7%9A%84%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86%E4%B9%8B%E9%81%93%E4%B9%8Bgit%E7%9A%84%E4%BD%BF%E7%94%A8_4.png)
