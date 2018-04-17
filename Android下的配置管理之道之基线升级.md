@@ -663,8 +663,18 @@ Changes to be committed:
 
 
 通过操作 git checkout --ours来选择高通提交  
-通过执行 git checkout --theirs 选择我们直接的提交
+通过执行 git checkout --theirs 选择我们自己的提交
 
+怎么理解这个ours，还是thires呢？
+```bash
+我们要看当前这个历史中的基线是 高通的还是我们的？  ours代表的基线历史中的那一方。
+
+例如rebase的时候，此时历史基线就是高通的，rebase操作是先把基线换成高通的，然后是把我们自己的提交一个一个打上的。
+
+例如cherry pick时候，此时历史是我们自己的，我们pick的提交是高通的，这个时候ours代表我们自己，theirs代表高通的。
+如果反过来，历史基线是高通的，我们pick自己的提交，这个时候ours是代表高通的，thires代表我们的。
+
+```
 
   
 ## 升级冲突之文本文件冲突解决策略
