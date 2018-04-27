@@ -1519,20 +1519,626 @@ $
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 # 第7 章 理解Linux 文件权限
+
+本章内容
+ 理解Linux的安全性
+ 解读文件权限
+ 使用Linux组
+
+
+
+
+用户权限是通过创建用户时分配的用户ID（User ID，通常缩写为UID）来跟踪的。
+UID是数值，每个用户都有唯一的UID，但在登录系统时用的不是UID，而是登录名。
+
+
+
+## /etc/passwd 文件
+
+```
+$ cat /etc/passwd                                                                                                              [mamh@10.0.63.43 ] 18-04-23 17:25  /home/mamh/work/jenkins-core
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+syslog:x:101:104::/home/syslog:/bin/false
+messagebus:x:102:106::/var/run/dbus:/bin/false
+usbmux:x:103:46:usbmux daemon,,,:/home/usbmux:/bin/false
+dnsmasq:x:104:65534:dnsmasq,,,:/var/lib/misc:/bin/false
+avahi-autoipd:x:105:113:Avahi autoip daemon,,,:/var/lib/avahi-autoipd:/bin/false
+kernoops:x:106:65534:Kernel Oops Tracking Daemon,,,:/:/bin/false
+rtkit:x:107:114:RealtimeKit,,,:/proc:/bin/false
+saned:x:108:115::/var/lib/saned:/bin/false
+whoopsie:x:109:116::/nonexistent:/bin/false
+speech-dispatcher:x:110:29:Speech Dispatcher,,,:/var/run/speech-dispatcher:/bin/sh
+avahi:x:111:117:Avahi mDNS daemon,,,:/var/run/avahi-daemon:/bin/false
+lightdm:x:112:118:Light Display Manager:/var/lib/lightdm:/bin/false
+colord:x:113:121:colord colour management daemon,,,:/var/lib/colord:/bin/false
+hplip:x:114:7:HPLIP system user,,,:/var/run/hplip:/bin/false
+pulse:x:115:122:PulseAudio daemon,,,:/var/run/pulse:/bin/false
+sshd:x:116:65534::/var/run/sshd:/usr/sbin/nologin
+systemd-timesync:x:118:127:systemd Time Synchronization,,,:/run/systemd:/bin/false
+systemd-network:x:119:128:systemd Network Management,,,:/run/systemd/netif:/bin/false
+systemd-resolve:x:120:129:systemd Resolver,,,:/run/systemd/resolve:/bin/false
+systemd-bus-proxy:x:121:130:systemd Bus Proxy,,,:/run/systemd:/bin/false
+uuidd:x:100:101::/run/uuidd:/bin/false
+_apt:x:122:65534::/nonexistent:/bin/false
+sddm:x:123:132:Simple Desktop Display Manager:/var/lib/sddm:/bin/false
+ntop:x:124:133::/var/lib/ntop:/bin/false
+statd:x:125:65534::/var/lib/nfs:/bin/false
+ftp:x:126:134:ftp daemon,,,:/srv/ftp:/bin/false
+postgres:x:127:135:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash
+mysql:x:128:137:MySQL Server,,,:/nonexistent:/bin/false
+Debian-exim:x:129:138::/var/spool/exim4:/bin/false
+tomcat8:x:130:139::/usr/share/tomcat8:/bin/false
+tomcat7:x:131:140::/usr/share/tomcat7:/bin/false
+jenkins:x:117:125:Jenkins,,,:/var/lib/jenkins:/bin/bash
+gerrit:x:1001:1001::/var/gerrit:
+mamh:x:1000:1000::/home/mamh:/usr/bin/zsh
+postfix:x:132:141::/var/spool/postfix:/bin/false
+redis:x:133:143::/var/lib/redis:/bin/false
+gitlab-www:x:999:999::/var/opt/gitlab/nginx:/bin/false
+git:x:998:998::/var/opt/gitlab:/bin/sh
+gitlab-redis:x:997:997::/var/opt/gitlab/redis:/bin/false
+gitlab-psql:x:996:996::/var/opt/gitlab/postgresql:/bin/sh
+gitlab-prometheus:x:995:995::/var/opt/gitlab/prometheus:/bin/sh
+nexus:x:1002:1002:,,,:/home/nexus:/bin/bash
+jetty:x:134:144::/usr/share/jetty9:/bin/false
+```
+
+root用户账户是Linux系统的管理员，固定分配给它的UID是0  
+Linux系统会为各种各样的功能创建不同的用户账户，而这些账户并不是真的用户。这些账户叫作系统账户，是系统上运行的各种服务进程访问资源用的特殊账户.  
+
+/etc/passwd文件的字段包含了如下信息：
+```
+登录用户名
+用户密码
+用户账户的UID（数字形式）
+用户账户的组ID（GID）（数字形式）
+用户账户的文本描述（称为备注字段）
+用户HOME目录的位置
+用户的默认shell
+```
+/etc/passwd文件中的密码字段都被设置成了x，这并不是说所有的用户账户都用相同的密码。
+在早期的Linux上，/etc/passwd文件里有加密后的用户密码。但鉴于很多程序都需要访问
+/etc/passwd文件获取用户信息，这就成了一个安全隐患。随着用来破解加密密码的工具的不断演
+进，用心不良的人开始忙于破解存储在/etc/passwd文件中的密码。Linux开发人员需要重新考虑这
+个策略。
+现在，绝大多数Linux系统都将用户密码保存在另一个单独的文件中（叫作shadow文件，位置
+在/etc/shadow）。只有特定的程序（比如登录程序）才能访问这个文件。
+
+/etc/passwd是一个标准的文本文件。你可以用任何文本编辑器在/etc/password文件里直接手动
+进行用户管理（比如添加、修改或删除用户账户）。但这样做极其危险。如果/etc/passwd文件出现
+损坏，系统就无法读取它的内容了，这样会导致用户无法正常登录（即便是root用户）。用标准的
+Linux用户管理工具去执行这些用户管理功能就会安全许多。
+
+
+## /etc/shadow 文件
+
+/etc/shadow文件对Linux系统密码管理提供了更多的控制。只有root用户才能访问/etc/shadow文件，这让它比起/etc/passwd安全许多
+```
+$ sudo cat /etc/shadow                                                                                                         [mamh@10.0.63.43 ] 18-04-26 16:25  /home/mamh/work/jenkins-core
+root:!:16981:0:99999:7:::
+daemon:*:16848:0:99999:7:::
+bin:*:16848:0:99999:7:::
+sys:*:16848:0:99999:7:::
+sync:*:16848:0:99999:7:::
+games:*:16848:0:99999:7:::
+man:*:16848:0:99999:7:::
+lp:*:16848:0:99999:7:::
+mail:*:16848:0:99999:7:::
+news:*:16848:0:99999:7:::
+uucp:*:16848:0:99999:7:::
+proxy:*:16848:0:99999:7:::
+www-data:*:16848:0:99999:7:::
+backup:*:16848:0:99999:7:::
+list:*:16848:0:99999:7:::
+irc:*:16848:0:99999:7:::
+gnats:*:16848:0:99999:7:::
+nobody:*:16848:0:99999:7:::
+syslog:*:16848:0:99999:7:::
+messagebus:*:16848:0:99999:7:::
+usbmux:*:16848:0:99999:7:::
+dnsmasq:*:16848:0:99999:7:::
+avahi-autoipd:*:16848:0:99999:7:::
+kernoops:*:16848:0:99999:7:::
+rtkit:*:16848:0:99999:7:::
+saned:*:16848:0:99999:7:::
+whoopsie:*:16848:0:99999:7:::
+speech-dispatcher:!:16848:0:99999:7:::
+avahi:*:16848:0:99999:7:::
+lightdm:*:16848:0:99999:7:::
+colord:*:16848:0:99999:7:::
+hplip:*:16848:0:99999:7:::
+pulse:*:16848:0:99999:7:::
+mamh:$6$Gi6ZqWPy$nl9MvdIPaQLZnsBloMgapvrryXf8IzaB2ovIFG/V90qhNYw5xnhl2SyTLR9uHjaZUZt64COGiyd0FovPi02gK/:16981:0:99999:7:::
+sshd:*:16981:0:99999:7:::
+jenkins:*:17017:0:99999:7:::
+systemd-timesync:*:17028:0:99999:7:::
+systemd-network:*:17028:0:99999:7:::
+systemd-resolve:*:17028:0:99999:7:::
+systemd-bus-proxy:*:17028:0:99999:7:::
+uuidd:!:16848:0:99999:7:::
+_apt:*:17028:0:99999:7:::
+sddm:*:17029:0:99999:7:::
+ntop:*:17099:0:99999:7:::
+gerrit:!:17102:0:99999:7:::
+statd:*:17134:0:99999:7:::
+ftp:*:17169:0:99999:7:::
+postgres:*:17183:0:99999:7:::
+mysql:!:17338:0:99999:7:::
+Debian-exim:!:17344:0:99999:7:::
+tomcat8:*:17372:0:99999:7:::
+tomcat7:*:17372:0:99999:7:::
+postfix:*:17403:0:99999:7:::
+redis:*:17403:0:99999:7:::
+gitlab-www:!:17421::::::
+git:!:17421::::::
+gitlab-redis:!:17421::::::
+gitlab-psql:!:17421::::::
+gitlab-prometheus:!:17421::::::
+nexus:!:17520:0:99999:7:::
+jetty:*:17550:0:99999:7:::
+```
+
+
+在/etc/shadow文件的每条记录中都有9个字段：
+```
+与/etc/passwd文件中的登录名字段对应的登录名
+加密后的密码
+自上次修改密码后过去的天数密码（自1970年1月1日开始计算）
+多少天后才能更改密码
+多少天后必须更改密码
+密码过期前提前多少天提醒用户更改密码
+密码过期后多少天禁用用户账户
+用户账户被禁用的日期（用自1970年1月1日到当天的天数表示）
+预留字段给将来使用
+
+```
+
+
+## 添加新用户,useradd命令
+
+useradd命令使用系统的默认值以及命令行参数来设置用户账户。系统默认值被设置在/etc/default/useradd文件中.
+```
+$ useradd -D                                                                                                                    
+GROUP=100             新用户会被添加到GID为100的公共组
+HOME=/home            新用户的HOME目录将会位于/home/loginname
+INACTIVE=-1           新用户账户密码在过期后不会被禁用；
+EXPIRE=               新用户账户未被设置过期日期；
+SHELL=/bin/sh         新用户账户将bash shell作为默认sh；
+SKEL=/etc/skel        系统会将/etc/skel目录下的内容复制到用户的HOME目录下
+CREATE_MAIL_SPOOL=no  系统为该用户账户在mail目录下创建一个用于接收邮件的文件
+$                      
+```
+
+倒数第二个值很有意思。useradd命令允许管理员创建一份默认的HOME目录配置，然后把
+它作为创建新用户HOME目录的模板。这样就能自动在每个新用户的HOME目录里放置默认的系
+统文件。在Ubuntu Linux系统上，/etc/skel目录有下列文件
+```
+$ ll /etc/skel -alh                                                                                                            
+total 40K
+drwxr-xr-x   2 root root 4.0K 5月  23  2017 ./
+drwxr-xr-x 191 root root  12K 4月  20 10:47 ../
+-rw-r--r--   1 root root 3.7K 6月  24  2016 .bashrc
+-rw-r--r--   1 root root  220 4月   9  2014 .bash_logout
+-rw-r--r--   1 root root  655 6月  24  2016 .profile
+-rw-r--r--   1 root root 8.8K 10月  4  2013 examples.desktop
+```
+
+
+```
+-c comment 给新用户添加备注
+-d home_dir 为主目录指定一个名字（如果不想用登录名作为主目录名的话）
+-e expire_date 用YYYY-MM-DD格式指定一个账户过期的日期
+-f inactive_days 指定这个账户密码过期后多少天这个账户被禁用；0表示密码一过期就立即禁用，1表示
+禁用这个功能
+-g initial_group 指定用户登录组的GID或组名
+-G group ... 指定用户除登录组之外所属的一个或多个附加组
+-k 必须和-m一起使用，将/etc/skel目录的内容复制到用户的HOME目录
+-m 创建用户的HOME目录
+-M 不创建用户的HOME目录（当默认设置里要求创建时才使用这个选项）
+-n 创建一个与用户登录名同名的新组
+
+-r 创建系统账户
+-p passwd 为用户账户指定默认密码
+-s shell 指定默认的登录shell
+-u uid 为账户指定唯一的UID
+```
+
+修改一下系统的默认值,可以在-D选项后跟上一个指定的值来修改系统默认的新用户设置.
+```
+-b default_home 更改默认的创建用户HOME目录的位置
+-e expiration_date 更改默认的新账户的过期日期
+-f inactive 更改默认的新用户从密码过期到账户被禁用的天数
+-g group 更改默认的组名称或GID
+-s shell 更改默认的登录shell
+```
+
+## 删除用户 userdel命令
+
+userdel命令会只删除/etc/passwd文件中的用户信息，而不会删除系统中属于该账户的任何文件。.
+
+-r参数，userdel会删除用户的HOME目录以及邮件目录.
+
+
+## 修改用户 usermod命令
+
+usermod命令是用户账户修改工具中最强大的一个。它能用来修改/etc/passwd文件中的大部分字段.
+-c修改备注字段，  
+-e修改过期日期，  
+-g修改默认的登录组  
+-l修改用户账户的登录名。  
+-L锁定账户，使用户无法登录。  
+-p修改账户的密码。  
+-U解除锁定，使用户能够登录。  
+
+
+## 修改密码 passwd和chpasswd 命令
+
+passwd和chpasswd
+如果只用passwd命令，它会改你自己的密码。系统上的任何用户都能改自己的密码，但只有root用户才有权限改别人的密码。  
+-e选项能强制用户下次登录时修改密码。你可以先给用户设置一个简单的密码，之后再强制在下次登录时改成他们能记住的更复杂的密码。  
+如果需要为系统中的大量用户修改密码，chpasswd命令可以事半功倍。chpasswd命令能从标准输入自动读取登录名和密码对（由冒号分割）列表，给密码加密，然后为用户账户设置.
+
+
+## 修改用户 chsh、chfn和chage
+chsh命令用来快速修改默认的用户登录shell。使用时必须用shell的全路径名作为参数，不能只用shell名。
+```
+# chsh -s /bin/csh test
+Changing shell for test.
+Shell changed.
+#
+```
+chfn命令提供了在/etc/passwd文件的备注字段中存储信息的标准方法。chfn命令会将用于
+Unix的finger命令的信息存进备注字段，而不是简单地存入一些随机文本（比如名字或昵称之
+类的），或是将备注字段留空。finger命令可以非常方便地查看Linux系统上的用户信息。
+```
+$ finger mamh
+Login: mamh           			Name: 
+Directory: /home/mamh               	Shell: /usr/bin/zsh
+On since Mon Apr 23 07:43 (CST) on tty7 from :0
+     4 days 1 hour idle
+On since Mon Apr 23 07:47 (CST) on pts/5 from 10.0.63.42
+    2 seconds idle
+On since Fri Apr 27 08:03 (CST) on pts/20 from :0
+   48 minutes 38 seconds idle
+On since Mon Apr 23 09:54 (CST) on pts/22 from linux-pc
+   3 days 23 hours idle
+On since Mon Apr 23 10:00 (CST) on pts/23 from linux-pc
+   17 hours 23 minutes idle
+Last login Thu Apr 26 20:36 (CST) on pts/26 from 10.0.13.159
+No mail.
+No Plan.
+$ finger root
+Login: root           			Name: root
+Directory: /root                    	Shell: /bin/bash
+Never logged in.
+No mail.
+No Plan.
+
+```
+出于安全性考虑，很多Linux系统管理员会在系统上禁用finger命令，不少Linux发行版甚至都没有默认安装该命令。我的ubuntu上就没有。
+
+chfn命令时没有参数，它会向你询问要将哪些适合的内容加进备注字段。
+
+chage命令用来帮助管理用户账户的有效期。
+```bash
+-d 设置上次修改密码到现在的天数
+-E 设置密码过期的日期
+-I 设置密码过期到锁定账户的天数
+-m 设置修改密码之间最少要多少天
+-W 设置密码过期前多久开始出现提醒信息
+
+```
+
+chage命令的日期值可以用下面两种方式中的任意一种：
+ YYYY-MM-DD格式的日期
+ 代表从1970年1月1日起到该日期天数的数值
+
+chage命令中有个好用的功能是设置账户的过期日期。有了它，你就能创建在特定日期自动
+过期的临时用户，再也不需要记住删除用户了！过期的账户跟锁定的账户很相似：账户仍然存在，
+但用户无法用它登录。
+
+## /etc/group 文件
+每个组都有唯一的GID——跟UID类似，在系统上这是个唯一的数值。除了GID，每个组还有唯一的组名
+Ubuntu就会为每个用户创建一个单独的与用户账户同名的组。
+```bash
+
+$ cat /etc/group   
+root:x:0:
+daemon:x:1:
+bin:x:2:
+sys:x:3:
+adm:x:4:syslog,mamh
+tty:x:5:mamh
+disk:x:6:
+lp:x:7:
+mail:x:8:
+news:x:9:
+uucp:x:10:
+man:x:12:
+proxy:x:13:
+kmem:x:15:
+dialout:x:20:mamh
+fax:x:21:
+voice:x:22:
+cdrom:x:24:mamh
+floppy:x:25:
+tape:x:26:
+sudo:x:27:mamh
+audio:x:29:pulse
+dip:x:30:mamh
+www-data:x:33:
+backup:x:34:
+operator:x:37:
+list:x:38:
+irc:x:39:
+src:x:40:
+gnats:x:41:
+shadow:x:42:
+utmp:x:43:
+video:x:44:
+sasl:x:45:
+plugdev:x:46:mamh
+staff:x:50:
+games:x:60:
+users:x:100:
+nogroup:x:65534:
+netdev:x:102:
+crontab:x:103:
+syslog:x:104:
+fuse:x:105:
+messagebus:x:106:
+ssl-cert:x:107:postgres
+lpadmin:x:108:mamh
+scanner:x:109:saned
+mlocate:x:110:
+ssh:x:111:
+utempter:x:112:
+avahi-autoipd:x:113:
+rtkit:x:114:
+saned:x:115:
+whoopsie:x:116:
+avahi:x:117:
+lightdm:x:118:
+nopasswdlogin:x:119:
+bluetooth:x:120:
+colord:x:121:
+pulse:x:122:
+pulse-access:x:123:
+mamh:x:1000:
+sambashare:x:124:mamh
+jenkins:x:125:
+systemd-journal:x:126:
+systemd-timesync:x:127:
+systemd-network:x:128:
+systemd-resolve:x:129:
+systemd-bus-proxy:x:130:
+uuidd:x:101:
+input:x:131:
+sddm:x:132:
+ntop:x:133:
+gerrit:x:1001:
+ftp:x:134:
+postgres:x:135:
+docker:x:136:
+mysql:x:137:
+Debian-exim:x:138:
+tomcat8:x:139:
+tomcat7:x:140:
+postfix:x:141:
+postdrop:x:142:
+redis:x:143:
+gitlab-www:x:999:
+git:x:998:
+gitlab-redis:x:997:
+gitlab-psql:x:996:
+gitlab-prometheus:x:995:
+nexus:x:1002:
+jetty:x:144:
+vboxusers:x:145:
+$                           
+
+```
+/etc/group文件有4个字段：
+```bash
+组名
+组密码         # 组密码允许非组内成员通过它临时成为该组成员。这个功能并不很普遍，但确实存在。
+GID
+属于该组的用户列表
+```
+千万不能通过直接修改/etc/group文件来添加用户到一个组，要用usermod命令
+
+## 创建新组 groupadd命令
+```bash
+
+$ groupadd --help 
+Usage: groupadd [options] GROUP
+
+Options:
+  -f, --force                   exit successfully if the group already exists,
+                                and cancel -g if the GID is already used
+  -g, --gid GID                 use GID for the new group
+  -h, --help                    display this help message and exit
+  -K, --key KEY=VALUE           override /etc/login.defs defaults
+  -o, --non-unique              allow to create groups with duplicate
+                                (non-unique) GID
+  -p, --password PASSWORD       use this encrypted password for the new group
+  -r, --system                  create a system account
+  -R, --root CHROOT_DIR         directory to chroot into
+      --extrausers              Use the extra users database
+
+```
+在创建新组时，默认没有用户被分配到该组。groupadd命令没有提供将用户添加到组中的选项，但可以用usermod命令来弥补这一点
+```bash
+# /usr/sbin/usermod -G shared rich
+# /usr/sbin/usermod -G shared test
+
+```
+为用户账户分配组时要格外小心。如果加了-g选项，指定的组名会替换掉该账户的默认组。-G选项则将该组添加到用户的属组的列表里，不会影响默认组。
+
+## 修改组 groupmod命令
+修改组名时，GID和组成员不会变，只有组名改变。由于所有的安全权限都是基于GID的，
+你可以随意改变组名而不会影响文件的安全性。
+
+
+## 文件权限符
+```bash
+$ ls –l
+total 68
+-rw-rw-r-- 1 rich rich 50 2010-09-13 07:49 file1.gz
+-rw-rw-r-- 1 rich rich 23 2010-09-13 07:50 file2
+-rw-rw-r-- 1 rich rich 48 2010-09-13 07:56 file3
+-rw-rw-r-- 1 rich rich 34 2010-09-13 08:59 file4
+-rwxrwxr-x 1 rich rich 4882 2010-09-18 13:58 myprog
+-rw-rw-r-- 1 rich rich 237 2010-09-18 13:58 myprog.c
+drwxrwxr-x 2 rich rich 4096 2010-09-03 15:12 test1
+drwxrwxr-x 2 rich rich 4096 2010-09-03 15:12 test2
+$
+
+```
+输出结果的第一个字段就是描述文件和目录权限的编码。这个字段的第一个字符代表了对象的类型：
+```
+ -代表文件
+ d代表目录
+ l代表链接
+ c代表字符型设备
+ b代表块设备
+ n代表网络设备
+
+之后有3组三字符的编码。每一组定义了3种访问权限：
+r代表对象是可读的
+w代表对象是可写的
+x代表对象是可执行的
+```
+
+
+## 默认文件权限    umask
+
+umask命令用来设置所创建文件和目录的默认权限。
+```bash
+$ touch newfile
+$ ls -al newfile
+-rw-r--r-- 1 rich rich 0 Sep 20 19:16 newfile
+$
+
+
+$ umask
+0022
+$
+```
+
+umask命令设置没那么简单明了，想弄明白其工作原理就更混乱了。第一位代表了一项特别的安全特性，叫作粘着位（sticky bit）
+
+八进制模式的安全性设置先获取这3个rwx权限的值，然后将其转换成3位二进制值，用一个八进制值来表示
+```bash
+
+--- 000 0 没有任何权限
+--x 001 1 只有执行权限
+-w- 010 2 只有写入权限
+-wx 011 3 有写入和执行权限
+r-- 100 4 只有读取权限
+r-x 101 5 有读取和执行权限
+rw- 110 6 有读取和写入权限
+rwx 111 7 有全部权限
+
+```
+
+## 改变权限 chmod命令
+
+```bash
+chmod options mode file
+
+
+$ chmod 760 newfile
+$ ls -l newfile
+-rwxrw---- 1 rich rich 0 Sep 20 19:16 newfile
+$
+
+```
+
+```
+ u代表用户
+ g代表组
+ o代表其他
+ a代表上述所有
+```
+
+后面跟着的符号表示你是想在现有权限基础上增加权限（+），还是在现有权限基础上移除权限（），或是将权限设置成后面的值（=）
+```
+ X：如果对象是目录或者它已有执行权限，赋予执行权限。
+ s：运行时重新设置UID或GID。
+ t：保留文件或目录。
+ u：将权限设置为跟属主一样。
+ g：将权限设置为跟属组一样。
+ o：将权限设置为跟其他用户一样。
+```
+
+-R选项可以让权限的改变递归地作用到文件和子目录
+
+## 改变所属关系  chown命令
+
+```bash
+chown options owner[.group] file
+
+```
+-R选项配合通配符可以递归地改变子目录和文件的所属关系。  
+-h选项可以改变该文件的所有符号链接文件的所属关系.   
+
+
+## 粘着位, SUID , SGID 
+Linux还为每个文件和目录存储了3个额外的信息位。
+```bash
+ 设置用户ID（SUID）：当文件被用户使用时，程序会以文件属主的权限运行。
+ 设置组ID（SGID）：对文件来说，程序会以文件属组的权限运行；对目录来说，目录中创建的新文件会以目录的默认属组作为默认属组。
+ 粘着位：进程结束后文件还驻留（粘着）在内存中。
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # 第8 章 管理文件系统
 # 第9 章 安装软件程序
 # 第10 章 使用编辑器
