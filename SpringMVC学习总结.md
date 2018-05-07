@@ -611,6 +611,389 @@ http://localhost:8080/springmvc/testRequestHeader
 
 ```
 
+使用 POJO 对象绑定请求参数值  
+Spring MVC 会按• 请求参数名和 POJO 属性名进行自动匹配，自动为该对象填充属性值。支持级联属性。
+如：dept.deptId、dept.address.tel 等
+
+```java
+    @RequestMapping("/testPOJO")
+    private String testPOJO(User user) {
+        System.out.println("hellow world.....testPOJO..." + user);
+        return "success";
+    }
+
+```
+
+
+使用 Servlet API 原生API
+```test
+
+HttpServletRequest  
+HttpServletResponse  
+HttpSession  
+java.security.Principal  
+Locale  
+InputStream  
+OutputStream 
+Reader  
+Writer
+
+```
+
+
+@SessionAttributes
+
+若希望在多个请求之间共用某个模型属性数据，则可以在 控制器类上标注一个 @SessionAttributes, Spring MVC 将在模型中对应的属性暂存到 HttpSession 中。
+
+@SessionAttributes 除了可以通过属性名指定需要放到会话中的属性外，还可以通过模型属性的对象类型指定哪些模型属性需要放到会话中
+```text
+
+@SessionAttributes(types=User.class) 会将隐含模型中所有类型为 User.class 的属性添加到会话中。
+
+@SessionAttributes(value={“user1”, “user2”}) 
+
+@SessionAttributes(types={User.class, Dept.class}) 
+
+@SessionAttributes(value={“user1”, “user2”}, types={Dept.class})
+
+```
+```java
+
+
+    @RequestMapping("/testSessionAttributes")
+    public String testSessionAttributes(Map<String, Object> map) {
+        User user = new User();
+        user.setAge(123);
+        user.setUsername("Tom");
+        user.setEmail("123@mm.com");
+        user.setPassword("123456");
+        map.put("user", user);
+        //默认这个是放到request里面的
+        
+        //可以在类上加上 @SessionAttributes(value = {"user"}, types = {Integer.class,String.class, User.class})
+        //来把map中对应的类型的,或者对应键值的 对象也放到session中取
+        map.put("string1", "xxxxxxxxxxxxxxxxxxx this is a stirng ....");
+        map.put("int1", 123321);
+
+        return "success";
+    }
+
+```
+
+
+@ModelAttribute
+
+在方法定义上使用 @ModelAttribute 注解：Spring MVC 在调用目标处理方法前，会先逐个调用在方法级上标注了@ModelAttribute 的方法。
+
+在方法的入参前使用@ModelAttribute 注解可以从隐含对象中获取隐含的模型数据中获取对象，再将请求参数绑定到对象中，再传入入参.将方法入参对象添加到模型中.  
+
+```java
+
+    @ModelAttribute
+    public void getUser(@RequestParam(value = "id", required = false) Integer id, Map<String, Object> map) {
+        if (id != null) {
+            User user = new User(1, "tom", "123456", "tom@123.com", 12, null);
+
+            System.out.println("从数据库获取一个对象" + user);
+            map.put("user", user);
+        }
+    }
+
+    @RequestMapping("/testModelAttribute")
+    public String testModelAttribute(User user) {
+        System.out.println("testModelAttribute=== " + user);
+
+
+        return "success";
+    }
+
+```
+@ModelAttribute注解,可以修身目标方法POJO入参。 当那个键不是类名第一个字母小写的时候，我们可以用  
+@ModelAttribute注解修饰入参，里面value就是自定义的那个键名 。例如下面我们把键名改为了“abc”，    
+在testModelAttribute(User user)方法中如果不使用注解那个user就是一个新建的，而不是从map中获得的。
+
+```java
+
+    @ModelAttribute
+    public void getUser(@RequestParam(value = "id", required = false) Integer id, Map<String, Object> map) {
+        if (id != null) {
+            User user = new User(1, "tom", "123456", "tom@123.com", 12, null);
+
+            System.out.println("从数据库获取一个对象" + user);
+            map.put("abc", user);
+        }
+    }
+
+    @RequestMapping("/testModelAttribute")
+    public String testModelAttribute(@ModelAttribute(value = "abc") User user) {
+        System.out.println("testModelAttribute=== " + user);
+
+
+        return "success";
+    }
+
+```
+
+国际化
+
+使用i18n国际化的时候，需要建2个properties文件  
+	new file:   src/main/resources/i18n_en_US.properties  
+	new file:   src/main/resources/i18n_zh_CN.properties  
+```text
+i18n.username=username
+i18n.passowrd=password
+
+
+i18n.username=\u7528\u6237\u540D
+i18n.passowrd=\u7528\u6237\u540D
+```
+properties文件中要使用编码后的，也就是中文要变成\u 开头这样的。
+
+```xml
+
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="i18n"/>
+    </bean>
+
+```
+
+
+view-controller
+
+```xml
+
+    <!-- 配置直接转发的页面，可以直接配置转发的页面，而不需要经过handler方法 -->
+    <mvc:view-controller path="/success" view-name="success"/>
+
+```
+可以直接访问 http://localhost:8080/success了。
+
+这个时候那个  @RequestMapping() 配置的那个返回的view就会报404错误了。这个时候可以加上
+annotation-driven
+```xml
+    <mvc:annotation-driven/>
+
+
+```
+
+自定义View
+```xml
+    <context:component-scan base-package="com.mamh.springmvc.demo.views"/>
+
+    <!-- 配置视图解析器 -->
+    <bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+        <property name="order" value="100"/>
+    </bean>
+
+```
+```java
+
+package com.mamh.springmvc.demo.views;
+
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.View;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.Map;
+
+@Component
+public class HelloView implements View {
+    @Override
+    public void render(@Nullable Map<String, ?> model, HttpServletRequest request,
+                       HttpServletResponse response) throws Exception {
+        response.getWriter().println("hello view, time: " + new Date());
+
+    }
+
+    @Nullable
+    @Override
+    public String getContentType() {
+        return "text/html";
+    }
+}
+
+```
+
+CRUD操作
+
+```java
+
+@Controller
+public class EmployeeHandler {
+
+    @Autowired
+    private EmployeeDao employeeDao;
+
+    @Autowired
+    private DepartmentDao departmentDao;
+
+    @RequestMapping(value = "/emp", method = RequestMethod.GET)
+    public String input( Map<String, Object> map) {
+        System.out.println("input..........");
+        map.put("departments", departmentDao.getDepartments());
+        map.put("employee",new Employee());
+
+        return "input";
+    }
+
+    @RequestMapping("/emps")
+    public String list(Map<String, Object> map) {
+
+        map.put("employees", employeeDao.getAll());
+
+        return "list";
+    }
+
+}
+
+```
+```jsp
+
+
+<c:if test="${empty requestScope.employees}">
+    没有任何信息
+</c:if>
+<c:if test="${!empty requestScope.employees}">
+    <table border="1" cellpadding="10" cellspacing="0">
+        <tr>
+            <th>ID</th>
+            <th>LastName</th>
+            <th>Email</th>
+            <th>Gender</th>
+            <th>Department</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        <c:forEach items="${requestScope.employees}" var="emp">
+            <tr>
+                <td>${emp.id}</td>
+                <td>${emp.lastName}</td>
+                <td>${emp.email}</td>
+                <td>${emp.gender == 0? 'Female': 'Male'}</td>
+                <td>${emp.department.departmentName}</td>
+                <td><a href="">Edit</a></td>
+                <td><a href="">Delete</a></td>
+            </tr>
+        </c:forEach>
+
+    </table>
+</c:if>
+
+<br/>
+<a href="/emp">Add new Employee.........</a>
+
+
+
+```
+
+```jsp
+
+<!--
+可以更快速的开发出表单页面，方便表单值回显
+
+java.lang.IllegalStateException: Neither BindingResult nor plain target object for bean name 'command' available as request attribute
+
+可以通过 modelAttribute 属性指定绑定的模型属性，
+若没有指定该属性，则默认从 request 域对象中读取
+command 的表单 bean，如果该属性值也不存在，则会
+发生错误。
+
+-->
+
+<form:form action="/emp" method="POST" modelAttribute="employee">
+    LastName: <form:input path="lastName"/> <br/>
+
+    Email: <form:input path="email"/> <br/>
+
+    <%
+        Map<String, String> genders = new HashMap();
+        genders.put("1", "Male");
+        genders.put("0", "Female");
+        request.setAttribute("genders", genders);
+    %>
+    Gender: <form:radiobuttons path="gender" items="${genders}"/> <br/>
+
+    Department: <form:select path="department" items="${departments}" itemLabel="departmentName" itemValue="id"/> <br/>
+
+
+    <input type="submit" value="submit"/>
+</form:form>
+
+
+```
+注意在使用```<form:form>```标签的时候，modelAttribute="employee"设置的值要和放到map中的键一致。  
+```<form:input>```标签中的path对应html中的name属性，支持级联属性。
+
+
+
+删除操作
+```java
+
+    @RequestMapping(value = "/emp/{id}", method = RequestMethod.DELETE)
+    public String delete(@PathVariable(value = "id") Integer id) {
+        System.out.println("delete.........." + id);
+        employeeDao.delete(id);
+        return "redirect:/emps";
+    }
+
+```
+注意spingmvc对静态资源的过滤，可以加上
+```xml
+
+    <mvc:default-servlet-handler/>
+
+```
+
+
+mvc:annotation-driven
+
+```<mvc:annotation-driven>```会自动注册3个bean：RequestMappingHandlerMapping,
+RequestMappingHandlerAdapter,ExceptionHandlerExceptionResolver。   
+支持ConversionService实例对表单参数进行类型转换。  
+支持使用@NumberFormat、@DateTimeFormat 注解完成数据类型的格式化。   
+支持使用 @Valid 注解对 JavaBean 实例进行 JSR 303 验证。  
+支持使用 @RequestBody 和 @ResponseBody 注解。  
+
+
+@InitBinder
+
+由 @InitBinder 标识的方法• ，可以对 WebDataBinder 对
+象进行初始化。WebDataBinder 是 DataBinder 的子类，用
+于完成由表单字段到 JavaBean 属性的绑定
+
+@InitBinder方法不能有返回值，它必须声明为void 。
+
+@InitBinder方法的参数通常是是 WebDataBinder
+
+```java
+
+    @InitBinder
+    public void initBinder(WebDataBinder webDataBinder){
+        webDataBinder.setDisallowedFields("lastName");
+    }
+
+```
+
+JSR 303验证标准  
+
+* hibernate validator验证框架  
+* 在springMVC配置文件中添加   <mvc:annotation-driven  
+
+
+ 
+
+
+
+
+
+
+
+
+
+
 
 
 
