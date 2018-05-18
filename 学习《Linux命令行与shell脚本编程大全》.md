@@ -109,12 +109,12 @@ Puppy Linux 一款适用于老旧PC的小型免费发行版马哥私房菜 淘�
 # 第2 章 走进shell
 
 本章内容
-- 访问命令行
-- 通过Linux控制台终端访问CLI
-- 通过图形化终端仿真器访问CLI
-- 使用GNOME终端仿真器
-- 使用Konsole终端仿真器
-- 使用xterm终端仿真器
+* 访问命令行
+* 通过Linux控制台终端访问CLI
+* 通过图形化终端仿真器访问CLI
+* 使用GNOME终端仿真器
+* 使用Konsole终端仿真器
+* 使用xterm终端仿真器
 
 ## 控制台终端
 在图形化桌面出现之前，与Unix系统进行交互的唯一方式就是借助由shell所提供的文本命令
@@ -160,12 +160,12 @@ Konsole Terminal是KDE桌面环境的默认终端仿真器
 
 # 第3 章 基本的bash shell 命令
 本章内容
-- 使用shell
-- bash手册
-- 浏览文件系统
-- 文件和目录列表
-- 管理文件和目录
-- 查看文件内容
+* 使用shell
+* bash手册
+* 浏览文件系统
+* 文件和目录列表
+* 管理文件和目录
+* 查看文件内容
 
 启动shell
 
@@ -732,11 +732,11 @@ umount命令支持通过设备文件或者是挂载点来指定要卸载的设�
 查看所有已挂载磁盘的使用情况  
 ```
    设备的设备文件位置；
- 能容纳多少个1024字节大小的块；
- 已用了多少个1024字节大小的块；
- 还有多少个1024字节大小的块可用；
- 已用空间所占的比例；
- 设备挂载到了哪个挂载点上。
+* 能容纳多少个1024字节大小的块；
+* 已用了多少个1024字节大小的块；
+* 还有多少个1024字节大小的块可用；
+* 已用空间所占的比例；
+* 设备挂载到了哪个挂载点上。
 ```
 -h。它会把输出中的磁盘空间按照用户易读的形式显示，通常用M来替代兆字节，用G替代吉字节  
 
@@ -863,10 +863,10 @@ tar -xvf test.tar  # 从tar文件test.tar中提取内容。如果tar文件是从
 
 # 第5 章 理解shell
 本章内容  
- 探究shell的类型  
- 理解shell的父/子关系  
- 别出心裁的子shell用法  
- 探究内建的shell命令  
+* 探究shell的类型  
+* 理解shell的父/子关系  
+* 别出心裁的子shell用法  
+* 探究内建的shell命令  
 
 
 ## shell 的类型
@@ -929,13 +929,13 @@ alias la='ls -A'
 
 # 第6 章 使用Linux 环境变量
 本章内容  
- 什么是环境变量  
- 创建自己的局部变量  
- 删除环境变量  
- 默认shell环境变量  
- 设置PATH环境变量  
- 定位环境文件  
- 数组变量  
+* 什么是环境变量  
+* 创建自己的局部变量  
+* 删除环境变量  
+* 默认shell环境变量  
+* 设置PATH环境变量  
+* 定位环境文件  
+* 数组变量  
 
 
 ## 什么是环境变量
@@ -1522,9 +1522,9 @@ $
 # 第7 章 理解Linux 文件权限
 
 本章内容  
- 理解Linux的安全性  
- 解读文件权限  
- 使用Linux组  
+* 理解Linux的安全性  
+* 解读文件权限  
+* 使用Linux组  
 
 
 
@@ -2113,11 +2113,11 @@ Linux还为每个文件和目录存储了3个额外的信息位。
 # 第8 章 管理文件系统
 
 本章内容  
- 文件系统基础  
- 日志文件系统与写时复制文件系统  
- 文件系统管理  
- 逻辑卷布局  
- 使用Linux逻辑卷管理器  
+* 文件系统基础  
+* 日志文件系统与写时复制文件系统  
+* 文件系统管理  
+* 逻辑卷布局  
+* 使用Linux逻辑卷管理器  
 
 
 
@@ -2313,7 +2313,353 @@ ext2、ext3、ext4、ReiserFS、JFS和XFS。
 
 
 # 第9 章 安装软件程序
+
+本章内容  
+* 安装软件  
+* 使用Debian包  
+* 使用Red Hat包  
+
+PMS工具及相关命令在不同的Linux发行版上有很大的不同。Linux中广泛使用的两种主要的PMS基础工具是dpkg和rpm
+
+
+基于Debian的发行版（如Ubuntu和Linux Mint）使用的是dpkg命令
+
+基于Red Hat的发行版（如Fedora、openSUSE及Mandriva）使用的是rpm命令
+
+
+dpkg命令是基于Debian系PMS工具的核心。包含在这个PMS中的其他工具有：
+* apt-get
+* apt-cache
+* aptitude
+
+
+## aptitude
+
+```bash
+aptitude show package_name
+
+```
+
+查看某个特定软件包相关的所有文件的列表
+```bash
+dpkg -L package_name
+
+```
+
+同样可以进行反向操作，查找某个特定文件属于哪个软件包。
+```bash
+
+dpkg --search absolute_file_name
+
+```
+```text
+
+$ aptitude search zsh                                                                                                  
+p   fizsh                                                                                   - Friendly Interactive ZSHell                                                                      
+i   zsh                                                                                     - shell with lots of features                                                                      
+p   zsh:i386                                                                                - shell with lots of features                                                                      
+p   zsh-antigen                                                                             - manage your zsh plugins                                                                          
+i A zsh-common                                                                              - architecture independent files for Zsh                                                           
+p   zsh-dbg                                                                                 - shell with lots of features (debugging symbols)                                                  
+p   zsh-dbg:i386                                                                            - shell with lots of features (debugging symbols)                                                  
+p   zsh-dev                                                                                 - shell with lots of features (development files)                                                  
+p   zsh-dev:i386                                                                            - shell with lots of features (development files)                                                  
+p   zsh-doc                                                                                 - zsh documentation - info/HTML format                                                             
+p   zsh-lovers                                                                              - tips, tricks and examples for the zsh                                                            
+p   zsh-static                                                                              - shell with lots of features (static link)                                                        
+p   zsh-static:i386                                                                         - shell with lots of features (static link)                                                        
+p   zsh-syntax-highlighting                                                                 - Fish shell like syntax highlighting for zsh                                                      
+p   zshdb                                                                                   - debugger for Z-Shell scripts                                                                     
+$             
+
+```
+在每个包名字之前都有一个p或i。如果看到一个i，说明这个包现在已经安装到了你的系统上了。如果看到一个p或v，说明这个包可用，但还没安装。
+
+
+在系统上用aptitude从软件仓库中安装软件包非常简单。
+```bash
+aptitude install package_name
+
+```
+
+更新软件，这个命令会更新所有已安装的软件
+```bash
+aptitude safe-upgrade
+
+```
+
+它们同safe-upgrade的区别在于，它们不会检查包与包之间的依赖关系。整个包依赖关系问题非常麻烦。
+如果不是很确定各种包的依赖关系，那还是坚持用safe-upgrade选项吧。
+```bash
+aptitude full-upgrade
+
+```
+
+```bash
+aptitude dist-upgrade
+
+```
+
+只删除软件包而不删除数据和配置文件
+```bash
+sudo aptitude remove package_name
+
+```
+
+删除软件包和相关的数据和配置文件
+```bash
+sudo aptitude purge wine
+```
+要看软件包是否已删除，可以再用aptitude的search选项。如果在软件包名称的前面看到
+一个c，意味着软件已删除，但配置文件尚未从系统中清除；如果前面是个p的话，说明配置文件
+也已删除。
+
+
+## aptitude 仓库
+
+aptitude默认的软件仓库位置是在安装Linux发行版时设置的。具体位置存储在文件/etc/apt/sources. list中。
+
+```text
+deb (or deb-src) address distribution_name package_type_list
+
+```
+deb或deb-src的值表明了软件包的类型,deb值说明这是一个已编译程序源，而deb-src值则说明这是一个源代码的源。
+address条目是软件仓库的Web地址。distribution_name条目是这个特定软件仓库的发行版版本的名称。
+package_type_list条目可能并不止一个词，它还表明仓库里面有什么类型的包。
+你可以看到诸如main、restricted、universe和partner这样的值。
+
+
+
+和基于Debian的发行版类似，基于Red Hat的系统也有几种不同的可用前端工具。常见的有以下3种。
+* yum：在Red Hat和Fedora中使用。
+* urpm：在Mandriva中使用。
+* zypper：在openSUSE中使用。
+
+
+## yum
+
+要找出系统上已安装的包
+```bash
+yum list installed
+
+yum list installed > installed_software
+
+rpm -qa > installed_software
+
+zypper search -I > installed_software
+
+```
+
+安装软件包
+```bash
+yum install package_name
+
+```
+
+
+
+更新软件包
+```bash
+yum update
+
+yum update package_name
+
+```
+
+只删除软件包而保留配置文件和数据文件
+```bash
+yum remove package_name
+
+```
+
+要删除软件和它所有的文件
+```bash
+yum erase package_name
+
+```
+有时在安装多个软件包时，某个包的软件依赖关系可能会被另一个包的安装覆盖掉。这叫作损坏的包依赖关系（broken dependency）。
+如果系统出现了这个问题，先试试下面的命令：
+```bash
+yum clean all
+
+```
+然后试着用yum命令的update选项。有时，只要清理了放错位置的文件就可以了。
+如果这还解决不了问题，试试下面的命令：
+```bash
+yum deplist package_name
+
+```
+
+如果这样仍未解决问题，还有最后一招：
+```bash
+yum update --skip-broken
+
+```
+--skip-broken选项允许你忽略依赖关系损坏的那个包，继续去更新其他软件包。这可能
+救不了损坏的包，但至少可以更新系统上的其他包。
+
+## yum 软件仓库
+
+要想知道你现在正从哪些仓库中获取软件，输入如下命令：
+```bash
+yum repolist
+
+```
+yum的仓库定义文件位于/etc/yum.repos.d。
+
+
+## 从源码安装
+
+下载tar.gz的类型的源码包，然后解压，可以通过查看README文件来了解怎么编译安装。
+
+一般步骤是：
+```bash
+./configure
+
+make
+
+make install
+
+```
+
+
 # 第10 章 使用编辑器
+
+本章内容  
+* vim编辑器  
+* nano编辑器  
+* emacs编辑器  
+* KWrite编辑器  
+* Kate编辑器  
+* GNOME编辑器  
+
+## vim
+普通模式,插入模式,命令行模式
+
+vim中有用来移动光标的命令
+```text
+
+ h：左移一个字符。
+ j：下移一行（文本中的下一行）。
+ k：上移一行（文本中的上一行）。
+ l：右移一个字符。
+
+```
+
+```text
+ PageDown（或Ctrl+F）：下翻一屏。
+ PageUp（或Ctrl+B）：上翻一屏。
+ G：移到缓冲区的最后一行。
+ num G：移动到缓冲区中的第num行。
+ gg：移到缓冲区的第一行。
+
+```
+
+```text
+ q：如果未修改缓冲区数据，退出。
+ q!：取消所有对缓冲区数据的修改并退出。
+ w filename：将文件保存到另一个文件中。
+ wq：将缓冲区数据保存到文件中并退出。
+
+```
+
+```text
+x 删除当前光标所在位置的字符
+dd 删除当前光标所在行
+dw 删除当前光标所在位置的单词
+d$ 删除当前光标所在位置至行尾的内容
+J 删除当前光标所在行行尾的换行符（拼接行）
+u 撤销前一编辑命令
+a 在当前光标后追加数据
+A 在当前光标所在行行尾追加数据
+r char 用char替换当前光标所在位置的单个字符
+R text 用text覆盖当前光标所在位置的数据，直到按下ESC键
+
+```
+
+
+```text
+ :s/old/new/g：一行命令替换所有old。
+ :n,ms/old/new/g：替换行号n和m之间所有old。
+ :%s/old/new/g：替换整个文件中的所有old。
+ :%s/old/new/gc：替换整个文件中的所有old，但在每次出现时提示。
+
+```
+
+
+
+## nano
+
+```text
+CTRL+C 显示光标在文本编辑缓冲区中的位置
+CTRL+G 显示nano的主帮助窗口
+CTRL+J 调整当前文本段落
+CTRL+K 剪切文本行，并将其保存在剪切缓冲区
+CTRL+O 将当前文本编辑缓冲区的内容写入文件
+CTRL+R 将文件读入当前文本编辑缓冲区
+CTRL+T 启动可用的拼写检查器
+CTRL+U 将剪切缓冲区中的内容放入当前行
+CTRL+V 翻动到文本编辑缓冲区中的下一页内容
+CTRL+W 在文本编辑缓冲区中搜索单词或短语
+CTRL+X 关闭当前文本编辑缓冲区，退出nano，返回shell
+CTRL+Y 翻动到文本编辑缓冲区中的上一页内容
+
+```
+
+## emacs
+
+```text
+C-p：上移一行（文本中的前一行
+C-b：左移一字符。
+C-f：右移一字符。
+C-n：下移一行（文本中的下一行）
+
+还有一些命令能够让光标在文本中进行较长距离的跳跃。
+ M-f：右移到下个单词。
+ M-b：左移到上个单词。
+ C-a：移至行首。
+ C-e：移至行尾。
+ M-a：移至当前句首。
+ M-e：移至当前句尾。
+ M-v：上翻一屏。
+ C-v：下翻一屏。
+ M-<：移至文本的首行。
+ M->：移至文本的尾行。
+
+
+还有几个命令可以将编辑器缓冲区保存至文件并退出emacs。
+ C-x C-s：保存当前缓冲区到文件。
+ C-z：退出emacs并保持在这个会话中继续运行，以便你切回。
+ C-x C-c：退出emacs并停止该程序。
+
+
+```
+
+
+```text
+ M-Backspace：剪切光标当前所在位置之前的单词。
+ M-d：剪切光标当前所在位置之后的单词。
+ C-k：剪切光标当前所在位置至行尾的文本。
+ M-k：剪切光标当前所在位置至句尾的文本。
+
+```
+
+## kwrite
+
+
+## kate
+
+## gedit
+
+
+
+
+
+
+
+
+
+
 
 
 第2部分 Part 2  shell 脚本编程基础
