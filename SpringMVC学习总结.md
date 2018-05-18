@@ -983,12 +983,93 @@ JSR 303验证标准
 * 在springMVC配置文件中添加   <mvc:annotation-driven  
 
 
- 
+@ResponseBody
+
+这个注意版本问题，有时候版本不对会报错的。
+```xml
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.9.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.9.5</version>
+        </dependency>
+
+```
+
+```java
+
+    @ResponseBody
+    @RequestMapping("/testJson")
+    public Collection<Employee> testJson( ) {
+        System.out.println("testJson......." );
+
+        return  employeeDao.getAll();
+    }
+
+```
+使用@ResponseBody，返回值可以直接显示到页面上，使用@RequestBody可以直接得到请求内容。 
+
+```java
+
+    @ResponseBody
+    @RequestMapping("/testHttpMessageConverter")
+    public String testHttpMessageConverter(@RequestBody String body) {
+        System.out.println("testHttpMessageConverter.......\n" + body + "\n\n");
+
+        return "hello world! " + new Date();
+    }
+
+```
 
 
 
+文件的上传
 
+springmvc.xml中需要配置个 multipartResolver。
+```
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"/>
+        <property name="maxUploadSize" value="2000000"/>
+        <property name="maxInMemorySize" value="40960"/>
+    </bean>
+```
 
+```java
+
+    @RequestMapping("/testFileUpload")
+    public String testFileUpload(@RequestParam(value = "desc", required = false) String desc,
+                                 @RequestParam(value = "file",required = false) MultipartFile file) {
+        System.out.println("testFileUpload.......\n");
+        System.out.println(desc);
+        System.out.println(file.getOriginalFilename());
+        System.out.println(file.getSize());
+
+        return "success";
+    }
+
+```
+
+html中的表单需要设置 enctype="multipart/form-data"。
+
+```html
+
+<form action="testFileUpload" method="POST" enctype="multipart/form-data">
+    File: <input type="file" name="file"/>
+    Desc: <input type="text" name="desc"/>
+    <input type="submit" value="Submit"/>
+</form>
+
+```
 
 
 
