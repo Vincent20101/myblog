@@ -9,22 +9,69 @@ Android下的配置管理之道之git的使用
 
 
 # git help
-git help 命令用来显示任何命令的 Git 自带文档。 但是我们仅会在此附录中提到大部分最常用的命令，  
+git help 命令用来显示任何命令的 Git 自带文档。     
 对于每一个命令的完整的可选项及标志列表，你可以随时运行 git help <command> 命令来了解。  
 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 
 # git config
+/etc/gitconfig 文件：系统中对所有用户都普遍适用的配置。
+``` 
+git config --system
+``` 
+~/.gitconfig 文件：用户目录下的配置文件只适用于该用户。
+``` 
+git config --global 
+``` 
+当前项目的 git 目录中的配置文件（也就是工作目录中的 .git/config 文件）：这里的配置仅仅针对当前项目有效。
+```bash
+git config --local
+
+```
+每一个级别的配置都会覆盖上层的相同配置，所以 .git/config 里的配置会覆盖~/.gitconfig, /etc/gitconfig 中的同名变量。 
+
+```bash
+$ git config --global user.name "马哥私房菜"
+$ git config --global user.email bright.ma@mage.com
+$ git config --global core.editor vim
+$ git config --global color.ui true
+
+```
+最后在~/.gitconfgi 文件下内容如下了
 ```
 [color]
     ui = true
 [user]
     email = bright.ma@mage.com
-    name = Minghui Ma
+    name = 马哥私房菜
 [core]
     editor = vim
     
     欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 ```
+
+列出所有配置信息 可以使用 git config --list 命令
+```bash
+$ git config --list --local                                                                                                    
+user.email=<https://shop592330910.taobao.com/>
+user.name=马哥私房菜
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=https://github.com/mageSFC/myblog.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+branch.master.remote=origin
+branch.master.merge=refs/heads/master
+
+
+```
+
+指定使用某个配置文件，可以使用-f，--file选项
+```bash
+git config -f some_to_path/config --list
+
+```
+
 
 # git init
 
@@ -110,13 +157,7 @@ git clean 命令只会移除没有忽略的未跟踪文件,-x 选项就会移除
 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/  
 git clean -fdx  
 
-# git reset
-git reset 命令主要用来执行撤销操作  
---soft 会将HEAD引用指向给定提交。索引和工作目录的内容保持不变。撤销上次git commit操作的。变成绿色状态。  
---mixed 会将HEAD引用指向给定提交。索引内容也跟着改变以符合给定提交的树结构。但是工作目录的内容不变。默认是这个。变成红色状态。  
---hard 将HEAD引用指向给定提交，索引内容发生改变，工作目录内容也发生改变。  
-欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/  
-取消暂存的文件,就是取消你git add 后的那个文件，就是把绿色的变成红色的  
+  
 
 # git branch
 git branch testing 这会在当前所在的提交对象上创建一个指针。  
@@ -136,6 +177,14 @@ git checkout -b <branch> --track <remote>/<branch>
 git checkout -b [branch] [remotename]/[branch]  跟踪分支  
 git checkout --track origin/serverfix  
 git checkout -b|-B <new_branch> [<start point>]  
+
+# git reset
+git reset 命令主要用来执行撤销操作  
+--soft 会将HEAD引用指向给定提交。索引和工作目录的内容保持不变。撤销上次git commit操作的。变成绿色状态。  
+--mixed 会将HEAD引用指向给定提交。索引内容也跟着改变以符合给定提交的树结构。但是工作目录的内容不变。默认是这个。变成红色状态。  
+--hard 将HEAD引用指向给定提交，索引内容发生改变，工作目录内容也发生改变。  
+欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/  
+取消暂存的文件,就是取消你git add 后的那个文件，就是把绿色的变成红色的
 
 # git merge
 git merge 工具用来合并一个或者多个分支到你已经检出的分支中。 然后它将当前分支指针移动到合并结果上。  
