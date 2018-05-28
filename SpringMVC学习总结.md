@@ -980,7 +980,7 @@ RequestMappingHandlerAdapter,ExceptionHandlerExceptionResolver。
 JSR 303验证标准  
 
 * hibernate validator验证框架  
-* 在springMVC配置文件中添加   <mvc:annotation-driven  
+* 在springMVC配置文件中添加   <mvc:annotation-driven/>  
 
 
 @ResponseBody
@@ -1035,7 +1035,7 @@ JSR 303验证标准
 
 文件的上传
 
-springmvc.xml中需要配置个 multipartResolver。
+springmvc.xml中需要配置个 multipartResolver。 这个ID必须是这个名称，如果不是会报错的。
 ```
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="defaultEncoding" value="utf-8"/>
@@ -1073,6 +1073,81 @@ html中的表单需要设置 enctype="multipart/form-data"。
 
 
 
+
+自定义拦截器
+```java
+
+public class FirstInterceptor implements HandlerInterceptor {
+
+
+    /**
+     * 该方法在目标方法之前被调用。
+     * 若返回是true，则继续调用后续的拦截器和目标方法。
+     * 若返回是false，则不会继续调用后续拦截器，也不会调用目标方法了
+     *
+     * 这个方法可以考虑做权限，日志，事务
+     * @param request
+     * @param response
+     * @param handler
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        System.out.println("preHandle");
+        return true;
+    }
+
+    /**
+     * 在调用目标方法之后，渲染视图之前被调用
+     *
+     * 这个方法可以用来对请求域中属性或者视图做出修改。
+     *
+     * @param request
+     * @param response
+     * @param handler
+     * @param modelAndView
+     * @throws Exception
+     */
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
+        System.out.println("postHandle");
+    }
+
+    /**
+     * 渲染视图之后被调用
+     *
+     * 这个方法可以用来释放资源用的
+     *
+     * @param request
+     * @param response
+     * @param handler
+     * @param ex
+     * @throws Exception
+     */
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
+        System.out.println("afterCompletion");
+    }
+}
+
+
+```
+
+配置多个拦截器
+```xml
+
+    <mvc:interceptors>
+        <!-- 配置自定义拦截器 -->
+        <bean id="firstInterceptor" class="com.mamh.springmvc.demo.interceptor.FirstInterceptor"/>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/emps"/>
+            <bean class="com.mamh.springmvc.demo.interceptor.SecondInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+```
 
 
 
