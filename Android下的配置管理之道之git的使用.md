@@ -45,13 +45,25 @@ $ git config --global color.ui true
     name = 马哥私房菜
 [core]
     editor = vim
-    
+
     欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+```
+这种git的配置文件我们也可以直接使用编辑器取编辑修改。  
+配置文件中的空行被忽略。井号，分号开头的行是注释行，被忽略的。
+
+配置文件中的数据类型
+```
+Type
+    --bool                value is "true" or "false"
+    --int                 value is decimal number
+    --bool-or-int         value is --bool or --int
+    --path                value is a path (file or directory name)
+
 ```
 
 列出所有配置信息 可以使用 git config --list 命令
 ```bash
-$ git config --list --local                                                                                                    
+$ git config --list --local
 user.email=<https://shop592330910.taobao.com/>
 user.name=马哥私房菜
 core.repositoryformatversion=0
@@ -66,11 +78,59 @@ branch.master.merge=refs/heads/master
 
 ```
 
-指定使用某个配置文件，可以使用-f，--file选项
+指定使用某个配置文件，可以使用-f，--file选项,该选项和--system,--local,--global不能同时使用的
 ```bash
 git config -f some_to_path/config --list
-
 ```
+
+下面再举个例子
+```text
+#Given a .git/config like this:
+
+#
+# This is the config file, and
+# a '#' or ';' character indicates
+# a comment
+#
+
+; core variables
+[core]
+    ; Don't trust file modes
+    filemode = false
+
+; Our diff algorithm
+[diff]
+    external = /usr/local/bin/diff-wrapper
+    renames = true
+
+; Proxy settings
+[core]
+    gitproxy=proxy-command for kernel.org
+    gitproxy=default-proxy ; for all the rest
+
+; HTTP
+[http]
+    sslVerify
+[http "https://weak.example.com"]
+    sslVerify = false
+    cookieFile = /tmp/cookie.txt
+```
+
+设置filemode为true：
+```
+git config core.filemode true
+```
+删除diff下面的renames
+```
+git config --unset diff.renames
+```
+查询某个给定的key的value
+```
+git config --get core.filemode
+
+git config       core.filemode
+```
+
 
 
 # git init
