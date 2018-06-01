@@ -8,6 +8,7 @@ Android下的配置管理之道之git的使用
     【马哥私房菜】亲情推出 git 视频教程
 
 
+
 # git help
 git help 命令用来显示任何命令的 Git 自带文档。     
 对于每一个命令的完整的可选项及标志列表，你可以随时运行 git help <command> 命令来了解。  
@@ -279,11 +280,435 @@ git clone --bare https://github.com/mageSFC/my_project my_project.git
 
 git clone https://github.com/mageSFC/myblog.git
 
-
-git clone --mirror https://github.com/mageSFC/myblog.git  myblog.git   #服务器上面会这么来克隆一个裸仓库，服务器上引用第三方仓库。
-
 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 ```
+
+--local选项，--no-hardlinks选项
+```bash
+git clone --local /home/mirror/repo.git r1
+--local，-l 选项，这个会在克隆一个本地路径的仓库时候 它会把  .git/objects/ 下面的文件做成硬链接的形式。（尽可能的，如果不能做成硬链接，他就会是复制的形式了）
+
+这个只有在路径是个本地路径的情况下面才有用的。如果是ssh://, http://这样的远端仓库路径就不会使用硬链接了。
+
+--no-local 和上面的意思相反，他不会使用硬链接的。
+
+$ git clone --local /home/mirror/repo.git 
+Cloning into 'repo'...
+done.
+
+$ ll repo/.git/objects/pack 
+total 924K
+-r--r--r-- 2 mamh mamh 102K 11月 28  2017 pack-b33f3eb5a3197675040d0e89cf2842ce644a973f.idx
+-r--r--r-- 2 mamh mamh 818K 11月 28  2017 pack-b33f3eb5a3197675040d0e89cf2842ce644a973f.pack
+
+$ ll repo/.git/objects/pack -i    
+total 924K
+57278473 -r--r--r-- 2 mamh mamh 102K 11月 28  2017 pack-b33f3eb5a3197675040d0e89cf2842ce644a973f.idx
+57278469 -r--r--r-- 2 mamh mamh 818K 11月 28  2017 pack-b33f3eb5a3197675040d0e89cf2842ce644a973f.pack
+
+$ ll /home/mirror/repo.git/objects/pack -i  
+total 924K
+57278473 -r--r--r-- 2 mamh mamh 102K 11月 28  2017 pack-b33f3eb5a3197675040d0e89cf2842ce644a973f.idx
+57278469 -r--r--r-- 2 mamh mamh 818K 11月 28  2017 pack-b33f3eb5a3197675040d0e89cf2842ce644a973f.pack
+
+通过上面的--local我们看到文件的i节点编号是一样的，说明我们克隆的时候采用了硬链接的方式。
+
+默认不加上--local，git自行判断，也会优化使用硬链接的方式的。
+
+git clone --no-hardlinks      -- copy files instead of hardlinking when doing a local clone 也是不采用硬链接的方式。 
+
+git clone --no-hardlinks   /home/mirror/repo.git repo_bak #一般的这个使用情况是，你想备份一个仓库，就可以使用这种不带硬链接的克隆了。
+
+```
+
+--bare和--mirror的区别
+```bash
+git clone --mirror https://github.com/mageSFC/myblog.git  myblog.git   #服务器上面会这么来克隆一个裸仓库，服务器上引用第三方仓库。
+
+git clone --bare https://github.com/mageSFC/my_project my_project.git   # 这个选项仅仅是复制克隆一个裸仓库。
+
+--bare和--mirror的区别是
+
+$ git clone --mirror /home/mirror/repo.git r1
+$ git clone --bare /home/mirror/repo.git r2
+
+$ ls r1 r2                                                                                                                                     
+r1:
+branches/  config  description  HEAD  hooks/  info/  objects/  packed-refs  refs/
+
+r2:
+branches/  config  description  HEAD  hooks/  info/  objects/  packed-refs  refs/
+从表面上看，这两种方式克隆下面的都是裸仓库，没上面区别。但是我们看看他们的config文件就知道了
+$ cat r1/config    
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[remote "origin"]
+	url = /home/mirror/repo.git
+	fetch = +refs/*:refs/*
+	mirror = true
+ 
+$ cat r2/config   
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[remote "origin"]
+	url = /home/mirror/repo.git
+
+我们可以看到--mirror的配置文件上是多了这个“fetch = +refs/*:refs/*”的。
+这个说明我们可以执行git fetch来继续获取上游仓库的更新。没有这个是不能继续更新的。所以--mirror更常用一些。
+
+
+
+```
+
+--reference 使用参考仓库来克隆仓库
+```bash
+git clone https://github.com/mageSFC/myblog.git --reference <本地仓库镜像库路径>
+
+git clone https://github.com/mageSFC/myblog.git --reference         /home/mirror/myblog.git
+git clone https://github.com/mageSFC/myblog.git --reference-if-able /home/mirror/myblog.git
+
+如果参考的本地镜像仓库不存在--reference  选项会报错的。    --reference-if-able不会报错，会继续克隆的。
+
+这个参考的仓库要是一个本地的裸仓库的。加上这个选项会节省克隆时间，节省磁盘空间的。
+
+
+$ git clone ssh://gerrit.blackshark.com:29418/git/aosp/kernel/msm-4.9 --reference /home/mirror/kernel/msm-4.9.git                             
+Cloning into 'msm-4.9'...
+remote: Counting objects: 3064590, done
+remote: Finding sources: 100% (3012366/3012366)
+remote: Total 3012366 (delta 2393732), reused 2939537 (delta 2393732)
+Receiving objects: 100% (3012366/3012366), 1.36 GiB | 11.24 MiB/s, done.
+Resolving deltas: 100% (2393732/2393732), completed with 9850 local objects.
+Checking connectivity: 8230985, done.
+warning: remote HEAD refers to nonexistent ref, unable to checkout.
+
+$ du -sh msm-4.9/.git  
+1.5G	msm-4.9/.git
+$ cat msm-4.9/.git/objects/info/alternates  
+/home/mirror/kernel/msm-4.9.git/objects
+使用了 --reference 选项克隆后.git目录只有1.5G大小。
+使用了 --reference 选项的克隆，.git/objects/info/alternates文件里面会指向镜像仓库的路径。
+
+
+$ git clone ssh://gerrit.blackshark.com:29418/git/aosp/kernel/msm-4.9 
+Cloning into 'msm-4.9'...
+remote: Counting objects: 8230985, done
+remote: Finding sources: 100% (8230985/8230985)
+remote: Total 8230985 (delta 6720180), reused 8140778 (delta 6720180)
+Receiving objects: 100% (8230985/8230985), 2.70 GiB | 18.83 MiB/s, done.
+Resolving deltas: 100% (6720180/6720180), done.
+warning: remote HEAD refers to nonexistent ref, unable to checkout.
+$ du -sh msm-4.9/.git  
+3.0G	msm-4.9/.git
+$ cat msm-4.9/.git/objects/info/alternates 
+cat: msm-4.9/.git/objects/info/alternates: No such file or directory
+
+通过比较加不加 --reference /home/mirror/kernel/msm-4.9.git 我们看到.git目录大小不一样，加上要小很多的。
+然后就是加上会有msm-4.9/.git/objects/info/alternates这个文件的。
+
+$ git clone ssh://gerrit.blackshark.com:29418/git/aosp/kernel/msm-4.9 --reference /home/mirror/msm-4.9.git                                 
+Cloning into 'msm-4.9'...
+fatal: reference repository '/home/mirror/msm-4.9.git' is not a local repository.
+如果这个本地镜像仓库路径不存在，会报错的。
+
+如果使用了--reference-if-able不会报错的。
+
+$ git clone ssh://gerrit.blackshark.com:29418/git/aosp/kernel/msm-4.9 --reference /home/mirror/kernel/msm-4.9.git --dissociate  
+Cloning into 'msm-4.9'...
+remote: Counting objects: 3064590, done
+remote: Finding sources: 100% (3012366/3012366)
+remote: Total 3012366 (delta 2393732), reused 2939537 (delta 2393732)
+Receiving objects: 100% (3012366/3012366), 1.36 GiB | 16.33 MiB/s, done.
+Resolving deltas: 100% (2393732/2393732), completed with 9850 local objects.
+Checking connectivity: 8230985, done.
+Counting objects: 8230985, done.
+Compressing objects: 100% (2540121/2540121), done.
+Writing objects: 100% (8230985/8230985), done.
+Total 8230985 (delta 5970312), reused 6375489 (delta 4914488)
+warning: remote HEAD refers to nonexistent ref, unable to checkout.
+
+$ du -sh msm-4.9/.git  
+3.7G	msm-4.9/.git
+
+$ cat msm-4.9/.git/objects/info/alternates
+cat: msm-4.9/.git/objects/info/alternates: No such file or directory
+
+--dissociate选项：
+如果同时使用这个选项和--reference 选项，克隆的时候也会参考镜像仓库的，也是会提高克隆速度的。
+但是不会创建 .git/objects/info/alternates 文件的。 “.git”目录的大小会变大的。
+
+这个--reference选项对于特别大的仓库很有用。对于多人在一台服务器上克隆然后开发的情况也是很有用的。
+这个镜像仓库一般可以使用git clone --mirror来创建。
+
+```
+
+
+--branch <name>, -b <name>选项  和 --single-branch选项
+```bash
+在不使用--branch选项的时候git clone的时候检出的分支是HEAD指向的那个分支。
+使用这个选项我们就可以在克隆时候检出某个指定的分支了。
+
+$ git clone ssh://gerrit.blackshark.com:29418/git/aosp/tools/repo 
+Cloning into 'repo'...
+remote: Counting objects: 3990, done
+remote: Finding sources: 100% (3990/3990)
+remote: Total 3990 (delta 2671), reused 3990 (delta 2671)
+Receiving objects: 100% (3990/3990), 1.23 MiB | 18.55 MiB/s, done.
+Resolving deltas: 100% (2671/2671), done.
+$ cd repo                                
+$ git branch -a                                                                                      
+* stable
+  remotes/origin/HEAD -> origin/stable
+  remotes/origin/maint
+  remotes/origin/master
+  remotes/origin/stable
+
+下面我们使用了-b选项，指定了检出maint分支。
+$ git clone ssh://gerrit.blackshark.com:29418/git/aosp/tools/repo -b maint 
+Cloning into 'repo'...
+remote: Counting objects: 3990, done
+remote: Finding sources: 100% (3990/3990)
+remote: Total 3990 (delta 2671), reused 3990 (delta 2671)
+Receiving objects: 100% (3990/3990), 1.23 MiB | 26.84 MiB/s, done.
+Resolving deltas: 100% (2671/2671), done.
+$ cd repo                                                                                                                                
+$ git branch -a 
+* maint          这里说明了检出的分支是maint分支。
+  remotes/origin/HEAD -> origin/stable
+  remotes/origin/maint
+  remotes/origin/master
+  remotes/origin/stable
+
+--single-branch选项什么意思呢？ 它和-b选项配合使用，让克隆的时候只下载-b指定的这一个分支。
+在上面的例子我们看到了克隆的时候git会把所有分支都下载到本地的，例如有maint，master，stable，这3个分支都下载了。
+
+$ git clone ssh://gerrit.blackshark.com:29418/git/aosp/tools/repo -b maint --single-branch 
+Cloning into 'repo'...
+remote: Counting objects: 1668, done
+remote: Finding sources: 100% (1764/1764)
+remote: Total 1764 (delta 1117), reused 1700 (delta 1117)
+Receiving objects: 100% (1764/1764), 716.75 KiB | 7.47 MiB/s, done.
+Resolving deltas: 100% (1117/1117), done.
+$ cd repo                    
+$ git branch -a
+* maint
+  remotes/origin/maint
+$  
+这个时候我们看到只有maint分支了。其他分支都没有下载。
+$ cat .git/config 
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = ssh://gerrit.blackshark.com:29418/git/aosp/tools/repo
+	fetch = +refs/heads/maint:refs/remotes/origin/maint
+[branch "maint"]
+	remote = origin
+	merge = refs/heads/maint
+通过.git/config 配置文件我们可以看到 fetch = +refs/heads/maint:refs/remotes/origin/maint 这么一行，它就是指定了只下载服务器上的maint分支到本地。
+之前的这一行样子是这个的： fetch = +refs/heads/*:refs/remotes/origin/*，星号代表所有，refs/heads/*也是所有分支的意思。
+你要是想再下载其他分支，可以在那个fetch行下面加上一行  fetch = +refs/heads/stable:refs/remotes/origin/stable 。
+
+
+这个-b和--single-branch的一个使用场景是：
+在一个仓库下面，我们有个分支源码分支bsui，
+另一个是二进制分支bsui_apk.二进制分支都是放的源码分支编译生成的apk文件的，这个分支很大，很占磁盘空间的。
+对于研发人员来说，他只会关系bsui源码分支，下载的时候也是只想下载这个bsui分支。另外一个分支是没什么用的。
+这个时候就可以使用 --branch bsui --single-branch 这2个选项了。
+
+
+$ git clone ssh://gerrit-sh.blackshark.com:29418/git/android/platform/vendor/zeusis/zui/app/I19tService                                      [mamh@10.0.63.43 ] 18-06-01 11:25  /home/mamh/tmp
+Cloning into 'I19tService'...
+remote: Counting objects: 6884, done
+remote: Finding sources: 100% (6884/6884)
+remote: Total 6884 (delta 3550), reused 6698 (delta 3550)
+Receiving objects: 100% (6884/6884), 6.68 GiB | 47.00 MiB/s, done.
+Resolving deltas: 100% (3550/3550), done.
+warning: remote HEAD refers to nonexistent ref, unable to checkout.
+$ du -sh I19tService/.git                                                                                                                    [mamh@10.0.63.43 ] 18-06-01 11:28  /home/mamh/tmp
+6.7G	I19tService/.git
+
+下面是使用了--branch bsui --single-branch选项的效果，磁盘空间只有600MB。之前是6GB。这就是差异。
+$ git clone ssh://gerrit-sh.blackshark.com:29418/git/android/platform/vendor/zeusis/zui/app/I19tService --branch bsui --single-branch        [mamh@10.0.63.43 ] 18-06-01 11:28  /home/mamh/tmp
+Cloning into 'I19tService'...
+remote: Counting objects: 5995, done
+remote: Finding sources: 100% (5995/5995)
+remote: Total 5995 (delta 2897), reused 5604 (delta 2897)
+Receiving objects: 100% (5995/5995), 663.97 MiB | 50.77 MiB/s, done.
+Resolving deltas: 100% (2897/2897), done.
+$ du -sh I19tService/.git                                                                                                                    [mamh@10.0.63.43 ] 18-06-01 11:29  /home/mamh/tmp
+665M	I19tService/.git
+
+如果使用了--reference .git目录大小会更小。
+$ git clone ssh://gerrit-sh.blackshark.com:29418/git/android/platform/vendor/zeusis/zui/app/I19tService --branch bsui --single-branch --reference /home/mirror/platform/vendor/zeusis/zui/app/I19tService.git             
+Cloning into 'I19tService'...
+$ du -sh I19tService/.git                                                                                                                    [mamh@10.0.63.43 ] 18-06-01 11:33  /home/mamh/tmp
+164K	I19tService/.git
+
+如果使用了--dissociate和 --reference 选项，目录大小恢复为600MB了。
+$ git clone ssh://gerrit-sh.blackshark.com:29418/git/android/platform/vendor/zeusis/zui/app/I19tService --branch bsui --single-branch --reference /home/mirror/platform/vendor/zeusis/zui/app/I19tService.git  --dissociate
+Cloning into 'I19tService'...
+Counting objects: 5995, done.
+Compressing objects: 100% (3211/3211), done.
+Writing objects: 100% (5995/5995), done.
+Total 5995 (delta 2519), reused 4618 (delta 1722)
+$ du -sh I19tService/.git                                                                                                                    [mamh@10.0.63.43 ] 18-06-01 11:32  /home/mamh/tmp
+646M	I19tService/.git
+
+
+
+```
+
+--depth <depth>浅克隆
+```bash
+git clone --depth 3  /home/mirror/repo.git
+使用这个选项是，浅克隆的意思，后面指定一个数字，下载的时候只下载指定的提交历史。
+
+$ git clone ssh://gerrit.blackshark.com:29418/git/aosp/tools/repo --depth 3 
+Cloning into 'repo'...
+remote: Counting objects: 87, done
+remote: Finding sources: 100% (90/90)
+remote: Total 90 (delta 7), reused 45 (delta 7)
+Receiving objects: 100% (90/90), 164.53 KiB | 4.22 MiB/s, done.
+Resolving deltas: 100% (7/7), done.
+$ cd repo                                                                                                                                    
+$ git ll                                                                                                                                
+* eceeb1b - Support broken symlinks when cleaning obsolete paths                      — Dan Willemsen (HEAD -> stable, tag: v1.12.37, origin/stable, origin/HEAD) - (1 year, 8 months ago)
+* 16889ba - Revert "Repo: fall back to http, if ssh connection fails for http repos"  — Dan Willemsen (tag: v1.12.36) - (1 year, 8 months ago)
+*   40d3952 - Merge "On project cleanup, don't remove nested projects"                — David Pursehouse (tag: v1.12.35) - (1 year, 8 months ago)
+|\  
+| * 4350791 - On project cleanup, don't remove nested projects                       — Dan Willemsen (grafted) - (1 year, 9 months ago)
+* d648045 - implement optional 'pushurl' in the manifest file                        — Steve Rae (grafted) - (1 year, 10 months ago)
+$
+加上了--depth选项，这个git log历史只有这么4个,或者说是5个了。
+
+$ cat .git/config                                                                                                                       [mamh@10.0.63.43 ] 18-06-01 10:57  /home/mamh/tmp/repo
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = ssh://gerrit.blackshark.com:29418/git/aosp/tools/repo
+	fetch = +refs/heads/stable:refs/remotes/origin/stable
+[branch "stable"]
+	remote = origin
+	merge = refs/heads/stable
+加上这个--depth，克隆的时候只会下载到一个分支，这里是stable，应为服务器上配置的HEAD执向的是stable分支。
+
+$ ls .git                                                                                                                               [mamh@10.0.63.43 ] 18-06-01 10:57  /home/mamh/tmp/repo
+branches/  config  description  HEAD  hooks/  index  info/  logs/  objects/  packed-refs  refs/  shallow
+在浅克隆的时候.git目录下面会有个shallow文件
+
+
+
+```
+
+
+--origin <name>, -o <name>选项
+```bash
+默认克隆的时候，使用的名称是origin，我们可以通过.git/config 看到
+$ cat I19tService/.git/config                                                                                                                [mamh@10.0.63.43 ] 18-06-01 11:36  /home/mamh/tmp
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = ssh://gerrit-sh.blackshark.com:29418/git/android/platform/vendor/zeusis/zui/app/I19tService
+	fetch = +refs/heads/bsui:refs/remotes/origin/bsui
+[branch "bsui"]
+	remote = origin
+	merge = refs/heads/bsui
+	
+这里[remote "origin"]标记的就是远端仓库名称是origin。
+
+使用--origin选项在克隆的时候可以更改这个名称，一般不会取改它的。
+$ git clone ssh://gerrit-sh.blackshark.com:29418/git/android/platform/vendor/zeusis/zui/app/I19tService --branch bsui --single-branch --reference /home/mirror/platform/vendor/zeusis/zui/app/I19tService.git   --origin o
+fatal: destination path 'I19tService' already exists and is not an empty directory.
+$ rm -rf I19tService                                                                                                                         [mamh@10.0.63.43 ] 18-06-01 11:38  /home/mamh/tmp
+$ git clone ssh://gerrit-sh.blackshark.com:29418/git/android/platform/vendor/zeusis/zui/app/I19tService --branch bsui --single-branch --reference /home/mirror/platform/vendor/zeusis/zui/app/I19tService.git   --origin o
+Cloning into 'I19tService'...
+$ cat I19tService/.git/config                                                                                                                [mamh@10.0.63.43 ] 18-06-01 11:38  /home/mamh/tmp
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "o"]
+	url = ssh://gerrit-sh.blackshark.com:29418/git/android/platform/vendor/zeusis/zui/app/I19tService
+	fetch = +refs/heads/bsui:refs/remotes/o/bsui
+[branch "bsui"]
+	remote = o
+	merge = refs/heads/bsui
+这里就使用了  --origin o选项，把这个名称改为了“o”
+```
+
+
+--no-checkout选项
+```bash
+加上这个选项 clone的时候不会把源码检出到工作目录。默认是会检出的。有时候会提示个warning，就是检出源码失败。
+ warning: remote HEAD refers to nonexistent ref, unable to checkout.
+一般这种情况是服务器端HEAD引用的那个分支是个不存在的分支，下载到本地检出代码的时候就报错了。
+
+$ git clone /home/mirror/kernel/msm-4.9.git --no-checkout                                                                                    
+Cloning into 'msm-4.9'...
+done.
+$ ls msm-4.9                                                                                                                                 
+
+$ rm -rf msm-4.9                                                                                                                             
+$ git clone /home/mirror/kernel/msm-4.9.git                                                                                                  
+Cloning into 'msm-4.9'...
+done.
+Checking out files: 100% (58866/58866), done.
+$ ls msm-4.9                                                                                                                                 [mamh@10.0.63.43 ] 18-06-01 10:47  /home/mamh/tmp
+AndroidKernel.mk  build.config.goldfish.arm    build.config.goldfish.mips64  certs/   crypto/         firmware/  init/   Kconfig  MAINTAINERS  net/            samples/   sound/     usr/
+arch/             build.config.goldfish.arm64  build.config.goldfish.x86     COPYING  Documentation/  fs/        ipc/    kernel/  Makefile     README          scripts/   techpack/  virt/
+block/            build.config.goldfish.mips   build.config.goldfish.x86_64  CREDITS  drivers/        include/   Kbuild  lib/     mm/          REPORTING-BUGS  security/  tools/
+$  
+```
+
+--template=<template_directory>选项
+```bash
+git clone --template=<template_directory>
+--template=<template_directory>选项指定一个模板路径，克隆的时候使用。我们在git init时候讲过这个选项。
+
+$ git clone --template=/usr/share/git-core/templates /home/mirror/kernel/msm-4.9.git
+
+```
+
+--no-tags选项
+```bash
+git clone  --no-tags /home/mirror/repo.git
+克隆的时候不下载tags标签，使用这个选项会在.git/config 配置文件中有个这个配置：remote.<remote>.tagOpt=--no-tags 。
+不使用这个选项是会下载标签的。      
+
+```
+
+-v,-q,--progress选项
+```bash
+git clone -v, --verbose 克隆的时候显示更多的详细信息。
+git clone -q, --quiet 克隆时候不显示任何提示信息。
+git clone --progress 强制显示进度报告。
+
+```
+
+
+
+
+
+
+
+
+
+
+
 
 # git add
 git add 命令将内容从工作目录添加到暂存区（或称为索引（index）区），以备下次提交。  
