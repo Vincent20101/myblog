@@ -138,11 +138,137 @@ git config       core.filemode
 ```
 git init        # 在一个空目录下面初始化一个空的仓库。
                 # 在存在的仓库下会reinit一个仓库的。作用不大。
-
+```
+```
 git init --bare # 建一个裸仓库
-
+git init --bare my.git
+一般的裸仓库名称我们习惯在目录名上带上.git结尾。
 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 ```
+```
+git init --shared[=(false|true|umask|group|all|world|everybody|0xxx)]
+
+git init --shared=everybody
+
+git init --shared=777 # 这样个出来的.git目录权限就会是777.
+```
+
+```
+git init --template=<template_directory> #这个是指定一个模板路径。默认的路径是/usr/share/git-core/templates.
+
+```
+
+```bash
+git init --separate-git-dir=<git dir> #这个选项用来分开存放.git目录的。
+
+git init my  --separate-git-dir my.git # 这样初始化一个空的仓库，名字是my，my这个目录也就是我们的工作区间。
+但是真正的仓库是在my.git这个目录下面的。 同时在my工作区间目录下面不会再有.git目录了，代替的一个.git文件。
+
+$ git init my --separate-git-dir=my.git
+Initialized empty Git repository in /home/mamh/tmp/my.git/
+
+$ ls 
+ my/  my.git/  test/
+
+$ ll my                                                                                                     
+total 0
+$ ls -lha my
+total 12K
+drwxrwxr-x 2 mamh mamh 4.0K 6月   1 08:42 ./
+drwxrwxr-x 7 mamh mamh 4.0K 6月   1 08:42 ../
+-rw-rw-r-- 1 mamh mamh   30 6月   1 08:42 .git
+$ cat my/.git
+gitdir: /home/mamh/tmp/my.git
+
+$ ll my.git                                                                                                 
+total 32K
+-rw-rw-r-- 1 mamh mamh   23 6月   1 08:42 HEAD
+drwxrwxr-x 2 mamh mamh 4.0K 6月   1 08:42 branches/
+-rw-rw-r-- 1 mamh mamh   92 6月   1 08:42 config
+-rw-rw-r-- 1 mamh mamh   73 6月   1 08:42 description
+drwxrwxr-x 2 mamh mamh 4.0K 6月   1 08:42 hooks/
+drwxrwxr-x 2 mamh mamh 4.0K 6月   1 08:42 info/
+drwxrwxr-x 4 mamh mamh 4.0K 6月   1 08:42 objects/
+drwxrwxr-x 4 mamh mamh 4.0K 6月   1 08:42 refs/
+$                                                 
+```
+```bash
+git init --separate-git-dir=../my.git  在一个已经存在的git仓库下面执行这样的命令，可以把当前仓库的.git目录移到外面某个目录下面。
+
+如果是对一个裸仓库执行这样的命令，他也会把仓库移到指定的目录下面，但是原来的仓库好像没什么变化的。
+```
+
+环境变量 GIT_DIR   和   GIT_WORK_TREE
+```bash
+#  如果设置了这个$GIT_DIR环境变量，默认初始化时候是带当前目录下面创建的.git目录，有了这个环境变量， .git目录下面的内容就会放到这个环境变量路径下面了。
+
+export GIT_DIR=/home/mamh/tmp/aaa.git
+$ git init bbb 
+Initialized empty Git repository in /home/mamh/tmp/aaa.git/ 
+$ ls -lh 
+total 575M
+drwxrwxr-x  7 mamh mamh 4.0K 6月   1 08:54 aaa.git/
+drwxrwxr-x  2 mamh mamh 4.0K 6月   1 08:54 bbb/
+
+$ ls -lha aaa.git bbb
+aaa.git:
+total 40K
+drwxrwxr-x 7 mamh mamh 4.0K 6月   1 08:54 ./
+drwxrwxr-x 6 mamh mamh 4.0K 6月   1 08:54 ../
+drwxrwxr-x 2 mamh mamh 4.0K 6月   1 08:54 branches/
+-rw-rw-r-- 1 mamh mamh   66 6月   1 08:54 config
+-rw-rw-r-- 1 mamh mamh   73 6月   1 08:54 description
+-rw-rw-r-- 1 mamh mamh   23 6月   1 08:54 HEAD
+drwxrwxr-x 2 mamh mamh 4.0K 6月   1 08:54 hooks/
+drwxrwxr-x 2 mamh mamh 4.0K 6月   1 08:54 info/
+drwxrwxr-x 4 mamh mamh 4.0K 6月   1 08:54 objects/
+drwxrwxr-x 4 mamh mamh 4.0K 6月   1 08:54 refs/
+
+bbb:
+total 8.0K
+drwxrwxr-x 2 mamh mamh 4.0K 6月   1 08:54 ./
+drwxrwxr-x 6 mamh mamh 4.0K 6月   1 08:54 ../
+通过上面的初始化方法，我初始化了一个bbb的仓库，通过环境变量GIT_DIR指定仓库的路径，这里是aaa.git，然后我们发现bbb目录是个空目录。下面什么文件都没的。这里我们的bbb目录应该是一个工作区间目录的。
+$ git status 
+fatal: This operation must be run in a work tree
+$ git diff 
+fatal: This operation must be run in a work tree
+这个时候你执行一些命令会报不是个工作目录的。这个时候我们可以使用另外一个环境变量来解决GIT_WORK_TREE
+
+$ export GIT_WORK_TREE=/home/mamh/tmp/bbb 
+$ git add .                   
+$ git st                       
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+	new file:   t.txt
+	
+这个时候git就能正常的识别到哪个是仓库目录，哪个是工作目录了。
+
+一般情况很少这样使用的。
+
+
+```
+选项 --work-tree 和   --git-dir 和上面的环境变量起到了同样的作用。
+```
+git --work-tree=<some path> --git-dir=<some path> 
+
+git --work-tree=/home/mamh/tmp/bbb --git-dir=/home/mamh/tmp/aaa.git   status
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+	new file:   t.txt
+```
+
+
 
 # git clone
 
