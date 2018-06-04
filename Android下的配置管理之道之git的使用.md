@@ -699,20 +699,31 @@ git clone --progress 强制显示进度报告。
 
 ```
 
-
-
-
-
-
-
-
-
-
-
-
 # git add
 git add 命令将内容从工作目录添加到暂存区（或称为索引（index）区），以备下次提交。  
 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+```bash
+git add --dry-run,-n  <pathspec>   # 不去真正执行add命令，只是打印出来将会被git添加进版本的文件。
+
+git add --force,-f  <pathspec>     # 这个会把.ignore文件中被忽略的文件也添加到版本库中。
+
+git add --update，-u  <pathspec>   # 这个选项不会把没有被git追踪的文件添加进来，也就是新建的文件不会添加进来
+
+git add  -A,--all, --no-ignore-removal # 这个选项会把所有的文件都添加进来，包括删除的，新增的，修改的。
+                                       # 如果没有给出具体的<pathspec> 这个选项会把当前版本库的工作空间中的所有文件都添加进来的。
+                                       
+git add --no-all, --ignore-removal     # 这个不会把删除的文件添加进来。
+
+git add   [option]  -- <pathspec>  # 这里 -- 的作用就是分开选项和文件，让git知道哪些是选项，哪些是文件名。如果文件名和选项重名了这个就很有用了。
+
+git add Documentation/\*.txt  #这个会把 Documentation 和 子目录下面的所有.txt 文件添加进来的。这里加了反斜线，这个星号就交给git命令来扩展了。
+
+git add git-*.sh
+                                       
+
+```
+
+
 
 # git status
 
