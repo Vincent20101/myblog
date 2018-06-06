@@ -824,16 +824,233 @@ git merge --continue # 继续合并操作
 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 
 # git log
-git log 命令用来展示一个项目的可达历史记录，从最近的提交快照起。   
-默认情况下，它只显示你当前所在分支的历史记录，但是可以显示不同的甚至多个头记录或分支以供遍历。   
-此命令通常也用来在提交记录级别显示两个或多个分支之间的差异。  
-    last = log -1 HEAD  
-git lo   = log --oneline  
-git ll   = log --graph --format=format:'%C(bold blue)%h%C(reset) %C(red)%<(100,trunc)%s%C(reset) %C(bold black)— %an%C(reset)%C(bold green)%d%C(reset) - %C(bold green)(%ar)%C(reset)' --abbrev-commit --date=relative --show-signature   
+git log 命令用来展示一个项目的可达历史记录，从最近的提交快照起。     
+默认情况下，它只显示你当前所在分支的历史记录，但是可以显示不同的甚至多个头记录或分支以供遍历。     
+此命令通常也用来在提交记录级别显示两个或多个分支之间的差异。   
+```bash
+git log -p  #选项展开显示每次提交的内容差异，按补丁格式显示每个更新之间的差异。
+git log -2  # 用 -2 则仅显示最近的两次更新
+git log -p  --word-diff #--word-diff获取单词层面上的对比.
+# 在程序代码中进行单词层面的对比常常是没什么用的。不过当你需要在书籍、论文这种很大的文本文件上进行对比的时候，这个功能就显出用武之地了。
 
-比较2个分支的差异的  
+git log --stat # --stat，仅显示简要的增改行数统计
+git log --shortstat	 # 只显示 --stat 中最后的行数修改添加移除统计。
+
+git log --name-only  #仅在提交信息后显示已修改的文件清单
+git log --name-status#显示新增、修改、删除的文件清单
+
+git log --abbrev-commit # 仅显示 SHA-1 的前几个字符，而非所有的 40 个字符。
+
+git  log --oneline  # --pretty=oneline --abbrev-commit 的简化用法。
+
+
+```
+
+我们还可以对历史进行格式化输出，利用--pretty 选项。
+```bash
+git log --pretty[=<format>] # 其中<format>可以是oneline, short, medium, full, fuller, email, raw, format:<string>, tformat:<string>
+# 默认是medium样式的输出。可以配置到gitconfig文件改变这个默认样式。
+```
+
+oneline的样式是
+``` 
+    <sha1> <title line>
+```
+short的样式是：
+```
+    commit <sha1>
+    Author: <author>
+    
+    <title line>
+```    
+medium的样式是
+```
+    commit <sha1>
+    Author: <author>
+    Date:   <author date>
+    
+    <title line>
+    
+    <full commit message>    
+```
+full的样式是
+```
+    commit <sha1>
+    Author: <author>
+    Commit: <committer>
+    
+    <title line>
+    
+    <full commit message>
+```
+fuller的样式是
+```
+    commit <sha1>
+    Author:     <author>
+    AuthorDate: <author date>
+    Commit:     <committer>
+    CommitDate: <committer date>
+    
+    <title line>
+    
+    <full commit message>
+```
+email的样式是
+```
+    From <sha1> <date>
+    From: <author>
+    Date: <author date>
+    Subject: [PATCH] <title line>
+    
+    <full commit message>
+
+```
+raw的样式
+```text
+    commit <sha1>
+    tree <sha1>
+    parent <sha1>
+    author <author> 1528082498 +0800
+    committer <date> 1528082498 +0800
+    
+        <full commit message>
+
+```
+format:<string>的，这种自定义样式更强大，功能更丰富。类似printf的格式化输出。
+```text
+# 例如： format:"The author of %h was %an, %ar%nThe title was >>%s<<%n"，其中使用%n来换行。
+
+可以用的占位符有：
+    ·   %H: commit hash  提交对象（commit）的完整哈希字串
+    ·   %h: abbreviated commit hash 提交对象的简短哈希字串
+    ·   %T: tree hash  树对象（tree）的完整哈希字串
+    ·   %t: abbreviated tree hash 树对象的简短哈希字串
+    ·   %P: parent hashes  父对象（parent）的完整哈希字串
+    ·   %p: abbreviated parent hashes 父对象的简短哈希字串
+    ·   %an: author name 作者（author）的名字
+    ·   %aN: author name (respecting .mailmap, see git-shortlog(1) or git-blame(1))
+    ·   %ae: author email 作者的电子邮件地址
+    ·   %aE: author email (respecting .mailmap, see git-shortlog(1) or git-blame(1))
+    ·   %ad: author date (format respects --date= option) 作者修订日期（可以用 -date= 选项定制格式）
+    ·   %aD: author date, RFC2822 style
+    ·   %ar: author date, relative  作者修订日期，按多久以前的方式显示
+    ·   %at: author date, UNIX timestamp
+    ·   %ai: author date, ISO 8601-like format
+    ·   %aI: author date, strict ISO 8601 format
+    ·   %cn: committer name  提交者(committer)的名字
+    ·   %cN: committer name (respecting .mailmap, see git-shortlog(1) or git-blame(1))
+    ·   %ce: committer email 提交者的电子邮件地址
+    ·   %cE: committer email (respecting .mailmap, see git-shortlog(1) or git-blame(1))
+    ·   %cd: committer date (format respects --date= option) 提交日期（可以用 -date= 选项定制格式）
+    ·   %cD: committer date, RFC2822 style
+    ·   %cr: committer date, relative  提交日期，按多久以前的方式显示
+    ·   %ct: committer date, UNIX timestamp
+    ·   %ci: committer date, ISO 8601-like format
+    ·   %cI: committer date, strict ISO 8601 format
+    ·   %d: ref names, like the --decorate option of git-log(1)
+    ·   %D: ref names without the " (", ")" wrapping.
+    ·   %e: encoding
+    ·   %s: subject  提交说明
+    ·   %f: sanitized subject line, suitable for a filename
+    ·   %b: body
+    ·   %B: raw body (unwrapped subject and body)
+    ·   %N: commit notes
+    ·   %GG: raw verification message from GPG for a signed commit
+    ·   %G?: show "G" for a good (valid) signature, "B" for a bad signature, "U" for a good
+             signature with unknown validity, "X" for a good signature that has expired, "Y" for a
+             good signature made by an expired key, "R" for a good signature made by a revoked key, 
+             "E" if the signature cannot be checked (e.g. missing key) and "N" for no signature
+    ·   %GS: show the name of the signer for a signed commit
+    ·   %GK: show the key used to sign a signed commit
+    ·   %gD: reflog selector, e.g., refs/stash@{1} or refs/stash@{2 minutes ago}; the format follows 
+             the rules described for the -g option. The portion before the @ is the refname
+             as given on the command line (so git log -g refs/heads/master would yield refs/heads/master@{0}).
+    ·   %gd: shortened reflog selector; same as %gD, but the refname portion is shortened for human readability
+             (so refs/heads/master becomes just master).
+    ·   %gn: reflog identity name
+    ·   %gN: reflog identity name (respecting .mailmap, see git-shortlog(1) or git-blame(1))
+    ·   %ge: reflog identity email
+    ·   %gE: reflog identity email (respecting .mailmap, see git-shortlog(1) or git-blame(1))
+    ·   %gs: reflog subject
+    ·   %Cred: switch color to red
+    ·   %Cgreen: switch color to green
+    ·   %Cblue: switch color to blue
+    ·   %Creset: reset color
+    ·   %C(...): color specification, as described under Values in the "CONFIGURATION FILE" section of git-config(1). 
+                 By default, colors are shown only when enabled for log output
+                 (by color.diff, color.ui, or --color, and respecting the auto settings of the former if we are going to a terminal).
+                 %C(auto,...)  is accepted as a historical synonym for
+                 the default (e.g., %C(auto,red)). Specifying %C(always,...) will show the colors even 
+                 when color is not otherwise enabled (though consider just using `--color=always to
+                 enable color for the whole output, including this format and anything else git might color).
+                 auto alone (i.e.  %C(auto)) will turn on auto coloring on the next
+                 placeholders until the color is switched again.
+    ·   %m: left (<), right (>) or boundary (-) mark
+    ·   %n: newline
+    ·   %%: a raw %
+    ·   %x00: print a byte from a hex code
+    ·   %w([<w>[,<i1>[,<i2>]]]): switch line wrapping, like the -w option of git-shortlog(1).
+    ·   %<(<N>[,trunc|ltrunc|mtrunc]): make the next placeholder take at least N columns, padding spaces on the 
+                                        right if necessary. Optionally truncate at the beginning (ltrunc),
+                                        the middle (mtrunc) or the end (trunc) if the output is longer than N columns.
+                                        Note that truncating only works correctly with N >= 2.
+    ·   %<|(<N>): make the next placeholder take at least until Nth columns, padding spaces on the right if necessary
+    ·   %>(<N>), %>|(<N>): similar to %<(<N>), %<|(<N>) respectively, but padding spaces on the left
+    ·   %>>(<N>), %>>|(<N>): similar to %>(<N>), %>|(<N>) respectively, except that if the next placeholder takes 
+                             more spaces than given and there are spaces on its left, use those spaces
+    ·   %><(<N>), %><|(<N>): similar to % <(<N>), %<|(<N>) respectively, but padding both sides (i.e. the text is centered)
+    ·   %(trailers): display the trailers of the body as interpreted by git-interpret-trailers(1)           
+需要注意的是有些占位符需要和某些选择配合使用的。              
+
+```
+
+git log  --graph，  用 oneline 或 format 时结合 --graph 选项，可以看到开头多出一些 ASCII 字符串表示的简单图形，形象地展示了每个提交所在的分支及其分化衍合情况
+```text
+$ git log --pretty=format:"%h %s" --graph
+* 2d3acf9 ignore errors from SIGCHLD on trap
+*  5e3ee11 Merge branch 'master' of git://github.com/dustin/grit
+|\
+| * 420eac9 Added a method for getting the current branch.
+* | 30e367c timeout code and tests
+* | 5a09431 add timeout protection to grit
+* | e1193f8 support for heads with slashes in them
+|/
+* d6016bc require time for xmlschema
+*  11d191e Merge branch 'defunkt' into local
+
+
+```
+
+限制输出长度 --since
+```text
+-<n> 选项,后面跟上数字，显示最新的几个提交。
+--since, --after  仅显示指定时间之后的提交。 
+--until, --before仅显示指定时间之前的提交
+--author 仅显示指定作者相关的提交。
+--committer 仅显示指定提交者相关的提交。
+
+$ git log --since=2.weeks     #
+
+$ git log --pretty="%h - %s" --author=gitster --since="2008-10-01" --before="2008-11-01" --no-merges -- t/
+
+```
+
+
+下面是定义的几个常用的git log的别名。
+```text
+    last = log -1 HEAD  
+    lo   = log --oneline  
+    ll   = log --graph --format=format:'%C(bold blue)%h%C(reset) %C(red)%<(100,trunc)%s%C(reset) %C(bold black)— %an%C(reset)%C(bold green)%d%C(reset) - %C(bold green)(%ar)%C(reset)' --abbrev-commit --date=relative --show-signature   
+
+```
+
+比较2个分支的差异的
+
+```  
 git lc   = log --left-right --cherry-pick --date=short --pretty='%m || %h ||  %<(120,trunc)%s (%<(10,trunc)%an) (%cd)'    
 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+
+```
 
 # git stash
 git stash 命令用来临时地保存一些还没有提交的工作，以便在分支上不需要提交未完成工作就可以清理工作目录。  
