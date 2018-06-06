@@ -835,16 +835,307 @@ Process finished with exit code 0
 默认是懒加载的情况。
 通用可以使用    @OneToMany(fetch = FetchType.EAGER) 来修改。然后那个查询会变为左外链接。
 
+双向一对多关联关系
+```java
+    /**
+     * 双向一对多关联关系
+     */
+    @Test
+    public void testOneToMany2() {
+        Customer customer = new Customer();
+        customer.setAge(112);
+        customer.setLastName("zz");
+        customer.setEmail("zzzzz");
+        customer.setBirth(new Date());
+        customer.setCreateTime(new Date());
+
+        Order order = new Order();
+        order.setOderName("o-ff-1");
+        Order order1 = new Order();
+        order1.setOderName("o-ff-2");
+
+        customer.getOrders().add(order);
+        customer.getOrders().add(order1);
+        order1.setCustomer(customer);
+        order.setCustomer(customer);
+
+        entityManager.persist(customer);
+        entityManager.persist(order);
+        entityManager.persist(order1);
+
+    }
+
+```
+先插入customer，然后在插入order，只有2个update语句，如果反过来插入，会有4条update语句的。
+```text
+Hibernate: 
+    insert 
+    into
+        jpa_customer
+        (age, birth, createTime, email, last_name) 
+    values
+        (?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        jpa_order
+        (customer_id, order_name) 
+    values
+        (?, ?)
+Hibernate: 
+    insert 
+    into
+        jpa_order
+        (customer_id, order_name) 
+    values
+        (?, ?)
+Hibernate: 
+    update
+        jpa_order 
+    set
+        customer_id=? 
+    where
+        id=?
+Hibernate: 
+    update
+        jpa_order 
+    set
+        customer_id=? 
+    where
+        id=?
+
+Process finished with exit code 0
+
+```
+在进行双向一对多的关联关系时。建议使用多的一方来维护管理关系。
+
+可以在customer上设置    @OneToMany(fetch = FetchType.EAGER,cascade = {CascadeType.REMOVE},mappedBy = "customer")
+这样customer就不会维护关联关系了。  
+此时这个不能同时使用    @JoinColumn(name = "customer_id") 了。
 
 
 
+双向一对一的关联关系
+```java
+package com.mamh.jpa;
 
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "jpa_department")
+public class Department {
+
+    private int id;
+    private String deptName;
+
+    private Manager manager;
+
+    @Id
+    @GeneratedValue
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Column(name = "name")
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
+    /**
+     * 使用  @OneToOne 来映射1-1关联关系。
+     * @return
+     */
+    @JoinColumn(name = "manager_id", unique = true)
+    @OneToOne
+    public Manager getManager() {
+        return manager;
+    }
+
+    public void setManager(Manager manager) {
+        this.manager = manager;
+    }
+}
 
 
+```
+```java
+package com.mamh.jpa;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "jpa_manager")
+public class Manager {
+    private int id;
+    private String mgrName;
+
+    private Department deptartment;
+
+    @Id
+    @GeneratedValue
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Column(name = "name")
+    public String getMgrName() {
+        return mgrName;
+    }
+
+    public void setMgrName(String mgrName) {
+        this.mgrName = mgrName;
+    }
+
+    @OneToOne(mappedBy = "manager")
+    public Department getDeptartment() {
+        return deptartment;
+    }
+
+    public void setDeptartment(Department deptartment) {
+        this.deptartment = deptartment;
+    }
+}
 
 
+```
 
+```java
+
+
+    @Test
+    public void testDepartment(){
+        Manager manager = new Manager();
+        manager.setMgrName("bright.ma");
+        Department department = new Department();
+        department.setDeptName("scm");
+        department.setManager(manager);
+        manager.setDeptartment(department);
+
+        //先保存不维护关联关系的那一方
+        entityManager.persist(manager);
+        entityManager.persist(department);
+    }
+
+```
+
+在添加数据的时候， 先保存不维护关联关系的那一方，这里就是先保存manager。
+```text
+Hibernate: 
+    insert 
+    into
+        jpa_manager
+        (name) 
+    values
+        (?)
+Hibernate: 
+    insert 
+    into
+        jpa_department
+        (name, manager_id) 
+    values
+        (?, ?)
+
+Process finished with exit code 0
+
+```
+
+获取的情况
+```java
+    @Test
+    public void testOnetoOneFind() {
+        Department department = entityManager.find(Department.class, 1);
+        System.out.println(department);
+
+    }
+
+
+```
+
+```text
+Hibernate: 
+    select
+        department0_.id as id1_1_0_,
+        department0_.name as name2_1_0_,
+        department0_.manager_id as manager_3_1_0_,
+        manager1_.id as id1_2_1_,
+        manager1_.name as name2_2_1_ 
+    from
+        jpa_department department0_ 
+    left outer join
+        jpa_manager manager1_ 
+            on department0_.manager_id=manager1_.id 
+    where
+        department0_.id=?
+Hibernate: 
+    select
+        department0_.id as id1_1_1_,
+        department0_.name as name2_1_1_,
+        department0_.manager_id as manager_3_1_1_,
+        manager1_.id as id1_2_0_,
+        manager1_.name as name2_2_0_ 
+    from
+        jpa_department department0_ 
+    left outer join
+        jpa_manager manager1_ 
+            on department0_.manager_id=manager1_.id 
+    where
+        department0_.manager_id=?
+com.mamh.jpa.Department@649f2009
+
+```
+
+
+```java
+    @Test
+    public void testOnetoOneFind1() {
+        Manager manager = entityManager.find(Manager.class, 1);
+        System.out.println(manager);
+
+    }
+
+```
+```text
+Hibernate: 
+    select
+        manager0_.id as id1_2_0_,
+        manager0_.name as name2_2_0_,
+        department1_.id as id1_1_1_,
+        department1_.name as name2_1_1_,
+        department1_.manager_id as manager_3_1_1_ 
+    from
+        jpa_manager manager0_ 
+    left outer join
+        jpa_department department1_ 
+            on manager0_.id=department1_.manager_id 
+    where
+        manager0_.id=?
+com.mamh.jpa.Manager@14bb2297
+
+```
 
 
 
