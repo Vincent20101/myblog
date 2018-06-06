@@ -723,7 +723,13 @@ git add git-*.sh
 
 ```
 
+# git rm
+git rm 是 Git 用来从工作区，或者暂存区移除文件的命令。 在为下一次提交暂存一个移除操作上，它与 git add 有一点类似  
+欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/  
 
+# git mv
+git mv 命令是一个便利命令，用于移到一个文件并且在新文件上执行git add命令及在老文件上执行git rm命令。  
+欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/  
 
 # git status
 
@@ -762,14 +768,6 @@ git commit --amend  追加提交到最后一个快照上。
 -s, --signoff 添加signoff行  
 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/  
 
-
-# git rm
-git rm 是 Git 用来从工作区，或者暂存区移除文件的命令。 在为下一次提交暂存一个移除操作上，它与 git add 有一点类似  
-欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/  
-
-# git mv
-git mv 命令是一个便利命令，用于移到一个文件并且在新文件上执行git add命令及在老文件上执行git rm命令。  
-欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/  
 
 # git clean
 git clean 是一个用来从工作区中移除不想要的文件的命令。 可以是编译的临时文件或者合并冲突的文件。  
@@ -1180,6 +1178,347 @@ git submodule update --remote --rebase
 # git show
 git show 命令可以以一种简单的人类可读的方式来显示一个 Git 对象。 你一般使用此命令来显示一个标签或一个提交的信息。  
 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+
+```bash
+git show [<options>] <object>...
+
+#这里的<object>可以是tree,blob,commit,tag
+
+git cat-file -p HEAD^{tree} # 得到当前HEAD对应的tree-blob结构
+git show blobID #显示文件内容
+git show -s --pretty=raw  commitID # 显示commit的具体信息
+git cat-file tag <TAG> 显示tag的具体信息
+```
+
+这个命令和git log命令有很多重复的地方，重复的选项等。
+
+
+git show --notes,--no-notes
+```bash
+
+$ git config --add remote.origin.fetch +refs/notes/*:refs/notes/*
+$ git config notes.displayRef refs/notes/*
+配置了上面的选项会下载到 notes的信息，一般是review的相关信息
+
+$ git show
+commit 9a460a3af12a150192c84f568c28e78bc256cabc (HEAD, changes/66/83266/1)
+Author: 马哥私房菜 <bright.ma@马哥私房菜.com>
+Date:   Tue Jun 12 19:33:15 2018 +0800
+
+    blackshark: add platform/vendor/zui/app/BSAMAgent
+    
+    Change-Id: I6d632133aaf2ae5cdc99df56f2e499443caf24d2
+    Signed-off-by: 马哥私房菜 <bright.ma@马哥私房菜.com>
+
+Notes (review):
+    Code-Review+1: Jira <jira@马哥私房菜.com>
+    Code-Review+2: 马哥私房菜 <bright.ma@马哥私房菜.com>
+    Verified+1: 马哥私房菜 <bright.ma@马哥私房菜.com>
+    Submitted-by: 马哥私房菜 <bright.ma@马哥私房菜.com>
+    Submitted-at: Tue, 12 Jun 2018 19:34:07 +0800
+    Reviewed-on: http://gerrit.马哥私房菜.com:8080/83266
+    Project: git/android/platform/manifest
+    Branch: refs/heads/bs_master
+
+如果没有配置“$ git config notes.displayRef refs/notes/*”这个，
+默认git show不会显示notes信息的，可以带上--notes选项来使用。
+$ git show --notes=refs/notes/review  
+commit 9a460a3af12a150192c84f568c28e78bc256cabc (HEAD, changes/66/83266/1)
+Author: 马哥私房菜 <bright.ma@马哥私房菜.com>
+Date:   Tue Jun 12 19:33:15 2018 +0800
+
+    blackshark: add platform/vendor/马哥私房菜/zui/app/BSAMAgent
+    
+    Change-Id: I6d632133aaf2ae5cdc99df56f2e499443caf24d2
+    Signed-off-by: 马哥私房菜 <bright.ma@马哥私房菜.com>
+
+Notes (review):
+    Code-Review+1: Jira <jira@马哥私房菜.com>
+    Code-Review+2: 马哥私房菜 <bright.ma@马哥私房菜.com>
+    Verified+1: 马哥私房菜 <bright.ma@马哥私房菜.com>
+    Submitted-by: 马哥私房菜 <bright.ma@马哥私房菜.com>
+    Submitted-at: Tue, 12 Jun 2018 19:34:07 +0800
+    Reviewed-on: http://gerrit.马哥私房菜.com:8080/83266
+    Project: git/android/platform/manifest
+    Branch: refs/heads/bs_master
+
+使用--no-notes选项可以不显示notes信息。
+$ git show --no-notes 
+```
+git show
+```bash
+#什么参数都加 是显示HEAD指向的那个提交信息的
+$ git --no-pager show   
+commit da40341a3e6e2e45877426aaefb97b3f0735a776 (HEAD -> master, origin/master, origin/HEAD, new)
+Author: Nasser Grainawi <nasser@codeaurora.org>
+Date:   Fri May 4 12:53:29 2018 -0600
+
+    manifest: Support a default upstream value
+    
+    It's convenient to set upstream for all projects in a manifest instead of
+    repeating the same value for each project.
+    
+    Change-Id: I946b1de4efb01b351c332dfad108fa7d4f443cba
+
+diff --git a/docs/manifest-format.txt b/docs/manifest-format.txt
+index 56bdf14..0c957dd 100644
+--- a/docs/manifest-format.txt
++++ b/docs/manifest-format.txt
+@@ -44,6 +44,7 @@ following DTD:
+     <!ATTLIST default remote      IDREF #IMPLIED>
+     <!ATTLIST default revision    CDATA #IMPLIED>
+     <!ATTLIST default dest-branch CDATA #IMPLIED>
++    <!ATTLIST default upstream    CDATA #IMPLIED>
+     <!ATTLIST default sync-j      CDATA #IMPLIED>
+     <!ATTLIST default sync-c      CDATA #IMPLIED>
+     <!ATTLIST default sync-s      CDATA #IMPLIED>
+@@ -164,6 +165,11 @@ Project elements not setting their own `dest-branch` will inherit
+ this value. If this value is not set, projects will use `revision`
+ by default instead.
+ 
++Attribute `upstream`: Name of the Git ref in which a sha1
++can be found.  Used when syncing a revision locked manifest in
++-c mode to avoid having to sync the entire ref space. Project elements
++not setting their own `upstream` will inherit this value.
++
+ Attribute `sync-j`: Number of parallel jobs to use when synching.
+ 
+ Attribute `sync-c`: Set to true to only sync the given Git
+diff --git a/manifest_xml.py b/manifest_xml.py
+index 60d6116..d0211ea 100644
+--- a/manifest_xml.py
++++ b/manifest_xml.py
+@@ -59,6 +59,7 @@ class _Default(object):
+ 
+   revisionExpr = None
+   destBranchExpr = None
++  upstreamExpr = None
+   remote = None
+   sync_j = 1
+   sync_c = False
+@@ -230,6 +231,9 @@ class XmlManifest(object):
+     if d.destBranchExpr:
+       have_default = True
+       e.setAttribute('dest-branch', d.destBranchExpr)
++    if d.upstreamExpr:
++      have_default = True
++      e.setAttribute('upstream', d.upstreamExpr)
+     if d.sync_j > 1:
+       have_default = True
+       e.setAttribute('sync-j', '%d' % d.sync_j)
+@@ -295,7 +299,8 @@ class XmlManifest(object):
+         revision = self.remotes[p.remote.orig_name].revision or d.revisionExpr
+         if not revision or revision != p.revisionExpr:
+           e.setAttribute('revision', p.revisionExpr)
+-        if p.upstream and p.upstream != p.revisionExpr:
++        if (p.upstream and (p.upstream != p.revisionExpr or
++                            p.upstream != d.upstreamExpr)):
+           e.setAttribute('upstream', p.upstream)
+ 
+       if p.dest_branch and p.dest_branch != d.destBranchExpr:
+@@ -694,6 +699,7 @@ class XmlManifest(object):
+       d.revisionExpr = None
+ 
+     d.destBranchExpr = node.getAttribute('dest-branch') or None
++    d.upstreamExpr = node.getAttribute('upstream') or None
+ 
+     sync_j = node.getAttribute('sync-j')
+     if sync_j == '' or sync_j is None:
+@@ -830,7 +836,7 @@ class XmlManifest(object):
+ 
+     dest_branch = node.getAttribute('dest-branch') or self._default.destBranchExpr
+ 
+-    upstream = node.getAttribute('upstream')
++    upstream = node.getAttribute('upstream') or self._default.upstreamExpr
+ 
+     groups = ''
+     if node.hasAttribute('groups'):
+                     
+
+```
+
+git show -s, --no-patch 不显示提交更改的内容  
+默认是显示更改内容的，可以通过-p, -u, --patch选项来改变这个选项的行为。
+
+
+```bash
+$ git --no-pager show  --pretty=raw -s  
+commit cf7c0834cfc24c5c9584695c657c6baf97d0fbb3
+tree 49be7db9b2f7b0e0cf9026a84b81716ddfc66034
+parent 4ea1f0cabdda28fdee837ee2f99e14375028b5f4
+author Akshay Verma <akshayverma948@gmail.com> 1521131190 +0530
+committer Akshay Verma <akshayverma948@gmail.com> 1521284363 +0530
+
+    Download latest patch when no patch is specified
+    
+    When someone does "repo download -c <project> <change>"
+    without specifying a patch number, by default patch 1 is
+    downloaded. An alternative is to look for the latest patch
+    and download the same when no explicit patch is given.
+    This commit does the same by identifying the latest patch
+    using "git ls-remote".
+    
+    Change-Id: Ia5fa7364415f53a3d9436df4643e38f3c90ded58
+$      
+
+```
+git show --name-only，--name-status这个和git log 中的一样
+```bash
+$ git show --name-only 
+commit cf7c0834cfc24c5c9584695c657c6baf97d0fbb3 (HEAD)
+Author: Akshay Verma <akshayverma948@gmail.com>
+Date:   Thu Mar 15 21:56:30 2018 +0530
+
+    Download latest patch when no patch is specified
+    
+    When someone does "repo download -c <project> <change>"
+    without specifying a patch number, by default patch 1 is
+    downloaded. An alternative is to look for the latest patch
+    and download the same when no explicit patch is given.
+    This commit does the same by identifying the latest patch
+    using "git ls-remote".
+    
+    Change-Id: Ia5fa7364415f53a3d9436df4643e38f3c90ded58
+
+project.py
+subcmds/download.py
+
+$ git show --name-status
+commit cf7c0834cfc24c5c9584695c657c6baf97d0fbb3 (HEAD)
+Author: Akshay Verma <akshayverma948@gmail.com>
+Date:   Thu Mar 15 21:56:30 2018 +0530
+
+    Download latest patch when no patch is specified
+    
+    When someone does "repo download -c <project> <change>"
+    without specifying a patch number, by default patch 1 is
+    downloaded. An alternative is to look for the latest patch
+    and download the same when no explicit patch is given.
+    This commit does the same by identifying the latest patch
+    using "git ls-remote".
+    
+    Change-Id: Ia5fa7364415f53a3d9436df4643e38f3c90ded58
+
+M       project.py
+M       subcmds/download.py
+
+```
+git show --abbrev-commit，--no-abbrev-commit 是显示40位commitid还是显示简短的commitid。
+```bash
+使用 --abbrev-commit 选项显示简短的
+$ git show --abbrev-commit -s  
+commit cf7c083 (HEAD)
+Author: Akshay Verma <akshayverma948@gmail.com>
+Date:   Thu Mar 15 21:56:30 2018 +0530
+
+    Download latest patch when no patch is specified
+    
+    When someone does "repo download -c <project> <change>"
+    without specifying a patch number, by default patch 1 is
+    downloaded. An alternative is to look for the latest patch
+    and download the same when no explicit patch is given.
+    This commit does the same by identifying the latest patch
+    using "git ls-remote".
+    
+    Change-Id: Ia5fa7364415f53a3d9436df4643e38f3c90ded58
+
+同时可以使用--abbrev=3来决定显示几位commit id。
+$ git show --abbrev-commit -s --abbrev=3  
+commit cf7c (HEAD)
+Author: Akshay Verma <akshayverma948@gmail.com>
+Date:   Thu Mar 15 21:56:30 2018 +0530
+
+    Download latest patch when no patch is specified
+    
+    When someone does "repo download -c <project> <change>"
+    without specifying a patch number, by default patch 1 is
+    downloaded. An alternative is to look for the latest patch
+    and download the same when no explicit patch is given.
+    This commit does the same by identifying the latest patch
+    using "git ls-remote".
+    
+    Change-Id: Ia5fa7364415f53a3d9436df4643e38f3c90ded58
+ 
+$ git show --abbrev-commit -s --abbrev=15   
+commit cf7c0834cfc24c5 (HEAD)
+Author: Akshay Verma <akshayverma948@gmail.com>
+Date:   Thu Mar 15 21:56:30 2018 +0530
+
+    Download latest patch when no patch is specified
+    
+    When someone does "repo download -c <project> <change>"
+    without specifying a patch number, by default patch 1 is
+    downloaded. An alternative is to look for the latest patch
+    and download the same when no explicit patch is given.
+    This commit does the same by identifying the latest patch
+    using "git ls-remote".
+    
+    Change-Id: Ia5fa7364415f53a3d9436df4643e38f3c90ded58
+
+使用了--no-abbrev-commit选项就会显示完整的40位的commit id了。
+ 
+```
+
+git show --oneline   显示为一行，和git log的一样效果。如果同时使用了-s那就是和git log --oneline -1 等价效果了。
+```bash
+$ git show --oneline 
+cf7c083 (HEAD) Download latest patch when no patch is specified
+diff --git a/project.py b/project.py
+old mode 100644
+new mode 100755
+index e4682e6..5297a5c
+--- a/project.py
++++ b/project.py
+@@ -2270,6 +2270,16 @@ class Project(object):
+       if self._allrefs:
+         raise GitError('%s cherry-pick %s ' % (self.name, rev))
+ 
++  def _LsRemote(self):
++    cmd = ['ls-remote']
++    p = GitCommand(self, cmd, capture_stdout=True)
++    if p.Wait() == 0:
++      if hasattr(p.stdout, 'decode'):
++        return p.stdout.decode('utf-8')
++      else:
++        return p.stdout
++    return None
++
+   def _Revert(self, rev):
+     cmd = ['revert']
+     cmd.append('--no-edit')
+diff --git a/subcmds/download.py b/subcmds/download.py
+old mode 100644
+new mode 100755
+index e1010aa..384af78
+--- a/subcmds/download.py
++++ b/subcmds/download.py
+@@ -62,6 +62,14 @@ If no project is specified try to use current directory as a project.
+           ps_id = int(m.group(2))
+         else:
+           ps_id = 1
++          regex = r'refs/changes/%2.2d/%d/(\d+)' % (chg_id % 100, chg_id)
++          output = project._LsRemote()
++          if output:
++            rcomp = re.compile(regex, re.I)
++            for line in output.splitlines():
++              match = rcomp.search(line)
++              if match:
++                ps_id = max(int(match.group(1)), ps_id)
+         to_get.append((project, chg_id, ps_id))
+       else:
+         project = self.GetProjects([a])[0]
+
+如果同时使用了 -s选项
+$ git show -s --oneline  
+cf7c083 (HEAD) Download latest patch when no patch is specified
+这个时候和git log 的效果一样了
+$ git log --oneline -1 
+cf7c083 (HEAD) Download latest patch when no patch is specified
+```
+
+git show --pretty 和 git log的一样。
+
+
 
 # git shortlog
 git shortlog 是一个用来归纳 git log 的输出的命令。 它可以接受很多与 git log 相同的选项，
