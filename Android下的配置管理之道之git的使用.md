@@ -782,12 +782,365 @@ git clean -fdx
 # git branch
 git branch testing 这会在当前所在的提交对象上创建一个指针。  
 
-git branch 如果不加任何参数运行它，会得到当前所有分支的一个列表  
---merged 与 --no-merged 这两个有用的选项可以过滤这个列表中已经合并或尚未合并到当前分支的分支。  
 
 git branch -d testing 删除分支，-D 如果真的想要删除分支并丢掉那些工作，如同帮助信息里所指出的，可以使用 -D 选项强制删除它。  
 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/  
-git branch -u origin/serverfix  
+git branch -u origin/serverfix
+
+git branch 如果不加任何参数运行它，会得到当前所有分支的一个列表  
+```bash
+$ git branch 
+* (HEAD detached at cf7c083)
+  master
+  new
+  test
+
+```
+git branch --list <pattern> 列出所有匹配模式的分支
+```bash
+$ git branch --list
+* (HEAD detached at cf7c083)
+  master
+  new
+  test
+
+特别注意，如果后面跟上了pattern，这个--list选项必须加上的，如果不加上会变成创建分支的功能。
+$ git branch --list 'maint*' 
+  maint-dev
+  maint-sh
+  maint-test
+  maint1.0.1
+  
+$ git branch --list 'maint*'  'dev*'   # 这个pattern可以有多个的。
+  dev
+  dev-sh
+  maint-dev
+  maint-sh
+  maint-test
+  maint1.0.1
+  
+特别注意 -l 选项可不是--list的缩写选项。-l是--create-reflog的意思    
+```
+
+git branch --color，--no-color这2个选项来控制是否输出显示为彩色
+
+git branch --edit-description <branchname> 编辑分支描述信息，会把信息写到.git/config 文件中
+
+git branch -r, --remotes 显示远端分支列表
+```bash
+$ git branch -r  
+  origin/HEAD -> origin/master
+  origin/maint
+  origin/master
+  origin/stable
+
+配合-v，--verbose选项
+$ git branch -rv  
+  origin/HEAD   -> origin/master
+  origin/maint  34acdd2 Fix ManifestParseError when first child node is comment
+  origin/master da40341 manifest: Support a default upstream value
+  origin/stable eceeb1b Support broken symlinks when cleaning obsolete paths
+```
+git branch -a, --all 显示远端本地分支列表
+```bash
+当前分支会标记个星号
+$ git br -a  
+* (HEAD detached at cf7c083)  # 这个表明当前是一个匿名分支。
+  master
+  new
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/maint
+  remotes/origin/master
+  remotes/origin/stable
+
+同样的配合-v选项一起的效果
+$ git br -av 
+* (HEAD detached at cf7c083) cf7c083 Download latest patch when no patch is specified
+  master                     da40341 manifest: Support a default upstream value
+  new                        da40341 manifest: Support a default upstream value
+  remotes/origin/HEAD        -> origin/master
+  remotes/origin/maint       34acdd2 Fix ManifestParseError when first child node is comment
+  remotes/origin/master      da40341 manifest: Support a default upstream value
+  remotes/origin/stable      eceeb1b Support broken symlinks when cleaning obsolete paths
+```
+
+git branch -v, -vv, --verbose 显示的信息更加详细
+```bash
+$ git br -v  
+* (HEAD detached at cf7c083) cf7c083 Download latest patch when no patch is specified
+  master                     da40341 manifest: Support a default upstream value
+  new                        da40341 manifest: Support a default upstream value
+
+使用-vv的效果
+$ git br -vv  #
+* (HEAD detached at cf7c083) cf7c083 Download latest patch when no patch is specified
+  master                     da40341 [origin/master] manifest: Support a default upstream value
+  new                        da40341 [origin/master] manifest: Support a default upstream value
+
+使用--abbrev=15选项来指定显示的commit id的位数，默认是显示7位。 （abbrev是缩写的意思）
+$ git br -v --abbrev=15  
+* (HEAD detached at cf7c083) cf7c0834cfc24c5 Download latest patch when no patch is specified
+  master                     da40341a3e6e2e4 manifest: Support a default upstream value
+  new                        da40341a3e6e2e4 manifest: Support a default upstream value
+
+使用--no-abbrev 显示完整的40位的commit id  
+$  git br -v --no-abbrev 
+* (HEAD detached at cf7c083) cf7c0834cfc24c5c9584695c657c6baf97d0fbb3 Download latest patch when no patch is specified
+  master                     da40341a3e6e2e45877426aaefb97b3f0735a776 manifest: Support a default upstream value
+  new                        da40341a3e6e2e45877426aaefb97b3f0735a776 manifest: Support a default upstream value
+  
+``` 
+
+git branch --contains <commit>， --no-contains <commit>列出包含/不包含某个提交的分支列表
+```bash
+
+$ git branch --no-contains=7d52585  #<commit>参数没有默认是HEAD
+  test
+ 
+$ git branch --contains=7d52585     #<commit>参数没有默认是HEAD
+* (HEAD detached at cf7c083)
+  master
+  new
+
+$ git branch --no-contains  #<commit>参数没有默认是HEAD
+  test
+  
+$ git branch --contains     #<commit>参数没有默认是HEAD
+* (HEAD detached at cf7c083)
+  master
+  new
+  
+
+```
+
+git branch --merged <commit>，--no-merged <commit>  
+--merged 与 --no-merged 这两个有用的选项可以过滤这个列表中已经合并或尚未合并到当前分支的分支。  
+
+```bash
+
+$ git br --merged  #列出已经合并到当前分支的其他分支列表 <commit>参数没有默认是HEAD
+* (HEAD detached at cf7c083)
+  test
+
+$ git br --no-merged 
+  master
+  new
+
+The options --contains, --no-contains, --merged and --no-merged serve four related but different purposes:
+·   --contains <commit> is used to find all branches which will need special attention if <commit> were to be rebased or amended, since those branches contain the specified <commit>.
+·   --no-contains <commit> is the inverse of that, i.e. branches that don’t contain the specified <commit>.
+·   --merged is used to find all branches which can be safely deleted, since those branches are fully contained by HEAD.
+·   --no-merged is used to find branches which are candidates for merging into HEAD, since those branches are not fully contained by HEAD.
+```
+
+
+
+git branch --track | --no-track <branchname> <start-point>
+```bash
+专家一个本地分支，并且追踪远端master分支。
+$ git br --track track-master origin/master
+Branch track-master set up to track remote branch master from origin.
+$ cat .git/config      
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://aosp.tuna.tsinghua.edu.cn/tools/repo
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "track-master"]
+	remote = origin
+	merge = refs/heads/master
+	
+如果配置了“git config branch.autoSetupMerge true”每次创建新分支的时候都会设置这个追踪分支的。（只有后面的参数<start-point>是一个远端分支的情况才会的）
+$ git br mm origin/master
+Branch mm set up to track remote branch master from origin.
+$ cat .git/config 
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://aosp.tuna.tsinghua.edu.cn/tools/repo
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "track-master"]
+	remote = origin
+	merge = refs/heads/master
+[branch]
+	autoSetupMerge = true
+[branch "mm"]
+	remote = origin
+	merge = refs/heads/master
+
+这种情况下可以使用--no-track选项改变这种情况
+$ git br --no-track notrack-master origin/master
+这样就不会设置”branch.<name>.remote“ 和 ”branch.<name>.merge“
+
+也可以设置个追踪本地分支的一个分支，这个需要加上--track才行。
+$ git br --track local-track-master track-master 
+Branch local-track-master set up to track local branch track-master.
+$ cat .git/config 
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://aosp.tuna.tsinghua.edu.cn/tools/repo
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "track-master"]
+	remote = origin
+	merge = refs/heads/master
+[branch]
+	autoSetupMerge = true
+[branch "mm"]
+	remote = origin
+	merge = refs/heads/master
+[branch "local-track-master"]
+	remote = .
+	merge = refs/heads/track-master
+```
+
+git branch -l，--create-reflog    <branchname> <start-point>
+```bash
+$ git br -l test origin/maint
+fatal: A branch named 'test' already exists.
+
+$ git br -l test origin/maint -f 
+Branch test set up to track remote branch maint from origin.
+
+$ cat .git/config 
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://aosp.tuna.tsinghua.edu.cn/tools/repo
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "test"]
+	remote = origin
+	merge = refs/heads/maint
+
+```
+git branch --set-upstream-to=<upstream>  <branchname>
+```bash
+设置某个本地分支<branchname>追踪某个<upstream>远端分支
+省略参数  <branchname> 就会设置当前分支的
+
+$ git br --set-upstream-to=origin/master
+Branch test1 set up to track remote branch master from origin.
+$ git brvv
+  dev   34acdd2 Fix ManifestParseError when first child node is comment
+  test  34acdd2 [origin/maint] Fix ManifestParseError when first child node is comment
+* test1 eceeb1b [origin/master: behind 87] Support broken symlinks when cleaning obsolete paths
+  test2 f46902a forall: Clarify expansion of REPO_ environment values with -c
+  test3 f46902a forall: Clarify expansion of REPO_ environment values with -c
+
+$ git br --set-upstream-to=origin/master test3 
+Branch test3 set up to track remote branch master from origin.
+$ git brvv
+  dev   34acdd2 Fix ManifestParseError when first child node is comment
+  test  34acdd2 [origin/maint] Fix ManifestParseError when first child node is comment
+* test1 eceeb1b [origin/master: behind 87] Support broken symlinks when cleaning obsolete paths
+  test2 f46902a forall: Clarify expansion of REPO_ environment values with -c
+  test3 f46902a [origin/master: behind 18] forall: Clarify expansion of REPO_ environment values with -c
+$
+
+```
+git branch --unset-upstream <branchname>   删除追踪关系，<branchname> 参数没有给出默认是当前分支名称。
+```bash
+$ git brvv   
+  dev   34acdd2 Fix ManifestParseError when first child node is comment
+  test  34acdd2 [origin/maint] Fix ManifestParseError when first child node is comment
+* test1 eceeb1b [origin/master: behind 87] Support broken symlinks when cleaning obsolete paths
+  test2 f46902a forall: Clarify expansion of REPO_ environment values with -c
+  test3 f46902a [origin/master: behind 18] forall: Clarify expansion of REPO_ environment values with -c
+               
+$ git br --unset-upstream dev
+fatal: Branch 'dev' has no upstream information
+
+$ git br --unset-upstream  test1
+
+$ git br --unset-upstream  test2 
+fatal: Branch 'test2' has no upstream information
+
+$ git br --unset-upstream  test3
+
+$ git brvv 
+  dev   34acdd2 Fix ManifestParseError when first child node is comment
+  test  34acdd2 [origin/maint] Fix ManifestParseError when first child node is comment
+* test1 eceeb1b Support broken symlinks when cleaning obsolete paths
+  test2 f46902a forall: Clarify expansion of REPO_ environment values with -c
+  test3 f46902a forall: Clarify expansion of REPO_ environment values with -c
+
+```
+
+git branch (-m | -M) <oldbranch> <newbranch>重命名分支名称  
+git branch -m，--move  
+git branch --move --force  
+```bash
+$ git brvv
+  dev   34acdd2 Fix ManifestParseError when first child node is comment
+  test  34acdd2 [origin/maint] Fix ManifestParseError when first child node is comment
+* test1 eceeb1b Support broken symlinks when cleaning obsolete paths
+  test2 f46902a forall: Clarify expansion of REPO_ environment values with -c
+  test3 f46902a forall: Clarify expansion of REPO_ environment values with -c
+
+$ git br -m test3 test33
+
+$ git brvv
+  dev    34acdd2 Fix ManifestParseError when first child node is comment
+  test   34acdd2 [origin/maint] Fix ManifestParseError when first child node is comment
+* test1  eceeb1b Support broken symlinks when cleaning obsolete paths
+  test2  f46902a forall: Clarify expansion of REPO_ environment values with -c
+  test33 f46902a forall: Clarify expansion of REPO_ environment values with -c
+
+```
+git branch (-c | -C) <oldbranch> <newbranch>  复制分支  
+git branch -c，--copy  
+git branch --copy --force  
+```bash
+这个好像在2.14版本中没有了
+
+```
+
+
+git branch (-d | -D) <branchname>…​ 删除分支  
+git branch -d，--delete  
+git branch --delete --force  
+```bash
+
+git branch -d test test1
+
+git branch -D test33
+
+如果带上-r选项 可以删除refs/remotes/下的分支，并不是远端服务器是的分支啊！！！
+ 
+$ git br -r   # 列出目前所有的远端分支
+  origin/HEAD -> origin/master
+  origin/maint
+  origin/master
+  origin/stable
+
+$ git br -d -r origin/HEAD      # 删除
+Deleted remote-tracking branch origin/HEAD (was refs/remotes/origin/master).
+
+$ git br -r   # 列出目前所有的远端分支
+  origin/maint
+  origin/master
+  origin/stable
+
+$ git br -d -r origin/maint
+Deleted remote-tracking branch origin/maint (was 34acdd2).
+
+$ git br -r    # 列出目前所有的远端分支
+  origin/master
+  origin/stable
+```
+
 
 # git checkout
 git checkout 命令用来切换分支，或者检出内容到工作目录
