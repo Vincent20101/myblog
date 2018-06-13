@@ -1141,6 +1141,44 @@ $ git br -r    # 列出目前所有的远端分支
   origin/stable
 ```
 
+批量删除某个目录下面的所有git仓库指定的匹配的某些分支
+```bash
+
+deleteBranches() {
+    git -C "$1" symbolic-ref HEAD refs/heads/master
+    a=$(git -C "$1" for-each-ref --format="%(refname:short)" refs/heads/msm8909\*)
+      b=$(git -C "$1" for-each-ref --format="%(refname:short)" refs/heads/pollux\*)
+      c=$(git -C "$1" for-each-ref --format="%(refname:short)" refs/heads/zs_msm8909\*)
+    git -C "$1"  branch -D $a $b $c
+}
+
+export -f deleteBranches
+find . -name "*.git" -type d -exec bash -c 'src="{}"; echo =$src=; deleteBranches $src' \; 
+
+git branch -D $(git for-each-ref --format="%(refname:short)" refs/heads/\*_master)
+
+
+cd  /home/gerrit2/review_site/git/git/android
+#find . -name "*.git" -type d -exec bash -c 'src="{}"; echo =$src=; git -C $src tag|xargs git -C $src tag -d' \;
+deleteBranches() {
+    #git -C "$1" symbolic-ref HEAD refs/heads/master
+    a=$(git -C "$1" for-each-ref --format="%(refname:short)" refs/heads/L\*)
+    b=$(git -C "$1" for-each-ref --format="%(refname:short)" refs/heads/caf/**)
+    c=$(git -C "$1" for-each-ref --format="%(refname:short)" refs/heads/aosp/**)
+    d=$(git -C "$1" for-each-ref --format="%(refname:short)" refs/heads/aosp**)
+    e=$(git -C "$1" for-each-ref --format="%(refname:short)" refs/heads/github**)
+    f=$(git -C "$1" for-each-ref --format="%(refname:short)" refs/heads/kk\*)
+    g=$(git -C "$1" for-each-ref --format="%(refname:short)" refs/heads/ics\*)
+    h=$(git -C "$1" for-each-ref --format="%(refname:short)" refs/heads/jb\*)
+    i=$(git -C "$1" for-each-ref --format="%(refname:short)" refs/heads/aosp-new/**)
+    j=$(git -C "$1" for-each-ref --format="%(refname:short)" refs/heads/2017-spf-1-0_master_rebase_r00400.1\*)
+    git -C "$1"  branch -D $a $b $c $d $e $f $g $h $i $j
+}
+
+export -f deleteBranches
+find . -name "*.git" -type d -exec bash -c 'src="{}"; echo =$src=; deleteBranches $src' \; 
+
+```
 
 # git checkout
 git checkout 命令用来切换分支，或者检出内容到工作目录
