@@ -447,7 +447,7 @@ cat: msm-4.9/.git/objects/info/alternates: No such file or directory
 ```
 
 
---branch <name>, -b <name>选项  和 --single-branch选项
+--branch &lt;name&gt;, -b &lt;name&gt;选项  和 --single-branch选项
 ```bash
 在不使用--branch选项的时候git clone的时候检出的分支是HEAD指向的那个分支。
 使用这个选项我们就可以在克隆时候检出某个指定的分支了。
@@ -523,7 +523,7 @@ $ cat .git/config
 这个时候就可以使用 --branch bsui --single-branch 这2个选项了。
 
 
-$ git clone ssh://gerrit-sh.blackshark.com:29418/git/android/platform/vendor/zeusis/zui/app/I19tService                                      [mamh@10.0.63.43 ] 18-06-01 11:25  /home/mamh/tmp
+$ git clone ssh://gerrit-sh.blackshark.com:29418/git/android/platform/vendor/zeusis/zui/app/I19tService                                      
 Cloning into 'I19tService'...
 remote: Counting objects: 6884, done
 remote: Finding sources: 100% (6884/6884)
@@ -531,11 +531,11 @@ remote: Total 6884 (delta 3550), reused 6698 (delta 3550)
 Receiving objects: 100% (6884/6884), 6.68 GiB | 47.00 MiB/s, done.
 Resolving deltas: 100% (3550/3550), done.
 warning: remote HEAD refers to nonexistent ref, unable to checkout.
-$ du -sh I19tService/.git                                                                                                                    [mamh@10.0.63.43 ] 18-06-01 11:28  /home/mamh/tmp
+$ du -sh I19tService/.git
 6.7G	I19tService/.git
 
 下面是使用了--branch bsui --single-branch选项的效果，磁盘空间只有600MB。之前是6GB。这就是差异。
-$ git clone ssh://gerrit-sh.blackshark.com:29418/git/android/platform/vendor/zeusis/zui/app/I19tService --branch bsui --single-branch        [mamh@10.0.63.43 ] 18-06-01 11:28  /home/mamh/tmp
+$ git clone ssh://gerrit-sh.blackshark.com:29418/git/android/platform/vendor/zeusis/zui/app/I19tService --branch bsui --single-branch        
 Cloning into 'I19tService'...
 remote: Counting objects: 5995, done
 remote: Finding sources: 100% (5995/5995)
@@ -558,7 +558,7 @@ Counting objects: 5995, done.
 Compressing objects: 100% (3211/3211), done.
 Writing objects: 100% (5995/5995), done.
 Total 5995 (delta 2519), reused 4618 (delta 1722)
-$ du -sh I19tService/.git                                                                                                                    [mamh@10.0.63.43 ] 18-06-01 11:32  /home/mamh/tmp
+$ du -sh I19tService/.git     
 646M	I19tService/.git
 
 
@@ -588,7 +588,7 @@ $ git ll
 $
 加上了--depth选项，这个git log历史只有这么4个,或者说是5个了。
 
-$ cat .git/config                                                                                                                       [mamh@10.0.63.43 ] 18-06-01 10:57  /home/mamh/tmp/repo
+$ cat .git/config   
 [core]
 	repositoryformatversion = 0
 	filemode = true
@@ -602,7 +602,7 @@ $ cat .git/config                                                               
 	merge = refs/heads/stable
 加上这个--depth，克隆的时候只会下载到一个分支，这里是stable，应为服务器上配置的HEAD执向的是stable分支。
 
-$ ls .git                                                                                                                               [mamh@10.0.63.43 ] 18-06-01 10:57  /home/mamh/tmp/repo
+$ ls .git 
 branches/  config  description  HEAD  hooks/  index  info/  logs/  objects/  packed-refs  refs/  shallow
 在浅克隆的时候.git目录下面会有个shallow文件
 
@@ -611,10 +611,10 @@ branches/  config  description  HEAD  hooks/  index  info/  logs/  objects/  pac
 ```
 
 
---origin <name>, -o <name>选项
+--origin &lt;name&gt;, -o &lt;name&gt;选项
 ```bash
 默认克隆的时候，使用的名称是origin，我们可以通过.git/config 看到
-$ cat I19tService/.git/config                                                                                                                [mamh@10.0.63.43 ] 18-06-01 11:36  /home/mamh/tmp
+$ cat I19tService/.git/config
 [core]
 	repositoryformatversion = 0
 	filemode = true
@@ -632,10 +632,11 @@ $ cat I19tService/.git/config                                                   
 使用--origin选项在克隆的时候可以更改这个名称，一般不会取改它的。
 $ git clone ssh://gerrit-sh.blackshark.com:29418/git/android/platform/vendor/zeusis/zui/app/I19tService --branch bsui --single-branch --reference /home/mirror/platform/vendor/zeusis/zui/app/I19tService.git   --origin o
 fatal: destination path 'I19tService' already exists and is not an empty directory.
-$ rm -rf I19tService                                                                                                                         [mamh@10.0.63.43 ] 18-06-01 11:38  /home/mamh/tmp
+$ rm -rf I19tService 
+
 $ git clone ssh://gerrit-sh.blackshark.com:29418/git/android/platform/vendor/zeusis/zui/app/I19tService --branch bsui --single-branch --reference /home/mirror/platform/vendor/zeusis/zui/app/I19tService.git   --origin o
 Cloning into 'I19tService'...
-$ cat I19tService/.git/config                                                                                                                [mamh@10.0.63.43 ] 18-06-01 11:38  /home/mamh/tmp
+$ cat I19tService/.git/config 
 [core]
 	repositoryformatversion = 0
 	filemode = true
@@ -667,7 +668,7 @@ $ git clone /home/mirror/kernel/msm-4.9.git
 Cloning into 'msm-4.9'...
 done.
 Checking out files: 100% (58866/58866), done.
-$ ls msm-4.9                                                                                                                                 [mamh@10.0.63.43 ] 18-06-01 10:47  /home/mamh/tmp
+$ ls msm-4.9  
 AndroidKernel.mk  build.config.goldfish.arm    build.config.goldfish.mips64  certs/   crypto/         firmware/  init/   Kconfig  MAINTAINERS  net/            samples/   sound/     usr/
 arch/             build.config.goldfish.arm64  build.config.goldfish.x86     COPYING  Documentation/  fs/        ipc/    kernel/  Makefile     README          scripts/   techpack/  virt/
 block/            build.config.goldfish.mips   build.config.goldfish.x86_64  CREDITS  drivers/        include/   Kbuild  lib/     mm/          REPORTING-BUGS  security/  tools/
@@ -824,7 +825,7 @@ $ git branch --list 'maint*'  'dev*'   # 这个pattern可以有多个的。
 
 git branch --color，--no-color这2个选项来控制是否输出显示为彩色
 
-git branch --edit-description <branchname> 编辑分支描述信息，会把信息写到.git/config 文件中
+git branch --edit-description &lt;branchname&gt; 编辑分支描述信息，会把信息写到.git/config 文件中
 
 git branch -r, --remotes 显示远端分支列表
 ```bash
@@ -891,7 +892,7 @@ $  git br -v --no-abbrev
   
 ``` 
 
-git branch --contains <commit>， --no-contains <commit>列出包含/不包含某个提交的分支列表
+git branch --contains &lt;commit&gt;， --no-contains &lt;commit&gt;列出包含/不包含某个提交的分支列表
 ```bash
 
 $ git branch --no-contains=7d52585  #<commit>参数没有默认是HEAD
@@ -913,7 +914,7 @@ $ git branch --contains     #<commit>参数没有默认是HEAD
 
 ```
 
-git branch --merged <commit>，--no-merged <commit>  
+git branch --merged &lt;commit&gt;，--no-merged &lt;commit&gt;  
 --merged 与 --no-merged 这两个有用的选项可以过滤这个列表中已经合并或尚未合并到当前分支的分支。  
 
 ```bash
@@ -935,7 +936,7 @@ The options --contains, --no-contains, --merged and --no-merged serve four relat
 
 
 
-git branch --track | --no-track <branchname> <start-point>
+git branch --track | --no-track &lt;branchname&gt; &lt;start-point&gt;
 ```bash
 专家一个本地分支，并且追踪远端master分支。
 $ git br --track track-master origin/master
@@ -1003,7 +1004,7 @@ $ cat .git/config
 	merge = refs/heads/track-master
 ```
 
-git branch -l，--create-reflog    <branchname> <start-point>
+git branch -l，--create-reflog    &lt;branchname&gt; &lt;start-point&gt;
 ```bash
 $ git br -l test origin/maint
 fatal: A branch named 'test' already exists.
@@ -1025,7 +1026,7 @@ $ cat .git/config
 	merge = refs/heads/maint
 
 ```
-git branch --set-upstream-to=<upstream>  <branchname>
+git branch --set-upstream-to=&lt;upstream&gt;  &lt;branchname&gt;
 ```bash
 设置某个本地分支<branchname>追踪某个<upstream>远端分支
 省略参数  <branchname> 就会设置当前分支的
@@ -1050,7 +1051,7 @@ $ git brvv
 $
 
 ```
-git branch --unset-upstream <branchname>   删除追踪关系，<branchname> 参数没有给出默认是当前分支名称。
+git branch --unset-upstream &lt;branchname&gt;   删除追踪关系，&lt;branchname&gt; 参数没有给出默认是当前分支名称。
 ```bash
 $ git brvv   
   dev   34acdd2 Fix ManifestParseError when first child node is comment
@@ -1078,7 +1079,7 @@ $ git brvv
 
 ```
 
-git branch (-m | -M) <oldbranch> <newbranch>重命名分支名称  
+git branch (-m | -M) &lt;oldbranch&gt; &lt;newbranch&gt; 重命名分支名称  
 git branch -m，--move  
 git branch --move --force  
 ```bash
@@ -1099,7 +1100,7 @@ $ git brvv
   test33 f46902a forall: Clarify expansion of REPO_ environment values with -c
 
 ```
-git branch (-c | -C) <oldbranch> <newbranch>  复制分支  
+git branch (-c | -C) &lt;oldbranch&gt; &lt;newbranch&gt;  复制分支  
 git branch -c，--copy  
 git branch --copy --force  
 ```bash
@@ -1108,7 +1109,7 @@ git branch --copy --force
 ```
 
 
-git branch (-d | -D) <branchname>…​ 删除分支  
+git branch (-d | -D) &lt;branchname&gt;…​ 删除分支  
 git branch -d，--delete  
 git branch --delete --force  
 ```bash
@@ -1217,7 +1218,8 @@ $ git checkout dev
 error: Your local changes to the following files would be overwritten by checkout:
 	color.py
 Please commit your changes or stash them before you switch branches.
-Aborting
+Aborting   欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/  
+
 这种情况下我们可以使用 -f选项，强制切换到dev分支，不过我们的改动会丢失。
 
 
@@ -1251,13 +1253,15 @@ $ git brvv
   dev         34acdd2 Fix ManifestParseError when first child node is comment
 * track-maint 34acdd2 [origin/maint] Fix ManifestParseError when first child node is comment
 
-$ cat .git/config 
+$ cat .git/config  欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/  
+
 [core]
 	repositoryformatversion = 0 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 	filemode = true
 	bare = false
 	logallrefupdates = true
-[remote "origin"]
+[remote "origin"]  欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/  
+
 	url = https://aosp.tuna.tsinghua.edu.cn/tools/repo
 	fetch = +refs/heads/*:refs/remotes/origin/*
 [branch "track-maint"]
@@ -1349,7 +1353,7 @@ git checkout \[-f|--ours|--theirs|-m|--conflict=&lt;style&gt;\] \[&lt;tree-ish&g
 ```bash
 我们这个时候修改了color.py文件，但是我们想撤销修改，就可以使用git checkout了
 HEAD detached at da40341
-Changes not staged for commit:
+Changes not staged for commit:   欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
   (use "git add <file>..." to update what will be committed)
   (use "git checkout -- <file>..." to discard changes in working directory)
 
@@ -1364,11 +1368,11 @@ Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git checkout -- <file>..." to discard changes in working directory)
 
-	modified:   command.py
+	modified:   command.py    欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 
 no changes added to commit (use "git add" and/or "git commit -a")
 
-我们也可以指定个commit来做作为参数
+我们也可以指定个commit来做作为参数   欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 $ git co a32c92c  -- command.py
 $ git st
 
@@ -1381,7 +1385,7 @@ git checkout --orphan <new_branch> <start point>  创建一个孤儿分支
 这个分支和其他的分支没有任何关系联系。  
 ```bash
 当前分支状态
-$ git brvv  
+$ git brvv                    欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 * new          02dbb6d Fix StopIteration exception during repo {sync,status}
   track-master da40341 [origin/master] manifest: Support a default upstream value
 
@@ -1390,14 +1394,14 @@ $ git co --orphan orphan-branch v1.0
 Switched to a new branch 'orphan-branch'
 这个时候我们看到所有的代码都是绿色的，表明都是在暂存区的。
 $ git st  
-On branch orphan-branch
+On branch orphan-branch        欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 
 No commits yet
 
 Changes to be committed:
   (use "git rm --cached <file>..." to unstage)
 
-	new file:   .gitignore
+	new file:   .gitignore    欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 	new file:   COPYING
 	new file:   Makefile
 	new file:   codereview/__init__.py
@@ -1449,7 +1453,7 @@ Changes to be committed:
 	new file:   subcmds/start.py
 	new file:   subcmds/status.py
 	new file:   subcmds/sync.py
-	new file:   subcmds/upload.py
+	new file:   subcmds/upload.py 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 这个之后我们需要git commit 一下。
 $ git ci -s -m 'init my orphan branch base on tag v1.0' 
 [orphan-branch (root-commit) 139e9c1] init my orphan branch base on tag v1.0
@@ -1506,7 +1510,7 @@ $ git ci -s -m 'init my orphan branch base on tag v1.0'
  create mode 100644 subcmds/start.py
  create mode 100644 subcmds/status.py
  create mode 100644 subcmds/sync.py
- create mode 100644 subcmds/upload.py
+ create mode 100644 subcmds/upload.py  欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 
 $ git st 
 On branch orphan-branch
@@ -1523,7 +1527,7 @@ commit 139e9c128630d6c7d8a01e2a35cde0f44190988d (HEAD -> orphan-branch)
 Author: mamh <bright.ma@blackshark.com>
 Date:   Thu Jun 14 12:58:04 2018 +0800
 
-    init my orphan branch base on tag v1.0
+    init my orphan branch base on tag v1.0 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
     
     Signed-off-by: mamh <bright.ma@blackshark.com>
 通过git log我们只看到一个提交                                            
@@ -1532,15 +1536,15 @@ Date:   Thu Jun 14 12:58:04 2018 +0800
 git checkout --merge，-m 切换分支，采用合并，就是但你本地文件有修改情况下你要切换分支，有时候是不能切换的文件有冲突，  
 这个时候可以使用--merge选项来合并当前分支，你的工作空间，你要切换的分支这3者。也就是这3者做一个三方合并的操作。  
 
-```
-$ git co track-master
+```bash
+$ git co track-master     欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 error: Your local changes to the following files would be overwritten by checkout:
 	color.py
 Please commit your changes or stash them before you switch branches.
 Aborting
 这个时候git checkout命令是拒绝你的切分支请求的
 
-$ git co track-master --merge
+$ git co track-master --merge 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 M	color.py
 Switched to branch 'track-master'
 Your branch is up-to-date with 'origin/master'.
@@ -1553,10 +1557,11 @@ Unmerged paths:
   (use "git reset HEAD <file>..." to unstage)
   (use "git add <file>..." to mark resolution)
 
-	both modified:   color.py
+	both modified:   color.py  欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
+
 ```
 $ git diff 
 diff --cc color.py
@@ -1567,7 +1572,7 @@ index 0218aab,fd26ee0..0000000
   import sys
   
   import pager
-++<<<<<<< track-master
+++<<<<<<< track-master       欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
  +
  +COLORS = {None: -1,
  +          'normal': -1,
@@ -1576,7 +1581,7 @@ index 0218aab,fd26ee0..0000000
  +          'green': 2,
  +          'yellow': 3,
  +          'blue': 4,
-++=======
+++=======欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 + from git_config import GitConfig
 + 
 + COLORS = {None     :-1,
@@ -1587,7 +1592,7 @@ index 0218aab,fd26ee0..0000000
 +           'yellow' : 3,
 +           'blue'   : 4,
 +           'yellow' : 3,
-++>>>>>>> local
+++>>>>>>> local    欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
             'magenta': 5,
  -          'cyan'   : 6,
  -          'white'  : 7}
@@ -1610,7 +1615,7 @@ index 0218aab,fd26ee0..0000000
   RESET = "\033[m"
 +           'yellow' : 3,
   
-++<<<<<<< track-master
+++<<<<<<< track-master 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 ...skipping...
  +      need_sep = True
  +
@@ -1672,7 +1677,7 @@ HEAD一般的都是指向一个有名字的分支的（例如master），同时�
 a---b---c  branch 'master' (refers to commit 'c')
     ^
     |
-  tag 'v2.0' (refers to commit 'b')
+  tag 'v2.0' (refers to commit 'b')欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 
 当有一个新的提交被创建了，分支也会更新指向新的commit上。同样的HEAD也还是指向master分支，master此时已经指向到新的提交上了。
 $ edit; git add; git commit
@@ -1683,7 +1688,7 @@ $ edit; git add; git commit
 a---b---c---d  branch 'master' (refers to commit 'd')
     ^
     |
-  tag 'v2.0' (refers to commit 'b')
+  tag 'v2.0' (refers to commit 'b')欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 
 但是呢有时候检出一个特定的commit，不是一个命名分支也是很有用的。
 这个时候特别注意HEAD指向了b这个提交上，这个时候就是一个“detached HEAD”的状态。
@@ -1696,7 +1701,7 @@ $ git checkout master^^
 a---b---c---d  branch 'master' (refers to commit 'd')
     ^
     |
-  tag 'v2.0' (refers to commit 'b')
+  tag 'v2.0' (refers to commit 'b')欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 
 这种情况下我们再新建个提交看看
 $ edit; git add; git commit
@@ -1709,7 +1714,7 @@ $ edit; git add; git commit
 a---b---c---d  branch 'master' (refers to commit 'd')
     ^
     |
-  tag 'v2.0' (refers to commit 'b')
+  tag 'v2.0' (refers to commit 'b')欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 
 这个使用有个新的提交e了，这个e只被HEAD引用，如果HEAD引用到其他地方，这个e就有可能丢失了。
 下面我们在e提交的基础上再次提交个f提交
@@ -1723,7 +1728,7 @@ $ edit; git add; git commit
 a---b---c---d  branch 'master' (refers to commit 'd')
     ^
     |
-  tag 'v2.0' (refers to commit 'b')  
+  tag 'v2.0' (refers to commit 'b') 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/ 
 这个时候如果我们切换到master分支上会怎么样？？？
 $ git checkout master
 
@@ -1733,7 +1738,7 @@ $ git checkout master
 a---b---c---d  branch 'master' (refers to commit 'd')
     ^
     |
-  tag 'v2.0' (refers to commit 'b')
+  tag 'v2.0' (refers to commit 'b') 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 这个时候我们要特别注意，提交f没有被任何分支引用了。最终这个提交f会被git 垃圾回收机制给清理掉，到那之后就再也找不回f提交了。
 也就是执行了git gc就会删除f提交，e提交等。除非我们在次之前建个引用指向这个提交f。
 $ git checkout -b foo   (1)
@@ -1745,7 +1750,7 @@ $ git tag foo           (3)
 
 (3)creates a new tag foo, which refers to commit f, leaving HEAD detached.
 
-匿名分支就讲解到这里
+匿名分支就讲解到这里  欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 
 ```
 
@@ -1765,7 +1770,7 @@ $ git checkout -- '*.c'       check out all C source files out of the index
 
 不幸的是如果你有个分支名称也是叫hello.c这个时候有可以产生疑惑了？到底是分支呢？还是文件呢？
 我可以这样使用‘--’来明确说明是文件。
-$ git checkout -- hello.c
+$ git checkout -- hello.c  欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
 
 ```
 
