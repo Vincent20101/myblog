@@ -1182,12 +1182,592 @@ find . -name "*.git" -type d -exec bash -c 'src="{}"; echo =$src=; deleteBranche
 
 # git checkout
 git checkout 命令用来切换分支，或者检出内容到工作目录
-git checkout <branch>  
+ 
 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/  
-git checkout -b <branch> --track <remote>/<branch>  
-git checkout -b [branch] [remotename]/[branch]  跟踪分支  
-git checkout --track origin/serverfix  
-git checkout -b|-B <new_branch> [<start point>]  
+
+git checkout的通用使用格式 
+```bash
+git checkout [-q] [-f] [-m] [<branch>]
+git checkout [-q] [-f] [-m] --detach [<branch>]
+git checkout [-q] [-f] [-m] [--detach] <commit>
+git checkout [-q] [-f] [-m] [[-b|-B|--orphan] <new_branch>] [<start_point>]
+git checkout [-f|--ours|--theirs|-m|--conflict=<style>] [<tree-ish>] [--] <paths>…​
+git checkout [<tree-ish>] [--] <pathspec>…​
+git checkout (-p|--patch) [<tree-ish>] [--] [<paths>…​]
+
+```
+
+git checkout &lt;branch&gt; 切换分支   欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+准备工作空间为给定的分支 &lt;branch&gt; 。同时更新index暂存区和working tree工作空间。然后把HEAD指向这个分支。  
+本地被改动的文件会被保留。
+```bash
+当前我们在test1分支上，我们修改了color.py文件
+$ git st
+On branch test1
+Changes not staged for commit:  欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   color.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+然后我们试着切换分支到dev分支上，但是发现报错了，因为color.py 文件的改动和 分支 dev上的有冲突了。
+$ git checkout dev 
+error: Your local changes to the following files would be overwritten by checkout:
+	color.py
+Please commit your changes or stash them before you switch branches.
+Aborting
+这种情况下我们可以使用 -f选项，强制切换到dev分支，不过我们的改动会丢失。
+
+
+
+我们在切换到另外一个分支test2，这个分支可以顺利切换
+$ git checkout test2
+M	color.py
+Switched to branch 'test2'  欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+
+$ git st 
+On branch test2
+Changes not staged for commit:  欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   color.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+$                                               
+
+```
+
+git checkout -b &lt;branch&gt; --track &lt;remote&gt;/&lt;branch&gt; 创建一个新分支，并设置一个远端追踪关系。
+```bash
+我创建了新的分支，同时设置追踪一个远端分支origin/maint
+$ git checkout -b track-maint --track origin/maint
+Branch track-maint set up to track remote branch maint from origin.
+Switched to a new branch 'track-maint'  欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+
+$ git brvv 
+  dev         34acdd2 Fix ManifestParseError when first child node is comment
+* track-maint 34acdd2 [origin/maint] Fix ManifestParseError when first child node is comment
+
+$ cat .git/config 
+[core]
+	repositoryformatversion = 0 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://aosp.tuna.tsinghua.edu.cn/tools/repo
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "track-maint"]
+	remote = origin
+	merge = refs/heads/maint  欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+
+```
+
+git checkout -b|-B &lt;new_branch&gt; &lt;start point&gt;新建分支，并且检出到这个新分支上
+```bash
+以v1.0这个tag点创建一个新分支，请检出到这个分支上
+$ git checkout -b  new-v1.0 v1.0
+Switched to a new branch 'new-v1.0' 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+$ git brvv
+  dev         34acdd2 Fix ManifestParseError when first child node is comment
+* new-v1.0    cf31fe9 Initial Contribution
+  track-maint 34acdd2 [origin/maint] Fix ManifestParseError when first child node is comment
+  
+使用-b选项时候，如果分支名称已经存在会报错的，这个时候可以使用-B选项强制创建  
+$ git checkout -b  new-v1.0 v1.1
+fatal: A branch named 'new-v1.0' already exists.
+$ git checkout -B  new-v1.0 v1.1   欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+Reset branch 'new-v1.0'
+
+当前在一个匿名分支上，然后start point我使用origin/master试试
+$ git brvv 
+* (HEAD detached at v1.0) cf31fe9 Initial Contribution
+
+$ git co -b track-master origin/master
+Previous HEAD position was cf31fe9... Initial Contribution
+Branch track-master set up to track remote branch master from origin.
+Switched to a new branch 'track-master' 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+$ git brvv
+* track-master da40341 [origin/master] manifest: Support a default upstream value
+通过这个方式我们创建了一个追踪分支
+
+默认是创建追踪分支的，如果不想可以使用--no-track选项。
+
+ 
+```
+git checkout --detach \[&lt;branch&gt;\]    切换/创建匿名分支，基于一个分支名  
+git checkout \[--detach\] &lt;commit&gt;    切换/创建匿名分支，基于一个commit提交id。 
+```bash
+当前我们在new分支上
+$ git brvv 
+* new          02dbb6d Fix StopIteration exception during repo {sync,status}
+  track-master da40341 [origin/master] manifest: Support a default upstream value
+
+通过使用git checkout我们切换到 track-master 分支上。这个是不带--detach选项的行为。
+$ git co track-master 
+Switched to branch 'track-master'
+Your branch is up-to-date with 'origin/master'.
+ 
+$ git brvv 
+  new          02dbb6d Fix StopIteration exception during repo {sync,status}
+* track-master da40341 [origin/master] manifest: Support a default upstream value
+
+下面我们带上--detach选项来切换到new分支上试试
+$ git co --detach new
+HEAD is now at 02dbb6d... Fix StopIteration exception during repo {sync,status}
+
+$ git brvv                欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+* (HEAD detached at refs/heads/new) 02dbb6d Fix StopIteration exception during repo {sync,status}
+  new                               02dbb6d Fix StopIteration exception during repo {sync,status}
+  track-master                      da40341 [origin/master] manifest: Support a default upstream value
+我们可以看到并没有切换到new分支上,而是以这个new分支为基准切换到了一个匿名分支上.
+
+如果后面的参数是commitID,tag这个时候切换的是匿名分支,这个时候--detach选项可以省略.
+$ git checkout da40341 
+Previous HEAD position was 02dbb6d... Fix StopIteration exception during repo {sync,status}
+HEAD is now at da40341... manifest: Support a default upstream value
+ 
+$ git brvv               欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+* (HEAD detached at da40341) da40341 manifest: Support a default upstream value
+  new                        02dbb6d Fix StopIteration exception during repo {sync,status}
+  track-master               da40341 [origin/master] manifest: Support a default upstream value
+$欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/ 
+ 
+ 
+
+``` 
+
+git checkout \[&lt;tree-ish&gt;\] \[--\] &lt;pathspec&gt;
+
+git checkout \(-p|--patch\) \[&lt;tree-ish&gt;\] \[--\] \[&lt;pathspec&gt;\]
+         
+git checkout \[-f|--ours|--theirs|-m|--conflict=&lt;style&gt;\] \[&lt;tree-ish&gt;\] \[--\] &lt;paths&gt;
+这几个命令是用 “index暂存区内容” 或者 “指定tree-ish” 来覆盖paths指定的文件，  
+```bash
+我们这个时候修改了color.py文件，但是我们想撤销修改，就可以使用git checkout了
+HEAD detached at da40341
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   color.py
+	modified:   command.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+$ git co HEAD  -- color.py
+$ git st  
+HEAD detached at da40341
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   command.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+我们也可以指定个commit来做作为参数
+$ git co a32c92c  -- command.py
+$ git st
+
+HEAD detached at da40341
+nothing to commit, working tree clean
+ 
+```
+git checkout --orphan <new_branch> <start point>  创建一个孤儿分支
+这个会基于指定的 <start point> 的代码，然后需要重新git commit，提交后会新建个分支<new_branch>，
+这个分支和其他的分支没有任何关系联系。  
+```bash
+当前分支状态
+$ git brvv  
+* new          02dbb6d Fix StopIteration exception during repo {sync,status}
+  track-master da40341 [origin/master] manifest: Support a default upstream value
+
+我们基于v1.0这个点创建一个孤立分支orphan-branch 
+$ git co --orphan orphan-branch v1.0 
+Switched to a new branch 'orphan-branch'
+这个时候我们看到所有的代码都是绿色的，表明都是在暂存区的。
+$ git st  
+On branch orphan-branch
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+	new file:   .gitignore
+	new file:   COPYING
+	new file:   Makefile
+	new file:   codereview/__init__.py
+	new file:   codereview/need_retry_pb2.py
+	new file:   codereview/proto_client.py
+	new file:   codereview/review_pb2.py
+	new file:   codereview/upload_bundle_pb2.py
+	new file:   color.py
+	new file:   command.py
+	new file:   editor.py
+	new file:   error.py
+	new file:   froofle/__init__.py
+	new file:   froofle/protobuf/__init__.py
+	new file:   froofle/protobuf/descriptor.py
+	new file:   froofle/protobuf/descriptor_pb2.py
+	new file:   froofle/protobuf/internal/__init__.py
+	new file:   froofle/protobuf/internal/decoder.py
+	new file:   froofle/protobuf/internal/encoder.py
+	new file:   froofle/protobuf/internal/input_stream.py
+	new file:   froofle/protobuf/internal/message_listener.py
+	new file:   froofle/protobuf/internal/output_stream.py
+	new file:   froofle/protobuf/internal/type_checkers.py
+	new file:   froofle/protobuf/internal/wire_format.py
+	new file:   froofle/protobuf/message.py
+	new file:   froofle/protobuf/reflection.py
+	new file:   froofle/protobuf/service.py
+	new file:   froofle/protobuf/service_reflection.py
+	new file:   froofle/protobuf/text_format.py
+	new file:   gerrit_upload.py
+	new file:   git_command.py
+	new file:   git_config.py
+	new file:   import_ext.py
+	new file:   import_tar.py
+	new file:   import_zip.py
+	new file:   main.py
+	new file:   manifest.py
+	new file:   pager.py
+	new file:   project.py
+	new file:   remote.py
+	new file:   repo
+	new file:   subcmds/__init__.py
+	new file:   subcmds/compute_snapshot_check.py
+	new file:   subcmds/diff.py
+	new file:   subcmds/forall.py
+	new file:   subcmds/help.py
+	new file:   subcmds/init.py
+	new file:   subcmds/prune.py
+	new file:   subcmds/stage.py
+	new file:   subcmds/start.py
+	new file:   subcmds/status.py
+	new file:   subcmds/sync.py
+	new file:   subcmds/upload.py
+这个之后我们需要git commit 一下。
+$ git ci -s -m 'init my orphan branch base on tag v1.0' 
+[orphan-branch (root-commit) 139e9c1] init my orphan branch base on tag v1.0
+ 53 files changed, 11781 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 COPYING
+ create mode 100644 Makefile
+ create mode 100644 codereview/__init__.py
+ create mode 100644 codereview/need_retry_pb2.py
+ create mode 100755 codereview/proto_client.py
+ create mode 100644 codereview/review_pb2.py
+ create mode 100644 codereview/upload_bundle_pb2.py
+ create mode 100644 color.py
+ create mode 100644 command.py
+ create mode 100644 editor.py
+ create mode 100644 error.py
+ create mode 100644 froofle/__init__.py
+ create mode 100644 froofle/protobuf/__init__.py
+ create mode 100644 froofle/protobuf/descriptor.py
+ create mode 100644 froofle/protobuf/descriptor_pb2.py
+ create mode 100644 froofle/protobuf/internal/__init__.py
+ create mode 100644 froofle/protobuf/internal/decoder.py
+ create mode 100644 froofle/protobuf/internal/encoder.py
+ create mode 100644 froofle/protobuf/internal/input_stream.py
+ create mode 100644 froofle/protobuf/internal/message_listener.py
+ create mode 100644 froofle/protobuf/internal/output_stream.py
+ create mode 100644 froofle/protobuf/internal/type_checkers.py
+ create mode 100644 froofle/protobuf/internal/wire_format.py
+ create mode 100644 froofle/protobuf/message.py
+ create mode 100644 froofle/protobuf/reflection.py
+ create mode 100644 froofle/protobuf/service.py
+ create mode 100644 froofle/protobuf/service_reflection.py
+ create mode 100644 froofle/protobuf/text_format.py
+ create mode 100755 gerrit_upload.py
+ create mode 100644 git_command.py
+ create mode 100644 git_config.py
+ create mode 100644 import_ext.py
+ create mode 100644 import_tar.py
+ create mode 100644 import_zip.py
+ create mode 100755 main.py
+ create mode 100644 manifest.py
+ create mode 100755 pager.py
+ create mode 100644 project.py
+ create mode 100644 remote.py
+ create mode 100755 repo
+ create mode 100644 subcmds/__init__.py
+ create mode 100644 subcmds/compute_snapshot_check.py
+ create mode 100644 subcmds/diff.py
+ create mode 100644 subcmds/forall.py
+ create mode 100644 subcmds/help.py
+ create mode 100644 subcmds/init.py
+ create mode 100644 subcmds/prune.py
+ create mode 100644 subcmds/stage.py
+ create mode 100644 subcmds/start.py
+ create mode 100644 subcmds/status.py
+ create mode 100644 subcmds/sync.py
+ create mode 100644 subcmds/upload.py
+
+$ git st 
+On branch orphan-branch
+nothing to commit, working tree clean
+
+git commit之后我们的孤立分支orphan-branch就新建好了
+$ git brvv  
+  new           02dbb6d Fix StopIteration exception during repo {sync,status}
+* orphan-branch 139e9c1 init my orphan branch base on tag v1.0
+  track-master  da40341 [origin/master] manifest: Support a default upstream value
+
+$ git log   
+commit 139e9c128630d6c7d8a01e2a35cde0f44190988d (HEAD -> orphan-branch)
+Author: mamh <bright.ma@blackshark.com>
+Date:   Thu Jun 14 12:58:04 2018 +0800
+
+    init my orphan branch base on tag v1.0
+    
+    Signed-off-by: mamh <bright.ma@blackshark.com>
+通过git log我们只看到一个提交                                            
+```
+
+git checkout --merge，-m 切换分支，采用合并，就是但你本地文件有修改情况下你要切换分支，有时候是不能切换的文件有冲突，  
+这个时候可以使用--merge选项来合并当前分支，你的工作空间，你要切换的分支这3者。也就是这3者做一个三方合并的操作。  
+
+```
+$ git co track-master
+error: Your local changes to the following files would be overwritten by checkout:
+	color.py
+Please commit your changes or stash them before you switch branches.
+Aborting
+这个时候git checkout命令是拒绝你的切分支请求的
+
+$ git co track-master --merge
+M	color.py
+Switched to branch 'track-master'
+Your branch is up-to-date with 'origin/master'.
+
+$ git st
+On branch track-master
+Your branch is up-to-date with 'origin/master'.
+
+Unmerged paths:
+  (use "git reset HEAD <file>..." to unstage)
+  (use "git add <file>..." to mark resolution)
+
+	both modified:   color.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+```
+$ git diff 
+diff --cc color.py
+index 0218aab,fd26ee0..0000000
+--- a/color.py
++++ b/color.py
+@@@ -17,92 -17,70 +17,112 @@@ import o
+  import sys
+  
+  import pager
+++<<<<<<< track-master
+ +
+ +COLORS = {None: -1,
+ +          'normal': -1,
+ +          'black': 0,
+ +          'red': 1,
+ +          'green': 2,
+ +          'yellow': 3,
+ +          'blue': 4,
+++=======
++ from git_config import GitConfig
++ 
++ COLORS = {None     :-1,
++           'normal' :-1,
++           'black'  : 0,
++           'red'    : 1,
++           'green'  : 2,
++           'yellow' : 3,
++           'blue'   : 4,
++           'yellow' : 3,
+++>>>>>>> local
+            'magenta': 5,
+ -          'cyan'   : 6,
+ -          'white'  : 7}
+ -
+ -ATTRS = {None     :-1,
+ -         'bold'   : 1,
+ -         'dim'    : 2,
+ -         'ul'     : 4,
+ -         'blink'  : 5,
+ +          'cyan': 6,
+ +          'white': 7}
+ +
+ +ATTRS = {None: -1,
+ +         'bold': 1,
+ +         'dim': 2,
+ +         'ul': 4,
+ +         'blink': 5,
+           'reverse': 7}
+  
+  RESET = "\033[m"
++           'yellow' : 3,
+  
+++<<<<<<< track-master
+...skipping...
+ +      need_sep = True
+ +
+ +    if fg >= 0:
+ +      if need_sep:
+ +        code += ';'
+ +      need_sep = True
+ +
+ +      if fg < 8:
+ +        code += '3%c' % (ord('0') + fg)
+ +      else:
+ +        code += '38;5;%d' % fg
+ +
+ +    if bg >= 0:
+ +      if need_sep:
+ +        code += ';'
+ +
+ +      if bg < 8:
+ +        code += '4%c' % (ord('0') + bg)
+ +      else:
+ +        code += '48;5;%d' % bg
+ +    code += 'm'
+ +  else:
+ +    code = ''
+ +  return code
+ +
+ +DEFAULT = None
+ +
+ +
+ +def SetDefaultColoring(state):
+ +  """Set coloring behavior to |state|.
+ +
+ +  This is useful for overriding config options via the command line.
+ +  """
+ +  if state is None:
+ +    # Leave it alone -- return quick!
+ +    return
+ +
+ +  global DEFAULT
+ +  state = state.lower()
+ +  if state in ('auto',):
+ +    DEFAULT = state
+ +  elif state in ('always', 'yes', 'true', True):
+ +    DEFAULT = 'always'
+ +  elif state in ('never', 'no', 'false', False):
+ +    DEFAULT = 'never'
+  
+  
+  class Coloring(object):
+
+```
+
+DETACHED HEAD 剥离的头指针，也就是匿名分支
+```bash
+HEAD一般的都是指向一个有名字的分支的（例如master），同时每个分支指向一个特定的commit。
+       HEAD (refers to branch 'master')
+        |
+        v
+a---b---c  branch 'master' (refers to commit 'c')
+    ^
+    |
+  tag 'v2.0' (refers to commit 'b')
+
+当有一个新的提交被创建了，分支也会更新指向新的commit上。同样的HEAD也还是指向master分支，master此时已经指向到新的提交上了。
+$ edit; git add; git commit
+
+           HEAD (refers to branch 'master')
+            |
+            v
+a---b---c---d  branch 'master' (refers to commit 'd')
+    ^
+    |
+  tag 'v2.0' (refers to commit 'b')
+
+但是呢有时候检出一个特定的commit，不是一个命名分支也是很有用的。
+这个时候特别注意HEAD指向了b这个提交上，这个时候就是一个“detached HEAD”的状态。
+$ git checkout v2.0  # or  检出到b这个提交上
+$ git checkout master^^
+
+   HEAD (refers to commit 'b')
+    |
+    v
+a---b---c---d  branch 'master' (refers to commit 'd')
+    ^
+    |
+  tag 'v2.0' (refers to commit 'b')
+
+这种情况下我们再新建个提交看看
+$ edit; git add; git commit
+
+     HEAD (refers to commit 'e')
+      |
+      v
+      e
+     /
+a---b---c---d  branch 'master' (refers to commit 'd')
+    ^
+    |
+  tag 'v2.0' (refers to commit 'b')
+
+这个使用有个新的提交e了，这个e只被HEAD引用，如果HEAD引用到其他地方，这个e就有可能丢失了。
+下面我们在e提交的基础上再次提交个f提交
+$ edit; git add; git commit
+
+         HEAD (refers to commit 'f')
+          |
+          v
+      e---f
+     /
+a---b---c---d  branch 'master' (refers to commit 'd')
+    ^
+    |
+  tag 'v2.0' (refers to commit 'b')  
+这个时候如果我们切换到master分支上会怎么样？？？
+$ git checkout master
+
+               HEAD (refers to branch 'master')
+      e---f     |
+     /          v
+a---b---c---d  branch 'master' (refers to commit 'd')
+    ^
+    |
+  tag 'v2.0' (refers to commit 'b')
+这个时候我们要特别注意，提交f没有被任何分支引用了。最终这个提交f会被git 垃圾回收机制给清理掉，到那之后就再也找不回f提交了。
+也就是执行了git gc就会删除f提交，e提交等。除非我们在次之前建个引用指向这个提交f。
+$ git checkout -b foo   (1)
+$ git branch foo        (2)
+$ git tag foo           (3)
+(1)creates a new branch foo, which refers to commit f, and then updates HEAD to refer to branch foo. In other words, we’ll no longer be in detached HEAD state after this command.
+
+(2)similarly creates a new branch foo, which refers to commit f, but leaves HEAD detached.
+
+(3)creates a new tag foo, which refers to commit f, leaving HEAD detached.
+
+匿名分支就讲解到这里
+
+```
+
+git checkout branchname  
+如果branchname和某个文件名重复了，git是首先作为分支名称的，如果你确实要指定的文件名称可以使用'--'。
+
+git checkout的一些例子
+```bash
+$ git checkout master             (1)    switch branch
+$ git checkout master~2 Makefile  (2)     take a file out of another commit
+$ rm -f hello.c
+$ git checkout hello.c            (3)   restore hello.c from the index
+
+$ git checkout -- '*.c'       check out all C source files out of the index
+这个将会包所有的.c文件都检出了，文件hello.c 也会，这个不是看working tree下面是否有个这个hello.c
+文件，而是看暂存区是否有个hello.c文件。
+
+不幸的是如果你有个分支名称也是叫hello.c这个时候有可以产生疑惑了？到底是分支呢？还是文件呢？
+我可以这样使用‘--’来明确说明是文件。
+$ git checkout -- hello.c
+
+```
 
 # git reset
 git reset 命令主要用来执行撤销操作  
