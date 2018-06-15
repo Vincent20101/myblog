@@ -564,6 +564,13 @@ step distanceTo banana
 ![image63.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image63.jpeg)
 ```js
 第 46 关挑战
+当我们有一根以上的香蕉时，我们可以用 [] 这个指令来帮它们分别命名.
+数组  "数组"索引
+turnTo bananas[0]
+step distanceTo bananas[0]
+
+turnTo bananas[1]
+step distanceTo bananas[1]
 
 
 
@@ -572,12 +579,29 @@ step distanceTo banana
 ```js
 第 47 关挑战
 
+在写代码的时候，你可以从 零 zero 开始编号，因此第一根香蕉可以命名为" 零号香蕉" bananas[0] ；而第二根香蕉可以命名为"一号香蕉" bananas[1].
+
+say "Boo!“
+step 10
+turnTo bananas[0]
+step distanceTo bananas[0]
+
+turnTo bananas[1]
+step distanceTo bananas[1]
 
 
 ```
 ![image65.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image65.jpeg)
 ```js
 第 48 关挑战
+bananas 是一个 数组 array 也就是对象 (在这里指的是香蕉) 的"集合“
+
+turnTo bananas[0]
+step distanceTo bananas[0]
+turnTo bananas[1]
+step distanceTo bananas[1]
+turnTo bananas[2]
+step distanceTo bananas[2]
 
 
 
@@ -585,6 +609,13 @@ step distanceTo banana
 ![image66.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image66.jpeg)
 ```js
 第 49 关挑战
+灌木丛 bushes 也是一个 数组 array
+turnTo bushes[0]
+step distanceTo bushes[0]
+turnTo bushes[1]
+step distanceTo bushes[1]
+turnTo banana
+step distanceTo banana
 
 
 
@@ -592,14 +623,20 @@ step distanceTo banana
 ![image67.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image67.jpeg)
 ```js
 第 50 关挑战
-
-
+河狸们 beavers 会帮助我们的小猴过河.
+beavers[0].step 10
+beavers[1].step 10
+step distanceTo banana
 
 ```
 ![image68.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image68.jpeg)
 ```js
 第 51 关挑战
 
+请用你的代码指令让河狸们动起来.
+beavers[1].step 13
+beavers[2].step 13
+step distanceTo banana
 
 
 ```
@@ -607,6 +644,10 @@ step distanceTo banana
 ```js
 第 52 关挑战
 
+beavers[0].step 4
+beavers[1].step 8
+beavers[2].step 12
+step distanceTo banana
 
 
 ```
@@ -614,6 +655,12 @@ step distanceTo banana
 ```js
 第 53 关挑战
 
+beavers[0].step 5
+beavers[1].step 5
+
+step distanceTo bananas[0]
+turnTo bananas[1]
+step distanceTo bananas[1]
 
 
 ```
@@ -621,6 +668,14 @@ step distanceTo banana
 ```js
 第 54 关挑战
 
+beavers[0].step 5
+beavers[1].step 5
+beavers[2].step 5
+beavers[3].step 5
+
+step distanceTo bananas[0]
+turnTo bananas[1]
+step distanceTo bananas[1]
 
 
 ```
@@ -628,6 +683,18 @@ step distanceTo banana
 ```js
 第 55 关挑战
 
+beavers[0].step 4
+beavers[1].step 4
+
+step distanceTo bananas[0]
+beavers[0].step 11
+beavers[1].step 11
+
+turnTo bananas[1]
+step distanceTo bananas[1]
+
+turnTo bananas[2]
+step distanceTo bananas[2]
 
 
 ```
@@ -635,6 +702,10 @@ step distanceTo banana
 ```js
 第 56 关挑战
 
+开始介绍for循环语句，for可以遍历一个数组
+for b in bananas
+    turnTo b
+    step distanceTo b
 
 
 ```
@@ -642,6 +713,9 @@ step distanceTo banana
 ```js
 第 57 关挑战
 
+for b in bananas
+    turnTo b
+    step distanceTo b
 
 
 ```
@@ -649,6 +723,9 @@ step distanceTo banana
 ```js
 第 58 关挑战
 
+for b in bananas
+    turtle.turnTo b
+    turtle.step distanceTo b
 
 
 ```
@@ -656,6 +733,10 @@ step distanceTo banana
 ```js
 第 59 关挑战
 
+say "Hi!"
+for b in bananas
+    turnTo b
+    step distanceTo b
 
 
 ```
@@ -663,6 +744,10 @@ step distanceTo banana
 ```js
 第 60 关挑战
 
+step distanceTo bridge
+for b in bananas
+    turnTo b
+    step distanceTo b
 
 
 ```
@@ -670,6 +755,10 @@ step distanceTo banana
 ```js
 第 61 关挑战
 
+x = 20
+for t in turtles
+    t.step x
+step distanceTo banana
 
 
 ```
@@ -677,6 +766,11 @@ step distanceTo banana
 ```js
 第 62 关挑战
 
+for b in bananas
+    turnTo raft
+    step distanceTo raft
+    turnTo b
+    step distanceTo b
 
 
 ```
@@ -684,6 +778,10 @@ step distanceTo banana
 ```js
 第 63 关挑战
 
+for b in islands
+    turnTo b
+
+    step distanceTo b
 
 
 ```
@@ -691,6 +789,9 @@ step distanceTo banana
 ```js
 第 64 关挑战
 
+for t in turtles
+    step distanceTo t
+    t.step 20
 
 
 ```
@@ -698,6 +799,11 @@ step distanceTo banana
 ```js
 第 65 关挑战
 
+for b in bananas
+    x = distanceTo  b
+    step x
+    step -x
+    turtle.step 8
 
 
 ```
@@ -706,12 +812,20 @@ step distanceTo banana
 第 66 关挑战
 
 
+for c in crocodiles
+    c.turnTo banana
+step distanceTo banana
+
 
 ```
 ![image84.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image84.jpeg)
 ```js
 第 67 关挑战
 
+for c in crocodiles
+    c.turnTo banana
+turnTo banana
+step distanceTo banana
 
 
 ```
@@ -719,6 +833,11 @@ step distanceTo banana
 ```js
 第 68 关挑战
 
+for c in crocodiles
+    c.turnTo islands[0]
+for i in    islands
+    turnTo i
+    step distanceTo i
 
 
 ```
@@ -726,6 +845,13 @@ step distanceTo banana
 ```js
 第 69 关挑战
 
+for c in crocodiles
+    c.turnTo raft
+for b in bananas
+    turnTo b
+    d = distanceTo b
+    step d
+    step -d
 
 
 ```
@@ -733,6 +859,11 @@ step distanceTo banana
 ```js
 第 70 关挑战
 
+for b in bananas
+    for c in crocodiles
+        c.turnTo monkey
+    turnTo b
+    step distanceTo b
 
 
 ```
