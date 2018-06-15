@@ -1174,6 +1174,16 @@ collect matches[1]
 ```js
 第 86 关挑战
 
+//"直到"沙地
+//接下来要介绍的是 直到 until 这个循环指令 !
+//这个和71关是一样的。这里用到了until和near。
+until near match
+    step 1
+
+grab()
+until near pile
+    step 1
+drop()
 
 
 ```
@@ -1181,6 +1191,15 @@ collect matches[1]
 ```js
 第 87 关挑战
 
+//接近 near 这个指令会返回给你 - 肯定的 yes 或 否定的 no 的结果
+//这个和71，86关是一样的。这里用到了until和near。
+
+until near match
+    step 1
+grab()
+until near pile
+    step 1
+drop()
 
 
 ```
@@ -1188,6 +1207,16 @@ collect matches[1]
 ```js
 第 88 关挑战
 
+//如果你不好好使用的话 , 直到 until 这个循环指令将会永无止尽的继续下去.
+//介绍了死循环
+
+until near match
+    step 1
+grab()
+turnTo pile
+until near pile
+    step 1
+drop()
 
 
 ```
@@ -1195,12 +1224,27 @@ collect matches[1]
 ```js
 第 89 关挑战
 
+接下来你需要好好利用 直到 until 这个循环指令哦.
+
+until near match
+    step 1
+grab()
+turnTo pile
+step distanceTo pile
+drop()
 
 
 ```
 ![image107.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image107.jpeg)
 ```js
 第 90 关挑战
+turn left
+until near match
+    step 1
+grab()
+turnTo pile
+step distanceTo pile
+drop()
 
 
 
@@ -1209,12 +1253,24 @@ collect matches[1]
 ```js
 第 91 关挑战
 
+until near match
+    step 1
+grab()
+turnTo pile
+step distanceTo pile
+drop()
 
 
 ```
 ![image109.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image109.jpeg)
 ```js
 第 92 关挑战
+until turtle.near bridge
+    turtle.step 1
+grab()
+step distanceTo pile
+drop()
+
 
 
 
@@ -1223,6 +1279,13 @@ collect matches[1]
 ```js
 第 93 关挑战
 
+until near match
+    turnTo match
+    step 1
+grab()
+turnTo pile
+step distanceTo pile
+drop()
 
 
 ```
@@ -1230,12 +1293,31 @@ collect matches[1]
 ```js
 第 94 关挑战
 
+希望你没有忘了函数，也就是 functions !
+chase = (m) ->
+    until near m
+        turnTo m
+        step 1
+chase match
+grab()
+chase pile
+drop()
 
 
 ```
 ![image112.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image112.jpeg)
 ```js
 第 95 关挑战
+chase = (m) ->
+    until near m 
+        turnTo m
+        step 1
+#这段代码是正常的:
+for m in matches
+    chase m
+    grab()
+    chase pile
+    drop()
 
 
 
@@ -1244,6 +1326,21 @@ collect matches[1]
 ```js
 第 96 关挑战
 
+goto = (t) ->
+    turnTo t
+    step distanceTo t
+collect = (t) ->
+    goto t
+    grab()
+    goto pile
+    drop()
+
+#如果猫还醒着，千万别走过去!
+until cat.sleeping()
+    wait()
+collect match
+
+step 15
 
 
 ```
@@ -1251,12 +1348,46 @@ collect matches[1]
 ```js
 第 97 关挑战
 
+用 wait 指令来静待猫咪睡觉吧...
+goto = (t) ->
+    turnTo t
+    step distanceTo t
+collect = (t) ->
+    goto t
+    grab()
+    goto pile
+    drop()
+for m in     matches
+    until cat.sleeping()
+        wait()
+    collect m
+
 
 
 ```
 ![image115.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image115.jpeg)
 ```js
 第 98 关挑战
+goto = (t) ->
+    turnTo t
+    step distanceTo t
+#让这个函数能够收集t  collect t
+#并且不要被吃掉或掉到水里哦
+safeCollect = (t) ->
+    until cat.sleeping()
+        wait()
+    #就在那儿!
+    goto bridge
+    goto t
+    grab()
+    goto bridge
+
+    goto pile
+    drop()
+    
+#它应该像这样:
+for m in matches
+    safeCollect m
 
 
 
@@ -1265,6 +1396,22 @@ collect matches[1]
 ```js
 第 99 关挑战
 
+chase = (t) ->
+    #实现这里!
+    turnTo t
+    step distanceTo t
+    
+safeCollect = (m) ->
+    until cat.sleeping()
+        wait()
+    #完成这里!
+    until near m
+        chase m
+    grab()
+    chase pile
+    drop()
+    
+safeCollect match
 
 
 ```
@@ -1272,6 +1419,20 @@ collect matches[1]
 ```js
 第 100 关挑战
 
+chase = (t) ->
+    turnTo t
+    step distanceTo t
+    
+safeCollect = (m) ->
+    until cat.sleeping()
+        wait()
+    until near m
+        chase m
+    grab()
+    chase pile
+    drop()
+for m in matches
+    safeCollect m
 
 
 ```
@@ -1279,6 +1440,9 @@ collect matches[1]
 ```js
 第 101 关挑战
 
+goto bridge
+
+goto banana
 
 
 ```
@@ -1286,12 +1450,15 @@ collect matches[1]
 ```js
 第 102 关挑战
 
+goat.hit()goto banana
 
 
 ```
 ![image120.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image120.jpeg)
 ```js
 第 103 关挑战
+goat.hit(banana)
+goto banana
 
 
 
@@ -1300,12 +1467,27 @@ collect matches[1]
 ```js
 第 104 关挑战
 
+#goat.hit()
+goat.turn right
+goat.hit()
+
+step 20
 
 
 ```
 ![image122.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image122.jpeg)
 ```js
 第 105 关挑战
+
+goat.goto bananas[0]
+goat.hit()
+
+goat.goto bananas[2]
+
+goat.hit()
+
+for b in bananas
+    goto b
 
 
 
@@ -1314,6 +1496,13 @@ collect matches[1]
 ```js
 第 106 关挑战
 
+请试试看 冷冻的香蕉banana.frozen() 这个指令.
+
+
+say banana.frozen()
+goat.hit()
+say banana.frozen()
+goto banana
 
 
 ```
@@ -1321,6 +1510,11 @@ collect matches[1]
 ```js
 第 107 关挑战
 
+请使用 如果 if 指令来判断条件是否成立 !
+if banana.frozen()
+    goat.hit()
+    
+goto banana
 
 
 ```
@@ -1328,6 +1522,12 @@ collect matches[1]
 ```js
 第 108 关挑战
 
+有的时候，你写在 如果 if 指令里面的判断条件并不会真的发生.
+
+if banana.frozen()
+    goat.goto banana
+    goat.hit()
+goto banana
 
 
 ```
@@ -1335,6 +1535,12 @@ collect matches[1]
 ```js
 第 109 关挑战
 
+你可以在一个 for循环中使用 如果 if 条件判断
+for b in bananas
+    if b.frozen()
+        goat.goto b
+        goat.hit b
+    goto b
 
 
 ```
@@ -1342,6 +1548,13 @@ collect matches[1]
 ```js
 第 110 关挑战
 
+#在 loop 循环中使用 if
+
+for b in bananas
+    if b.frozen()
+        goat.goto(b)
+        goat.hit(b)
+    monkey.goto b
 
 
 ```
@@ -1349,6 +1562,12 @@ collect matches[1]
 ```js
 第 111 关挑战
 
+for b in bananas
+    if b.frozen()
+        goat.hit(b)
+    monkey.goto b
+
+    turtle.step 5
 
 
 ```
@@ -1356,6 +1575,7 @@ collect matches[1]
 ```js
 第 112 关挑战
 
+goat.goto banana
 
 
 ```
@@ -1363,6 +1583,9 @@ collect matches[1]
 ```js
 第 113 关挑战
 
+goat.step 15
+
+monkey.step 15
 
 
 ```
@@ -1371,12 +1594,19 @@ collect matches[1]
 第 114 关挑战
 
 
+if banana.green()
+    goat.goto banana
+
 
 ```
 ![image132.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image132.jpeg)
 ```js
 第 115 关挑战
 
+if banana.green()
+    say "It's green!"
+else
+    monkey.goto(banana)
 
 
 ```
@@ -1384,6 +1614,11 @@ collect matches[1]
 ```js
 第 116 关挑战
 
+for b in bananas
+    if b.green()
+        goat.goto b
+    else
+        monkey.goto b
 
 
 ```
@@ -1391,6 +1626,17 @@ collect matches[1]
 ```js
 第 117 关挑战
 
+不管是哪种颜色的香蕉，所有的 结冰香蕉都应该使用 撞击 hit() 指令来去冰, 但是只有山羊会吃掉 绿色的香蕉.
+
+for b in bananas
+    goat.goto b
+    goat.hit()
+    
+    #在这里写 if else 条件:
+    if b.green()
+        goat.goto b
+    else
+        monkey.goto b
 
 
 ```
@@ -1398,6 +1644,11 @@ collect matches[1]
 ```js
 第 118 关挑战
 
+for b in bananas
+    if b.green()
+        goat.goto b
+    else
+        monkey.goto b
 
 
 ```
@@ -1405,6 +1656,16 @@ collect matches[1]
 ```js
 第 119 关挑战
 
+breakBanana = (f) ->
+    if f.frozen()
+        goat.goto f
+        goat.hit f
+    if f.green()
+        goat.goto f
+    else
+        monkey.goto f
+for b in bananas
+    breakBanana b
 
 
 ```
