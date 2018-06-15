@@ -943,7 +943,7 @@ goto = (t) ->
     turnTo t
     step distanceTo t
 
-#在这里写下你的代码: (使用goto)
+
 goto bridge
 goto match
 grab()
@@ -960,13 +960,15 @@ drop()
 goto = (a) ->
     turnTo a
     step distanceTo a
-#Add your code to get matches[1]:
+
 for match in matches
     goto match
     grab()
     goto pile
     drop()
-================================================
+
+//================================================
+
 goto = (a) ->
     turnTo a
     step distanceTo a
@@ -985,12 +987,10 @@ drop()
 ```js
 第 77 关挑战
 
-#请修复这个函数:
 goto = (a) ->
     turnTo a
     step distanceTo a
 
-#这段代码是正确的:
 for m in matches
     goto m
     grab()
@@ -1002,10 +1002,7 @@ for m in matches
 ![image95.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image95.jpeg)
 ```js
 第 78 关挑战
-The name of the argument can be anything we want.Here we will use c as the argument name.
 
-#Here the argument name is c
-#Fix this function:
 goto = (c) ->
     turnTo c
     step distanceTo c
@@ -1014,7 +1011,7 @@ goto bridge
 goto match
 grab()
 goto bridge
-#Add more code here:
+
 goto(pile)
 drop()
 
@@ -1029,9 +1026,7 @@ goto = (p) ->
     #请在这里编写函数的实现
     turnTo p
     step distanceTo p
-    
-    
-#这段代码是正常的:
+
 for m in matches
     goto bridge
     goto m
@@ -1045,8 +1040,6 @@ for m in matches
 ![image97.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image97.jpeg)
 ```js
 第 80 关挑战
-
-Here we have a new function: collect.This function moves a match to the pile (using the rat, of course).
 
 collect = (e) ->
     turnTo e
@@ -1069,14 +1062,12 @@ goto = (t) ->
     turnTo t
     step distanceTo t
 
-#请修复这个函数:
 collect = (e) ->
     goto e
     grab()
     goto pile
     drop()
     
-#这段代码是正常的:
 for m in matches
     collect m
 
@@ -1092,7 +1083,6 @@ goto = (x)->
     turnTo x
     step distanceTo x
     
-#这段代码保持不变:
 goto match
 grab()
 goto pile
@@ -1109,12 +1099,10 @@ drop()
 goto = (t) ->
     turnTo t
     step distanceTo t
-#修复这里:
 gotoAll = (stuff) ->
     for s in stuff
         goto s
 
-#还有这里:
 gotoAll islands
 grab()
 gotoAll rafts
@@ -1162,7 +1150,6 @@ allTurtlesStep = (d) ->
     for c in turtles
         c.step d
         
-#这段代码是正常的:
 allTurtlesStep 10
 collect matches[0]
 allTurtlesStep -10
@@ -1385,7 +1372,6 @@ safeCollect = (t) ->
     goto pile
     drop()
     
-#它应该像这样:
 for m in matches
     safeCollect m
 
@@ -1632,7 +1618,6 @@ for b in bananas
     goat.goto b
     goat.hit()
     
-    #在这里写 if else 条件:
     if b.green()
         goat.goto b
     else
@@ -1672,6 +1657,9 @@ for b in bananas
 ![image137.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image137.jpeg)
 ```js
 第 120 关挑战
+until tiger.sleeping()
+    wait()
+goto banana
 
 
 
@@ -1679,6 +1667,9 @@ for b in bananas
 ![image138.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image138.jpeg)
 ```js
 第 121 关挑战
+until bear.sleeping()
+    wait()
+goto banana
 
 
 
@@ -1687,6 +1678,10 @@ for b in bananas
 ```js
 第 122 关挑战
 
+for b in bananas
+    until bear.sleeping()
+        wait() //#等待，什么？
+    goto b
 
 
 ```
@@ -1694,6 +1689,9 @@ for b in bananas
 ```js
 第 123 关挑战
 
+until bear.sleeping() and tiger.sleeping()
+    wait()
+goto banana
 
 
 ```
@@ -1701,6 +1699,9 @@ for b in bananas
 ```js
 第 124 关挑战
 
+until bear.sleeping() and tiger.sleeping()
+    wait()
+goto banana
 
 
 ```
@@ -1708,6 +1709,11 @@ for b in bananas
 ```js
 第 125 关挑战
 
+until bear.sleeping() and tiger.sleeping() //#并且...
+    wait()
+
+for b in bananas
+    goto b
 
 
 ```
@@ -1715,6 +1721,12 @@ for b in bananas
 ```js
 第 126 关挑战
 
+for b in bananas
+    until bear.sleeping() and tiger.sleeping() //#并且...
+        wait()
+    if b.green()
+        goat.goto b
+    monkey.goto b
 
 
 ```
@@ -1722,13 +1734,29 @@ for b in bananas
 ```js
 第 127 关挑战
 
+waitForSafety = () ->
+    until bear.sleeping() and tiger.sleeping()
+        wait()
 
+for b in bananas
+    waitForSafety()
+    goto b
 
 ```
 ![image145.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image145.jpeg)
 ```js
 第 128 关挑战
 
+for b in bananas
+    until bear.sleeping() and tiger.sleeping()
+            wait()
+    if b.frozen()
+        goat.goto b
+        goat.hit()
+    until bear.sleeping() and tiger.sleeping()
+            wait()
+    monkey.goto b
+ 
 
 
 ```
@@ -1736,12 +1764,21 @@ for b in bananas
 ```js
 第 129 关挑战
 
+until tiger.sleeping() or tiger.playing()
+    wait()
+goto banana
 
 
 ```
 ![image147.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image147.jpeg)
 ```js
 第 130 关挑战
+
+或者 or 指令能够让小猴等到许多个判断式其中之一的条件成立了之后，就开始下个行动.
+until tiger.sleeping() or tiger.playing()
+    wait()
+goto banana
+
 
 
 
@@ -1750,6 +1787,16 @@ for b in bananas
 ```js
 第 131 关挑战
 
+//你可以在所有的判断式里面都使用 或者 or 指令
+until tiger.sleeping() or tiger.playing()
+    wait()
+
+step 10
+
+//#这里等待 <code>wait</code> 熊玩耍或睡着
+until bear.sleeping() or bear.playing()
+    wait()
+step 10
 
 
 ```
@@ -1757,12 +1804,23 @@ for b in bananas
 ```js
 第 132 关挑战
 
+until bear.playing() or bear.sleeping()
+    wait()
+
+goat.goto banana
 
 
 ```
 ![image150.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image150.jpeg)
 ```js
 第 133 关挑战
+for b in bananas
+    until tiger.playing() or tiger.sleeping()
+        wait()
+    if b.green()
+        goat.goto b
+    else
+        monkey.goto b
 
 
 
@@ -1770,13 +1828,24 @@ for b in bananas
 ![image151.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image151.jpeg)
 ```js
 第 134 关挑战
-
-
+for b in bears
+    until b.sleeping() or b.playing()
+        wait()
+    step 10
 
 ```
 ![image152.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image152.jpeg)
 ```js
 第 135 关挑战
+
+waitFor = (t) ->
+    until t.sleeping() or t.playing()
+        wait()
+    
+for t in tigers
+    for stepper in [monkey, goat]
+        waitFor t
+        stepper.step 10
 
 
 
@@ -1785,6 +1854,13 @@ for b in bananas
 ```js
 第 136 关挑战
 
+//这个开始是否逻辑了。
+
+//not 这个否定指令会把原先是 肯定yes 的结果变成 否定no 的结果。此外，它也会把原先就 否定的no 结果变成 yes 的结果.
+
+if not banana.green()
+    //#你只能修改这里的代码:
+    goto banana
 
 
 ```
@@ -1792,6 +1868,16 @@ for b in bananas
 ```js
 第 137 关挑战
 
+请试试看使用 烂掉的 rotten() 来识别烂掉的香蕉并且不要靠近它们!
+
+rotten英 [ˈrɒtn]   美 [ˈrɑ:tn]  adj.腐烂的;恶臭的;堕落的;极坏的
+
+for b in bananas
+    turnTo b
+    if b.rotten()
+        say "Yuck!"
+    else
+        goto b
 
 
 ```
@@ -1799,6 +1885,8 @@ for b in bananas
 ```js
 第 138 关挑战
 
+goto bush
+goto bananas[0]
 
 
 ```
@@ -1806,12 +1894,19 @@ for b in bananas
 ```js
 第 139 关挑战
 
+if not banana.rotten()
+    goto banana
 
 
 ```
 ![image157.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image157.jpeg)
 ```js
 第 140 关挑战
+
+for b in bananas
+    #修复这里的条件:
+    if  not b.rotten()
+        goto b
 
 
 
@@ -1820,6 +1915,10 @@ for b in bananas
 ```js
 第 141 关挑战
 
+for b in bananas
+    if not b.rotten()
+        goto b
+        goto bush
 
 
 ```
@@ -1827,6 +1926,8 @@ for b in bananas
 ```js
 第 142 关挑战
 
+say health()
+goto banana
 
 
 ```
@@ -1834,6 +1935,8 @@ for b in bananas
 ```js
 第 143 关挑战
 
+goto bananas[0]
+goto bananas[1]
 
 
 ```
@@ -1841,6 +1944,10 @@ for b in bananas
 ```js
 第 144 关挑战
 
+if health() == 40 //#是的，40等于40，得到yes
+    goto banana
+if health() == 100 //#不是，40不是100，得到no
+    goto banana
 
 
 ```
@@ -1848,6 +1955,12 @@ for b in bananas
 ```js
 第 145 关挑战
 
+请待在 休息区 healthZone 以便恢复体力l.
+goto healthZone
+//#修改这里，它永远到不到1000的数值
+until health() == 100
+    wait()
+goto banana
 
 
 ```
@@ -1855,6 +1968,12 @@ for b in bananas
 ```js
 第 146 关挑战
 
+for b in bananas
+    goto healthZone
+    //#在这里等待，直到小猴的健康值是100
+    until health() == 100
+        wait()
+    goto b
 
 
 ```
@@ -1862,27 +1981,56 @@ for b in bananas
 ```js
 第 147 关挑战
 
+goto healthZone
+until health() ==100
+    wait()
+goto banana
 
 
 ```
 ![image165.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image165.jpeg)
 ```js
 第 148 关挑战
+请使用 小于 < 符号来比较是否一个数值小于另外一个数值.
 
-
+if health() < 90 #是的，80小于90，得到yes
+    goto banana
+else
+    goto banana
 
 ```
 ![image166.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image166.jpeg)
 ```js
 第 149 关挑战
 
-
+for b in bananas
+    goto b
+    //#提示: 如果健康值低于70，就需要补充体力啦
+    if health() <=70
+        goto healthZone
+        until health()==100
+            wait()
 
 ```
 ![image167.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image167.jpeg)
 ```js
 第 150 关挑战
 
+gotoNearestHealth = () ->
+    d0 = distanceTo healthZones[0]
+    d1 = distanceTo healthZones[1]
+    if d0 < d1
+        goto healthZones[0]
+    else
+        goto healthZones[1]
+    
+for b in bananas
+    goto b
+    if health() < 60
+        gotoNearestHealth() 
+        #在这里等待，直到小猴是健康的!
+        until health() ==100
+            wait()
 
 
 ```
@@ -1890,6 +2038,15 @@ for b in bananas
 ```js
 第 151 关挑战
 
+使用 返回 return 指令，我们可以把某个 函数 function 的运算结果传送回来.
+
+example = () ->
+    return  not banana.rotten()
+    
+if example() #example() 函数返回 no
+    goto banana
+else
+    turn 360
 
 
 ```
@@ -1897,13 +2054,26 @@ for b in bananas
 ```js
 第 152 关挑战
 
+通常函数 function 的 返回 return 结果取决于我们如何定义这个函数.
 
-
+yummy = (x) ->
+    return not x.rotten()
+for b in bananas
+    if yummy b
+        goto b
 ```
 ![image170.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image170.jpeg)
 ```js
 第 153 关挑战
 
+healthy = () ->
+    return health() == 100
+
+goto healthZone
+
+until healthy()
+    wait()
+goto banana
 
 
 ```
@@ -1911,13 +2081,35 @@ for b in bananas
 ```js
 第 154 关挑战
 
+healthy = () ->
+    return health() == 100
 
+injured = () ->
+    return health() < 70
+
+//#在这里使用 healthy() 函数和 injured() 函数
+for b in bananas
+    goto b
+    if injured()
+        goto healthZone
+        until healthy()
+            wait()
 
 ```
 ![image172.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image172.jpeg)
 ```js
 第 155 关挑战
 
+healthy = () ->
+    return health() > 99
+
+
+//#这里应该是正常的，如果你已经修复了 healthy() 函数
+goto healthZone
+until healthy()
+    wait()
+goto bush
+goto banana
 
 
 ```
@@ -1925,6 +2117,14 @@ for b in bananas
 ```js
 第 156 关挑战
 
+safeFrom = (a) ->
+    return a.sleeping() or a.playing() //#或者 or ？
+
+//#另一种调用有参数的函数的用法是使用小括号 '()' 
+until safeFrom(tiger)
+    wait()
+
+goto banana
 
 
 ```
@@ -1932,6 +2132,13 @@ for b in bananas
 ```js
 第 157 关挑战
 
+safeFrom = (a) ->
+    return a.sleeping() or a.playing() //#修复这里吧
+
+until safeFrom(tiger) and safeFrom(bear)
+    wait()
+
+goto banana
 
 
 ```
@@ -1939,6 +2146,18 @@ for b in bananas
 ```js
 第 158 关挑战
 
+请写出一个函数 function , 以便让它 返回 return 肯定 yes 或者是 否定 no 的结果.
+
+negative = () ->
+    return no //#改成 no 吧
+
+positive = () ->
+    return yes //#这段代码是正常的
+    
+if negative()
+    goto bananas[0]
+if positive()
+    goto bananas[1]
 
 
 ```
@@ -1946,20 +2165,39 @@ for b in bananas
 ```js
 第 159 关挑战
 
+在一个函数 function 里面，所有写在 返回 return 指令后面的内容都不会被执行.
+
+foo = () ->
+    return yes
+    
+if foo()
+    goto banana
+else
+    say "nope"
 
 
 ```
 ![image177.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image177.jpeg)
 ```js
 第 160 关挑战
-
-
+until not crow.watching()
+    say "Boo!"
+goto banana
 
 ```
 ![image178.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image178.jpeg)
 ```js
 第 161 关挑战
 
+//请使用 说话 say 这个指令，直到安全为止.
+safe = () ->
+    return not crow.watching()
+    
+//#使用 say 函数来吓走乌鸦 crow 吧
+
+until safe()
+    say "x"
+goto banana
 
 
 ```
@@ -1967,13 +2205,39 @@ for b in bananas
 ```js
 第 162 关挑战
 
+safe = () ->
+    if crows[0].watching()
+        return no
+    if crows[1].watching()
+        return no
+    #如果到达这里意味着两只乌鸦都没有在监控啦
+    return yes
+    
+#在这里使用 safe() 函数
+goto banana
 
 
+或者
+safe = () ->
+    if crows[0].watching()  or crows[1].watching() //0号或者1号乌鸦在监视，就是不安全的情况
+        return no
+    return yes
 ```
 ![image180.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image180.jpeg)
 ```js
 第 163 关挑战
 
+
+safe = () ->
+    #只有乌鸦监控的时候才返回 yes
+    return not( crows[1].watching() or crows[0].watching())
+
+until safe()
+    say "Go away!"
+
+for b in bananas
+    
+    goto b
 
 
 ```
@@ -1981,6 +2245,15 @@ for b in bananas
 ```js
 第 164 关挑战
 
+safe = () ->
+     return  (not crows[0].watching() and not crows[1].watching() and not crows[2].watching())
+或者
+     return not (crows[0].watching() or crows[1].watching() or crows[2].watching())
+
+until safe()
+    say "Go away!"
+
+goto banana
 
 
 ```
@@ -1988,6 +2261,17 @@ for b in bananas
 ```js
 第 165 关挑战
 
+safe = () ->
+    for c in crows
+        if c.watching()
+            return no //#这样是安全的吗?
+    //#如果到达这里意味着没有乌鸦在监控啦
+    return yes
+
+until safe()
+    say "Go away!"
+
+goto banana
 
 
 ```
