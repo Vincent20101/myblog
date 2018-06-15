@@ -20,7 +20,7 @@
 ![image17.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image17.jpeg)
 
 
-![image18.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image18.jpeg)
+![image18.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image18.jpeg)
 ```js
 //第 0 关挑战
 step 15
@@ -28,7 +28,7 @@ step 15
 
 ```
 
-![image18.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image18.jpeg)
+![image18.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image18.jpeg)
 ```js
 第 1 关挑战 和0关一样的
 step 15
@@ -36,7 +36,7 @@ step 15
 ```
 
 
-![image19.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image19.jpeg)
+![image19.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image19.jpeg)
 ```js
 第 2 关挑战
 step 20
@@ -45,7 +45,7 @@ step 20
 
 
 
-![image20.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image20.jpeg)
+![image20.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image20.jpeg)
 ```js
 第 3 关挑战
 
@@ -54,7 +54,7 @@ turn right
 step 12
 
 ```
-![image21.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image21.jpeg)
+![image21.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image21.jpeg)
 ```js
 第 4 关挑战
 
@@ -65,7 +65,7 @@ step 20
 
 
 
-![image22.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image22.jpeg)
+![image22.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image22.jpeg)
 ```js
 第 5 关挑战
 turn left
@@ -78,7 +78,7 @@ step 15
 
 ```
 
-![image23.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image23.jpeg)
+![image23.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image23.jpeg)
 ```js
 第 6 关挑战
 turn left
@@ -91,7 +91,7 @@ step 17
 turn right
 step 5
 ```
-![image24.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image24.jpeg)
+![image24.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image24.jpeg)
 ```js
 第 7 关挑战
 你也可以用 转向 turn 这个指令再加上转动的角度.
@@ -100,7 +100,7 @@ step 5
 turn 45
 step 14
 ```
-![image25.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image25.jpeg)
+![image25.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image25.jpeg)
 ```js
 第 8 关挑战
 turn left
@@ -113,7 +113,7 @@ turn left
 step 15
 
 ```
-![image26.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image26.jpeg)
+![image26.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image26.jpeg)
 ```js
 第 9 关挑战
 step 10
@@ -123,7 +123,7 @@ step -20
 
 
 ```
-![image27.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image27.jpeg)
+![image27.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image27.jpeg)
 ```js
 第 10 关挑战
 turn 45.5
@@ -135,7 +135,7 @@ step 10
 step -20
 
 ```
-![image28.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image28.jpeg)
+![image28.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image28.jpeg)
 ```js
 第 11 关挑战
 面对 turnTo 这个指令能够让小猴面对其它对象.
@@ -145,7 +145,7 @@ step 20
 
 
 ```
-![image29.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image29.jpeg)
+![image29.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image29.jpeg)
 ```js
 第 12 关挑战
 你也可以用 面对turnTo函数让小猴面对香蕉 banana以外的对象
@@ -156,13 +156,13 @@ turnTo banana
 step 10
 
 ```
-![image30.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image30.jpeg)
+![image30.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image30.jpeg)
 ```js
 第 13 关挑战
 turtle.step 20
 
 ```
-![image31.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image31.jpeg)
+![image31.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image31.jpeg)
 ```js
 第 14 关挑战
 step 5
@@ -173,7 +173,7 @@ step 5
 
 
 ```
-![image32.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image32.jpeg)
+![image32.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image32.jpeg)
 ```js
 第 15 关挑战
 turtle.step 10
@@ -181,7 +181,7 @@ monkey.step 15
 
 
 ```
-![image33.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image33.jpeg)
+![image33.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image33.jpeg)
 ```js
 第 16 关挑战
 
@@ -191,7 +191,7 @@ turtle.step 15
 step -11
 
 ```
-![image34.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image34.jpeg)
+![image34.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image34.jpeg)
 ```js
 第 17 关挑战
 turtle.turn right
@@ -202,7 +202,7 @@ turtle.step 20
 
 
 ```
-![image35.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image35.jpeg)
+![image35.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image35.jpeg)
 ```js
 第 18 关挑战
 turtle.turnTo banana
@@ -215,7 +215,7 @@ turtle.step 10
 
 
 ```
-![image36.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image36.jpeg)
+![image36.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image36.jpeg)
 ```js
 第 19 关挑战
 turtle.step 15
@@ -223,7 +223,7 @@ turtle.turnTo bananas[3]
 turtle.step 28
 
 ```
-![image37.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image37.jpeg)
+![image37.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image37.jpeg)
 ```js
 第 20 关挑战
 turtle.turnTo monkey
@@ -235,7 +235,7 @@ turtle.step 18
 
 
 ```
-![image38.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image38.jpeg)
+![image38.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image38.jpeg)
 ```js
 第 21 关挑战
 3.times ->
@@ -243,7 +243,7 @@ turtle.step 18
     step 15
 
 ```
-![image39.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image39.jpeg)
+![image39.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image39.jpeg)
 ```js
 第 22 关挑战
 10.times ->    
@@ -255,7 +255,7 @@ turtle.step 18
     step -6
 
 ```
-![image40.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image40.jpeg)
+![image40.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image40.jpeg)
 ```js
 第 23 关挑战
 
@@ -272,7 +272,7 @@ turtle.step 18
     turn 300
 
 ```
-![image41.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image41.jpeg)
+![image41.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image41.jpeg)
 ```js
 第 24 关挑战
 
@@ -283,7 +283,7 @@ turtle.step 18
 
 
 ```
-![image42.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image42.jpeg)
+![image42.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image42.jpeg)
 ```js
 第 25 关挑战
 你可以修正这个循环 loop 的错误吗 ?
@@ -305,7 +305,7 @@ For I in [1..11]
 
 
 ```
-![image43.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image43.jpeg)
+![image43.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image43.jpeg)
 ```js
 第 26 关挑战
 step 5
@@ -316,7 +316,7 @@ step 5
 
 
 ```
-![image44.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image44.jpeg)
+![image44.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image44.jpeg)
 ```js
 第 27 关挑战
 4.times ->
@@ -328,7 +328,7 @@ step 5
 
 
 ```
-![image45.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image45.jpeg)
+![image45.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image45.jpeg)
 ```js
 第 28 关挑战
 10.times ->
@@ -339,7 +339,7 @@ step 10
 
 
 ```
-![image46.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image46.jpeg)
+![image46.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image46.jpeg)
 ```js
 第 29 关挑战
 turtle.step 5
@@ -353,7 +353,7 @@ step 5
 
 
 ```
-![image47.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image47.jpeg)
+![image47.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image47.jpeg)
 ```js
 第 30 关挑战
 快过关了喽 !让我看看你怎么使用循环吧.
@@ -381,7 +381,7 @@ step 20
 
 
 ```
-![image48.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image48.jpeg)
+![image48.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image48.jpeg)
 ```js
 第 31 关挑战
 变量来源于数学，是计算机语言中能储存计算结果或能表示值抽象概念。
@@ -389,7 +389,7 @@ x = 20
 step x
 
 ```
-![image49.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image49.jpeg)
+![image49.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image49.jpeg)
 ```js
 第 32 关挑战
 x = 15
@@ -400,7 +400,7 @@ x = 15
 
 
 ```
-![image50.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image50.jpeg)
+![image50.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image50.jpeg)
 ```js
 第 33 关挑战
 所有的数目字 number 你都可以用 变量 variable来代替它.
@@ -416,7 +416,7 @@ n.times ->
 
 
 ```
-![image51.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image51.jpeg)
+![image51.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image51.jpeg)
 ```js
 第 34 关挑战
 t = 3
@@ -430,7 +430,7 @@ t.times ->
 
 
 ```
-![image52.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image52.jpeg)
+![image52.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image52.jpeg)
 ```js
 第 35 关挑战
 x=15
@@ -442,7 +442,7 @@ step x
 
 
 ```
-![image53.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image53.jpeg)
+![image53.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image53.jpeg)
 ```js
 第 36 关挑战
 
@@ -460,7 +460,7 @@ for b in bananas
     turtle.step 8
 
 ```
-![image54.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image54.jpeg)
+![image54.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image54.jpeg)
 ```js
 第 37 关挑战
 say "xxxxxxxxx"
@@ -469,7 +469,7 @@ step 15
 
 
 ```
-![image55.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image55.jpeg)
+![image55.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image55.jpeg)
 ```js
 第 38 关挑战
 x = 20
@@ -480,7 +480,7 @@ step x
 
 
 ```
-![image56.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image56.jpeg)
+![image56.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image56.jpeg)
 ```js
 第 39 关挑战
 
@@ -494,7 +494,7 @@ step x
 
 
 ```
-![image57.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image57.jpeg)
+![image57.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image57.jpeg)
 ```js
 第 40 关挑战
 
@@ -505,7 +505,7 @@ step 2
 
 
 ```
-![image58.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image58.jpeg)
+![image58.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image58.jpeg)
 ```js
 第 41 关挑战
 
@@ -517,14 +517,14 @@ turtle.step d
 
 
 ```
-![image59.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image59.jpeg)
+![image59.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image59.jpeg)
 ```js
 第 42 关挑战
 turnTo banana
 step distanceTo banana
 
 ```
-![image60.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image60.jpeg)
+![image60.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image60.jpeg)
 ```js
 第 43 关挑战
 
@@ -535,7 +535,7 @@ step distanceTo banana
 
 
 ```
-![image61.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image61.jpeg)
+![image61.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image61.jpeg)
 ```js
 第 44 关挑战
 
@@ -547,7 +547,7 @@ turnTo banana
 step distanceTo banana
 
 ```
-![image62.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image62.jpeg)
+![image62.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image62.jpeg)
 ```js
 第 45 关挑战
 say "Hello world!“
@@ -561,7 +561,7 @@ step distanceTo banana
 
 
 ```
-![image63.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image63.jpeg)
+![image63.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image63.jpeg)
 ```js
 第 46 关挑战
 当我们有一根以上的香蕉时，我们可以用 [] 这个指令来帮它们分别命名.
@@ -575,7 +575,7 @@ step distanceTo bananas[1]
 
 
 ```
-![image64.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image64.jpeg)
+![image64.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image64.jpeg)
 ```js
 第 47 关挑战
 
@@ -591,7 +591,7 @@ step distanceTo bananas[1]
 
 
 ```
-![image65.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image65.jpeg)
+![image65.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image65.jpeg)
 ```js
 第 48 关挑战
 bananas 是一个 数组 array 也就是对象 (在这里指的是香蕉) 的"集合“
@@ -606,7 +606,7 @@ step distanceTo bananas[2]
 
 
 ```
-![image66.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image66.jpeg)
+![image66.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image66.jpeg)
 ```js
 第 49 关挑战
 灌木丛 bushes 也是一个 数组 array
@@ -620,7 +620,7 @@ step distanceTo banana
 
 
 ```
-![image67.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image67.jpeg)
+![image67.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image67.jpeg)
 ```js
 第 50 关挑战
 河狸们 beavers 会帮助我们的小猴过河.
@@ -629,7 +629,7 @@ beavers[1].step 10
 step distanceTo banana
 
 ```
-![image68.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image68.jpeg)
+![image68.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image68.jpeg)
 ```js
 第 51 关挑战
 
@@ -640,7 +640,7 @@ step distanceTo banana
 
 
 ```
-![image69.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image69.jpeg)
+![image69.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image69.jpeg)
 ```js
 第 52 关挑战
 
@@ -651,7 +651,7 @@ step distanceTo banana
 
 
 ```
-![image70.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image70.jpeg)
+![image70.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image70.jpeg)
 ```js
 第 53 关挑战
 
@@ -664,7 +664,7 @@ step distanceTo bananas[1]
 
 
 ```
-![image71.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image71.jpeg)
+![image71.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image71.jpeg)
 ```js
 第 54 关挑战
 
@@ -679,7 +679,7 @@ step distanceTo bananas[1]
 
 
 ```
-![image72.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image72.jpeg)
+![image72.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image72.jpeg)
 ```js
 第 55 关挑战
 
@@ -698,7 +698,7 @@ step distanceTo bananas[2]
 
 
 ```
-![image73.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image73.jpeg)
+![image73.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image73.jpeg)
 ```js
 第 56 关挑战
 
@@ -709,7 +709,7 @@ for b in bananas
 
 
 ```
-![image74.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image74.jpeg)
+![image74.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image74.jpeg)
 ```js
 第 57 关挑战
 
@@ -719,7 +719,7 @@ for b in bananas
 
 
 ```
-![image75.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image75.jpeg)
+![image75.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image75.jpeg)
 ```js
 第 58 关挑战
 
@@ -729,7 +729,7 @@ for b in bananas
 
 
 ```
-![image76.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image76.jpeg)
+![image76.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image76.jpeg)
 ```js
 第 59 关挑战
 
@@ -740,7 +740,7 @@ for b in bananas
 
 
 ```
-![image77.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image77.jpeg)
+![image77.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image77.jpeg)
 ```js
 第 60 关挑战
 
@@ -751,7 +751,7 @@ for b in bananas
 
 
 ```
-![image78.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image78.jpeg)
+![image78.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image78.jpeg)
 ```js
 第 61 关挑战
 
@@ -762,7 +762,7 @@ step distanceTo banana
 
 
 ```
-![image79.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image79.jpeg)
+![image79.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image79.jpeg)
 ```js
 第 62 关挑战
 
@@ -774,7 +774,7 @@ for b in bananas
 
 
 ```
-![image80.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image80.jpeg)
+![image80.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image80.jpeg)
 ```js
 第 63 关挑战
 
@@ -785,7 +785,7 @@ for b in islands
 
 
 ```
-![image81.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image81.jpeg)
+![image81.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image81.jpeg)
 ```js
 第 64 关挑战
 
@@ -795,7 +795,7 @@ for t in turtles
 
 
 ```
-![image82.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image82.jpeg)
+![image82.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image82.jpeg)
 ```js
 第 65 关挑战
 
@@ -807,7 +807,7 @@ for b in bananas
 
 
 ```
-![image83.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image83.jpeg)
+![image83.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image83.jpeg)
 ```js
 第 66 关挑战
 
@@ -818,7 +818,7 @@ step distanceTo banana
 
 
 ```
-![image84.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image84.jpeg)
+![image84.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image84.jpeg)
 ```js
 第 67 关挑战
 
@@ -829,7 +829,7 @@ step distanceTo banana
 
 
 ```
-![image85.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image85.jpeg)
+![image85.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image85.jpeg)
 ```js
 第 68 关挑战
 
@@ -841,7 +841,7 @@ for i in    islands
 
 
 ```
-![image86.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image86.jpeg)
+![image86.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image86.jpeg)
 ```js
 第 69 关挑战
 
@@ -855,7 +855,7 @@ for b in bananas
 
 
 ```
-![image87.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image87.jpeg)
+![image87.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image87.jpeg)
 ```js
 第 70 关挑战
 
@@ -867,7 +867,7 @@ for b in bananas
 
 
 ```
-![image88.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image88.jpeg)
+![image88.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image88.jpeg)
 ```js
 第 71 关挑战
 "函数"农场
@@ -879,7 +879,7 @@ drop()
 
 
 ```
-![image89.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image89.jpeg)
+![image89.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image89.jpeg)
 ```js
 第 72 关挑战
 
@@ -894,7 +894,7 @@ drop()
 
 
 ```
-![image90.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image90.jpeg)
+![image90.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image90.jpeg)
 ```js
 第 73 关挑战
 
@@ -912,7 +912,7 @@ for m in matches
 
 
 ```
-![image91.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image91.jpeg)
+![image91.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image91.jpeg)
 ```js
 第 74 关挑战
 
@@ -934,7 +934,7 @@ drop()
 
 
 ```
-![image92.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image92.jpeg)
+![image92.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image92.jpeg)
 ```js
 第 75 关挑战
 
@@ -953,7 +953,7 @@ drop()
 
 
 ```
-![image93.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image93.jpeg)
+![image93.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image93.jpeg)
 ```js
 第 76 关挑战
 
@@ -983,7 +983,7 @@ drop()
 
 
 ```
-![image94.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image94.jpeg)
+![image94.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image94.jpeg)
 ```js
 第 77 关挑战
 
@@ -999,7 +999,7 @@ for m in matches
 
 
 ```
-![image95.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image95.jpeg)
+![image95.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image95.jpeg)
 ```js
 第 78 关挑战
 
@@ -1018,7 +1018,7 @@ drop()
 
 
 ```
-![image96.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image96.jpeg)
+![image96.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image96.jpeg)
 ```js
 第 79 关挑战
 
@@ -1037,7 +1037,7 @@ for m in matches
 
 
 ```
-![image97.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image97.jpeg)
+![image97.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image97.jpeg)
 ```js
 第 80 关挑战
 
@@ -1053,7 +1053,7 @@ for m in matches
 
 
 ```
-![image98.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image98.jpeg)
+![image98.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image98.jpeg)
 ```js
 第 81 关挑战
 
@@ -1074,7 +1074,7 @@ for m in matches
 
 
 ```
-![image99.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image99.jpeg)
+![image99.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image99.jpeg)
 ```js
 第 82 关挑战
 
@@ -1090,7 +1090,7 @@ drop()
 
 
 ```
-![image100.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image100.jpeg)
+![image100.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image100.jpeg)
 ```js
 第 83 关挑战
 
@@ -1110,7 +1110,7 @@ drop()
 
 
 ```
-![image101.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image101.jpeg)
+![image101.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image101.jpeg)
 ```js
 第 84 关挑战
 
@@ -1130,7 +1130,7 @@ for m in matches
 
 
 ```
-![image102.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image102.jpeg)
+![image102.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image102.jpeg)
 ```js
 第 85 关挑战
 
@@ -1157,7 +1157,7 @@ collect matches[1]
 
 
 ```
-![image103.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image103.jpeg)
+![image103.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image103.jpeg)
 ```js
 第 86 关挑战
 
@@ -1174,7 +1174,7 @@ drop()
 
 
 ```
-![image104.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image104.jpeg)
+![image104.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image104.jpeg)
 ```js
 第 87 关挑战
 
@@ -1190,7 +1190,7 @@ drop()
 
 
 ```
-![image105.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image105.jpeg)
+![image105.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image105.jpeg)
 ```js
 第 88 关挑战
 
@@ -1207,7 +1207,7 @@ drop()
 
 
 ```
-![image106.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image106.jpeg)
+![image106.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image106.jpeg)
 ```js
 第 89 关挑战
 
@@ -1222,7 +1222,7 @@ drop()
 
 
 ```
-![image107.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image107.jpeg)
+![image107.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image107.jpeg)
 ```js
 第 90 关挑战
 turn left
@@ -1236,7 +1236,7 @@ drop()
 
 
 ```
-![image108.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image108.jpeg)
+![image108.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image108.jpeg)
 ```js
 第 91 关挑战
 
@@ -1249,7 +1249,7 @@ drop()
 
 
 ```
-![image109.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image109.jpeg)
+![image109.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image109.jpeg)
 ```js
 第 92 关挑战
 until turtle.near bridge
@@ -1262,7 +1262,7 @@ drop()
 
 
 ```
-![image110.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image110.jpeg)
+![image110.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image110.jpeg)
 ```js
 第 93 关挑战
 
@@ -1276,7 +1276,7 @@ drop()
 
 
 ```
-![image111.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image111.jpeg)
+![image111.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image111.jpeg)
 ```js
 第 94 关挑战
 
@@ -1292,7 +1292,7 @@ drop()
 
 
 ```
-![image112.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image112.jpeg)
+![image112.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image112.jpeg)
 ```js
 第 95 关挑战
 chase = (m) ->
@@ -1309,7 +1309,7 @@ for m in matches
 
 
 ```
-![image113.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image113.jpeg)
+![image113.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image113.jpeg)
 ```js
 第 96 关挑战
 
@@ -1331,7 +1331,7 @@ step 15
 
 
 ```
-![image114.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image114.jpeg)
+![image114.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image114.jpeg)
 ```js
 第 97 关挑战
 
@@ -1352,7 +1352,7 @@ for m in     matches
 
 
 ```
-![image115.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image115.jpeg)
+![image115.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image115.jpeg)
 ```js
 第 98 关挑战
 goto = (t) ->
@@ -1378,7 +1378,7 @@ for m in matches
 
 
 ```
-![image116.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image116.jpeg)
+![image116.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image116.jpeg)
 ```js
 第 99 关挑战
 
@@ -1401,7 +1401,7 @@ safeCollect match
 
 
 ```
-![image117.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image117.jpeg)
+![image117.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image117.jpeg)
 ```js
 第 100 关挑战
 
@@ -1422,7 +1422,7 @@ for m in matches
 
 
 ```
-![image118.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image118.jpeg)
+![image118.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image118.jpeg)
 ```js
 第 101 关挑战
 
@@ -1432,7 +1432,7 @@ goto banana
 
 
 ```
-![image119.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image119.jpeg)
+![image119.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image119.jpeg)
 ```js
 第 102 关挑战
 
@@ -1440,7 +1440,7 @@ goat.hit()goto banana
 
 
 ```
-![image120.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image120.jpeg)
+![image120.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image120.jpeg)
 ```js
 第 103 关挑战
 goat.hit(banana)
@@ -1449,7 +1449,7 @@ goto banana
 
 
 ```
-![image121.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image121.jpeg)
+![image121.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image121.jpeg)
 ```js
 第 104 关挑战
 
@@ -1461,7 +1461,7 @@ step 20
 
 
 ```
-![image122.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image122.jpeg)
+![image122.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image122.jpeg)
 ```js
 第 105 关挑战
 
@@ -1478,7 +1478,7 @@ for b in bananas
 
 
 ```
-![image123.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image123.jpeg)
+![image123.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image123.jpeg)
 ```js
 第 106 关挑战
 
@@ -1492,7 +1492,7 @@ goto banana
 
 
 ```
-![image124.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image124.jpeg)
+![image124.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image124.jpeg)
 ```js
 第 107 关挑战
 
@@ -1504,7 +1504,7 @@ goto banana
 
 
 ```
-![image125.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image125.jpeg)
+![image125.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image125.jpeg)
 ```js
 第 108 关挑战
 
@@ -1517,7 +1517,7 @@ goto banana
 
 
 ```
-![image126.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image126.jpeg)
+![image126.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image126.jpeg)
 ```js
 第 109 关挑战
 
@@ -1530,7 +1530,7 @@ for b in bananas
 
 
 ```
-![image127.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image127.jpeg)
+![image127.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image127.jpeg)
 ```js
 第 110 关挑战
 
@@ -1544,7 +1544,7 @@ for b in bananas
 
 
 ```
-![image128.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image128.jpeg)
+![image128.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image128.jpeg)
 ```js
 第 111 关挑战
 
@@ -1557,7 +1557,7 @@ for b in bananas
 
 
 ```
-![image129.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image129.jpeg)
+![image129.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image129.jpeg)
 ```js
 第 112 关挑战
 
@@ -1565,7 +1565,7 @@ goat.goto banana
 
 
 ```
-![image130.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image130.jpeg)
+![image130.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image130.jpeg)
 ```js
 第 113 关挑战
 
@@ -1575,7 +1575,7 @@ monkey.step 15
 
 
 ```
-![image131.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image131.jpeg)
+![image131.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image131.jpeg)
 ```js
 第 114 关挑战
 
@@ -1585,7 +1585,7 @@ if banana.green()
 
 
 ```
-![image132.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image132.jpeg)
+![image132.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image132.jpeg)
 ```js
 第 115 关挑战
 
@@ -1596,7 +1596,7 @@ else
 
 
 ```
-![image133.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image133.jpeg)
+![image133.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image133.jpeg)
 ```js
 第 116 关挑战
 
@@ -1608,7 +1608,7 @@ for b in bananas
 
 
 ```
-![image134.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image134.jpeg)
+![image134.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image134.jpeg)
 ```js
 第 117 关挑战
 
@@ -1625,7 +1625,7 @@ for b in bananas
 
 
 ```
-![image135.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image135.jpeg)
+![image135.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image135.jpeg)
 ```js
 第 118 关挑战
 
@@ -1637,7 +1637,7 @@ for b in bananas
 
 
 ```
-![image136.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image136.jpeg)
+![image136.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image136.jpeg)
 ```js
 第 119 关挑战
 
@@ -1654,7 +1654,7 @@ for b in bananas
 
 
 ```
-![image137.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image137.jpeg)
+![image137.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image137.jpeg)
 ```js
 第 120 关挑战
 until tiger.sleeping()
@@ -1664,7 +1664,7 @@ goto banana
 
 
 ```
-![image138.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image138.jpeg)
+![image138.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image138.jpeg)
 ```js
 第 121 关挑战
 until bear.sleeping()
@@ -1674,7 +1674,7 @@ goto banana
 
 
 ```
-![image139.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image139.jpeg)
+![image139.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image139.jpeg)
 ```js
 第 122 关挑战
 
@@ -1685,7 +1685,7 @@ for b in bananas
 
 
 ```
-![image140.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image140.jpeg)
+![image140.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image140.jpeg)
 ```js
 第 123 关挑战
 
@@ -1695,7 +1695,7 @@ goto banana
 
 
 ```
-![image141.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image141.jpeg)
+![image141.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image141.jpeg)
 ```js
 第 124 关挑战
 
@@ -1705,7 +1705,7 @@ goto banana
 
 
 ```
-![image142.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image142.jpeg)
+![image142.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image142.jpeg)
 ```js
 第 125 关挑战
 
@@ -1717,7 +1717,7 @@ for b in bananas
 
 
 ```
-![image143.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image143.jpeg)
+![image143.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image143.jpeg)
 ```js
 第 126 关挑战
 
@@ -1730,7 +1730,7 @@ for b in bananas
 
 
 ```
-![image144.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image144.jpeg)
+![image144.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image144.jpeg)
 ```js
 第 127 关挑战
 
@@ -1743,7 +1743,7 @@ for b in bananas
     goto b
 
 ```
-![image145.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image145.jpeg)
+![image145.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image145.jpeg)
 ```js
 第 128 关挑战
 
@@ -1760,7 +1760,7 @@ for b in bananas
 
 
 ```
-![image146.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image146.jpeg)
+![image146.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image146.jpeg)
 ```js
 第 129 关挑战
 
@@ -1770,7 +1770,7 @@ goto banana
 
 
 ```
-![image147.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image147.jpeg)
+![image147.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image147.jpeg)
 ```js
 第 130 关挑战
 
@@ -1783,7 +1783,7 @@ goto banana
 
 
 ```
-![image148.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image148.jpeg)
+![image148.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image148.jpeg)
 ```js
 第 131 关挑战
 
@@ -1800,7 +1800,7 @@ step 10
 
 
 ```
-![image149.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image149.jpeg)
+![image149.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image149.jpeg)
 ```js
 第 132 关挑战
 
@@ -1811,7 +1811,7 @@ goat.goto banana
 
 
 ```
-![image150.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image150.jpeg)
+![image150.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image150.jpeg)
 ```js
 第 133 关挑战
 for b in bananas
@@ -1825,7 +1825,7 @@ for b in bananas
 
 
 ```
-![image151.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image151.jpeg)
+![image151.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image151.jpeg)
 ```js
 第 134 关挑战
 for b in bears
@@ -1834,7 +1834,7 @@ for b in bears
     step 10
 
 ```
-![image152.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image152.jpeg)
+![image152.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image152.jpeg)
 ```js
 第 135 关挑战
 
@@ -1850,7 +1850,7 @@ for t in tigers
 
 
 ```
-![image153.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image153.jpeg)
+![image153.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image153.jpeg)
 ```js
 第 136 关挑战
 
@@ -1864,7 +1864,7 @@ if not banana.green()
 
 
 ```
-![image154.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image154.jpeg)
+![image154.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image154.jpeg)
 ```js
 第 137 关挑战
 
@@ -1881,7 +1881,7 @@ for b in bananas
 
 
 ```
-![image155.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image155.jpeg)
+![image155.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image155.jpeg)
 ```js
 第 138 关挑战
 
@@ -1890,7 +1890,7 @@ goto bananas[0]
 
 
 ```
-![image156.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image156.jpeg)
+![image156.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image156.jpeg)
 ```js
 第 139 关挑战
 
@@ -1899,7 +1899,7 @@ if not banana.rotten()
 
 
 ```
-![image157.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image157.jpeg)
+![image157.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image157.jpeg)
 ```js
 第 140 关挑战
 
@@ -1911,7 +1911,7 @@ for b in bananas
 
 
 ```
-![image158.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image158.jpeg)
+![image158.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image158.jpeg)
 ```js
 第 141 关挑战
 
@@ -1922,7 +1922,7 @@ for b in bananas
 
 
 ```
-![image159.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image159.jpeg)
+![image159.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image159.jpeg)
 ```js
 第 142 关挑战
 
@@ -1931,7 +1931,7 @@ goto banana
 
 
 ```
-![image160.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image160.jpeg)
+![image160.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image160.jpeg)
 ```js
 第 143 关挑战
 
@@ -1940,7 +1940,7 @@ goto bananas[1]
 
 
 ```
-![image161.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image161.jpeg)
+![image161.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image161.jpeg)
 ```js
 第 144 关挑战
 
@@ -1951,7 +1951,7 @@ if health() == 100 //#不是，40不是100，得到no
 
 
 ```
-![image162.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image162.jpeg)
+![image162.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image162.jpeg)
 ```js
 第 145 关挑战
 
@@ -1964,7 +1964,7 @@ goto banana
 
 
 ```
-![image163.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image163.jpeg)
+![image163.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image163.jpeg)
 ```js
 第 146 关挑战
 
@@ -1977,7 +1977,7 @@ for b in bananas
 
 
 ```
-![image164.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image164.jpeg)
+![image164.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image164.jpeg)
 ```js
 第 147 关挑战
 
@@ -1988,7 +1988,7 @@ goto banana
 
 
 ```
-![image165.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image165.jpeg)
+![image165.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image165.jpeg)
 ```js
 第 148 关挑战
 请使用 小于 < 符号来比较是否一个数值小于另外一个数值.
@@ -1999,7 +1999,7 @@ else
     goto banana
 
 ```
-![image166.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image166.jpeg)
+![image166.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image166.jpeg)
 ```js
 第 149 关挑战
 
@@ -2012,7 +2012,7 @@ for b in bananas
             wait()
 
 ```
-![image167.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image167.jpeg)
+![image167.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image167.jpeg)
 ```js
 第 150 关挑战
 
@@ -2034,7 +2034,7 @@ for b in bananas
 
 
 ```
-![image168.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image168.jpeg)
+![image168.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image168.jpeg)
 ```js
 第 151 关挑战
 
@@ -2050,7 +2050,7 @@ else
 
 
 ```
-![image169.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image169.jpeg)
+![image169.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image169.jpeg)
 ```js
 第 152 关挑战
 
@@ -2062,7 +2062,7 @@ for b in bananas
     if yummy b
         goto b
 ```
-![image170.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image170.jpeg)
+![image170.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image170.jpeg)
 ```js
 第 153 关挑战
 
@@ -2077,7 +2077,7 @@ goto banana
 
 
 ```
-![image171.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image171.jpeg)
+![image171.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image171.jpeg)
 ```js
 第 154 关挑战
 
@@ -2096,7 +2096,7 @@ for b in bananas
             wait()
 
 ```
-![image172.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image172.jpeg)
+![image172.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image172.jpeg)
 ```js
 第 155 关挑战
 
@@ -2113,7 +2113,7 @@ goto banana
 
 
 ```
-![image173.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image173.jpeg)
+![image173.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image173.jpeg)
 ```js
 第 156 关挑战
 
@@ -2128,7 +2128,7 @@ goto banana
 
 
 ```
-![image174.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image174.jpeg)
+![image174.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image174.jpeg)
 ```js
 第 157 关挑战
 
@@ -2142,7 +2142,7 @@ goto banana
 
 
 ```
-![image175.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image175.jpeg)
+![image175.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image175.jpeg)
 ```js
 第 158 关挑战
 
@@ -2161,7 +2161,7 @@ if positive()
 
 
 ```
-![image176.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image176.jpeg)
+![image176.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image176.jpeg)
 ```js
 第 159 关挑战
 
@@ -2177,7 +2177,7 @@ else
 
 
 ```
-![image177.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image177.jpeg)
+![image177.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image177.jpeg)
 ```js
 第 160 关挑战
 until not crow.watching()
@@ -2185,7 +2185,7 @@ until not crow.watching()
 goto banana
 
 ```
-![image178.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image178.jpeg)
+![image178.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image178.jpeg)
 ```js
 第 161 关挑战
 
@@ -2201,7 +2201,7 @@ goto banana
 
 
 ```
-![image179.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image179.jpeg)
+![image179.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image179.jpeg)
 ```js
 第 162 关挑战
 
@@ -2223,7 +2223,7 @@ safe = () ->
         return no
     return yes
 ```
-![image180.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image180.jpeg)
+![image180.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image180.jpeg)
 ```js
 第 163 关挑战
 
@@ -2241,7 +2241,7 @@ for b in bananas
 
 
 ```
-![image181.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image181.jpeg)
+![image181.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image181.jpeg)
 ```js
 第 164 关挑战
 
@@ -2257,7 +2257,7 @@ goto banana
 
 
 ```
-![image182.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image182.jpeg)
+![image182.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image182.jpeg)
 ```js
 第 165 关挑战
 
