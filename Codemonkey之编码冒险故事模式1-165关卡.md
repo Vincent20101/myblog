@@ -384,13 +384,18 @@ step 20
 ![image48.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image48.jpeg)
 ```js
 第 31 关挑战
-
-
+变量来源于数学，是计算机语言中能储存计算结果或能表示值抽象概念。
+x = 20
+step x
 
 ```
 ![image49.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image49.jpeg)
 ```js
 第 32 关挑战
+x = 15
+4.times ->
+    turn right
+    step x
 
 
 
@@ -398,6 +403,15 @@ step 20
 ![image50.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image50.jpeg)
 ```js
 第 33 关挑战
+所有的数目字 number 你都可以用 变量 variable来代替它.
+
+n = 6
+x = 10
+d = 60
+
+n.times ->
+    step x
+    turn d
 
 
 
@@ -405,13 +419,25 @@ step 20
 ![image51.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image51.jpeg)
 ```js
 第 34 关挑战
+t = 3
+x = 20
+d = 120
 
+t.times ->
+    step x
+    turn d
+//这种转圈循环的，就可以使用这种通用解法，确定3个数字，即：次数（香蕉个数），步数（2个香蕉直接距离），角度（360除以香蕉个数）
 
 
 ```
 ![image52.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image52.jpeg)
 ```js
 第 35 关挑战
+x=15
+turtle.step x
+step x
+turn left
+step x
 
 
 
@@ -420,20 +446,37 @@ step 20
 ```js
 第 36 关挑战
 
+x = 15
+4.times ->
+    step x
+    step -x
+    turtle.step 8
 
+//这种的是不是也可以用个for循环？？ 不过有要求，香蕉的排序下标最右边从0开始
+x = 15
+for b in bananas
+    step x
+    step -x
+    turtle.step 8
 
 ```
 ![image54.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image54.jpeg)
 ```js
 第 37 关挑战
+say "xxxxxxxxx"
 
+step 15
 
 
 ```
 ![image55.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image55.jpeg)
 ```js
 第 38 关挑战
+x = 20
+say x
 
+turnTo banana
+step x
 
 
 ```
@@ -441,6 +484,13 @@ step 20
 ```js
 第 39 关挑战
 
+变量也可以用来取代你不知道的数目.
+x = distanceTo turtle
+say x
+
+step x
+
+//介绍一下函数distanceTo 的作用
 
 
 ```
@@ -448,6 +498,10 @@ step 20
 ```js
 第 40 关挑战
 
+//你也可以使用 turtle.distanceTo 的指令写代码 !
+x = turtle.distanceTo banana
+
+step 2
 
 
 ```
@@ -455,20 +509,29 @@ step 20
 ```js
 第 41 关挑战
 
+d = turtle.distanceTo monkey
+turtle.step d
+turtle.step –d
+turtle.turn right
+turtle.step d
 
 
 ```
 ![image59.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image59.jpeg)
 ```js
 第 42 关挑战
-
-
+turnTo banana
+step distanceTo banana
 
 ```
 ![image60.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image60.jpeg)
 ```js
 第 43 关挑战
 
+turnTo bridge
+step distanceTo bridge
+turnTo banana
+step distanceTo banana
 
 
 ```
@@ -476,12 +539,24 @@ step 20
 ```js
 第 44 关挑战
 
+别让老鼠把宝贵的香蕉给偷走了 !
+say "Let's go!“
 
+turnTo banana
+
+step distanceTo banana
 
 ```
 ![image62.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image62.jpeg)
 ```js
 第 45 关挑战
+say "Hello world!“
+turnTo bridge
+step distanceTo bridge
+
+turnTo banana
+
+step distanceTo banana
 
 
 
