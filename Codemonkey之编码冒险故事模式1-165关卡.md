@@ -870,7 +870,12 @@ for b in bananas
 ![image88.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image88.jpeg)
 ```js
 第 71 关挑战
+"函数"农场
 
+step distanceTo match
+grab()
+step pile.distanceTo rat
+drop()
 
 
 ```
@@ -878,6 +883,14 @@ for b in bananas
 ```js
 第 72 关挑战
 
+turnTo match
+step distanceTo match
+
+grab()
+
+turnTo pile
+step distanceTo pile
+drop()
 
 
 ```
@@ -885,6 +898,17 @@ for b in bananas
 ```js
 第 73 关挑战
 
+# 顺便说一下，这是一行注释哦  这里开始引入了注释的概念
+# 它是由 '#' 开始的
+
+for m in matches
+    turnTo m
+    step distanceTo m
+    grab()
+    turnTo pile
+    step distanceTo pile
+    drop()
+    # 每次只能捡一根火柴
 
 
 ```
@@ -892,6 +916,21 @@ for b in bananas
 ```js
 第 74 关挑战
 
+# 有没有发现代码有重复的地方，下面会引入函数，就可以减少代码的重复了
+
+turnTo bridge
+step distanceTo bridge
+turnTo match
+step distanceTo match
+
+grab()
+
+turnTo bridge
+step distanceTo bridge
+turnTo pile
+step distanceTo pile
+
+drop()
 
 
 ```
@@ -899,6 +938,18 @@ for b in bananas
 ```js
 第 75 关挑战
 
+# 这里开始引入函数的概念了，这一关卡是不是和上一个很类似
+goto = (t) ->
+    turnTo t
+    step distanceTo t
+
+#在这里写下你的代码: (使用goto)
+goto bridge
+goto match
+grab()
+goto bridge
+goto pile
+drop()
 
 
 ```
@@ -906,6 +957,27 @@ for b in bananas
 ```js
 第 76 关挑战
 
+goto = (a) ->
+    turnTo a
+    step distanceTo a
+#Add your code to get matches[1]:
+for match in matches
+    goto match
+    grab()
+    goto pile
+    drop()
+================================================
+goto = (a) ->
+    turnTo a
+    step distanceTo a
+goto matches[0]
+grab()
+goto pile
+drop()
+goto matches[1]
+grab()
+goto pile
+drop()
 
 
 ```
@@ -913,12 +985,38 @@ for b in bananas
 ```js
 第 77 关挑战
 
+#请修复这个函数:
+goto = (a) ->
+    turnTo a
+    step distanceTo a
+
+#这段代码是正确的:
+for m in matches
+    goto m
+    grab()
+    goto pile
+    drop()
 
 
 ```
 ![image95.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image95.jpeg)
 ```js
 第 78 关挑战
+The name of the argument can be anything we want.Here we will use c as the argument name.
+
+#Here the argument name is c
+#Fix this function:
+goto = (c) ->
+    turnTo c
+    step distanceTo c
+    
+goto bridge
+goto match
+grab()
+goto bridge
+#Add more code here:
+goto(pile)
+drop()
 
 
 
@@ -927,6 +1025,20 @@ for b in bananas
 ```js
 第 79 关挑战
 
+goto = (p) ->
+    #请在这里编写函数的实现
+    turnTo p
+    step distanceTo p
+    
+    
+#这段代码是正常的:
+for m in matches
+    goto bridge
+    goto m
+    grab()
+    goto bridge
+    goto pile
+    drop()
 
 
 ```
@@ -934,12 +1046,39 @@ for b in bananas
 ```js
 第 80 关挑战
 
+Here we have a new function: collect.This function moves a match to the pile (using the rat, of course).
+
+collect = (e) ->
+    turnTo e
+    step distanceTo e
+    grab()
+    turnTo pile
+    step distanceTo pile
+    drop()
+for m in matches
+    collect m
 
 
 ```
 ![image98.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/image98.jpeg)
 ```js
 第 81 关挑战
+
+这里不只有一个函数, 而是有 两个 函数 !
+goto = (t) ->
+    turnTo t
+    step distanceTo t
+
+#请修复这个函数:
+collect = (e) ->
+    goto e
+    grab()
+    goto pile
+    drop()
+    
+#这段代码是正常的:
+for m in matches
+    collect m
 
 
 
@@ -948,6 +1087,16 @@ for b in bananas
 ```js
 第 82 关挑战
 
+#请在这里定义 goto 函数
+goto = (x)->
+    turnTo x
+    step distanceTo x
+    
+#这段代码保持不变:
+goto match
+grab()
+goto pile
+drop()
 
 
 ```
@@ -955,6 +1104,21 @@ for b in bananas
 ```js
 第 83 关挑战
 
+接下来我们试试将小岛 islands 和木筏 rafts 作为函数的参数来使用
+
+goto = (t) ->
+    turnTo t
+    step distanceTo t
+#修复这里:
+gotoAll = (stuff) ->
+    for s in stuff
+        goto s
+
+#还有这里:
+gotoAll islands
+grab()
+gotoAll rafts
+drop()
 
 
 ```
@@ -962,6 +1126,19 @@ for b in bananas
 ```js
 第 84 关挑战
 
+goto = (t) ->
+    turnTo t
+    step distanceTo t
+getAndReturn = (r) ->
+    goto r
+    grab()
+    goto turtle
+for m in matches
+    getAndReturn m
+    goto pile
+    drop()
+    goto turtle
+    turtle.step 8
 
 
 ```
@@ -969,6 +1146,27 @@ for b in bananas
 ```js
 第 85 关挑战
 
+我们也可以用数字 numbers 作为函数的参数
+goto = (t) ->
+    turnTo t
+    step distanceTo t
+collect = (m) ->
+    goto m
+    grab()
+    goto pile
+    drop()
+#这个函数应该让所有
+#turtles 前进 d (d是数字)
+allTurtlesStep = (d) ->
+    #请完成这里!
+    for c in turtles
+        c.step d
+        
+#这段代码是正常的:
+allTurtlesStep 10
+collect matches[0]
+allTurtlesStep -10
+collect matches[1]
 
 
 ```
