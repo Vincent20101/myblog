@@ -143,69 +143,114 @@ step 10
 
 ![image12.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image12.jpeg)
 ```js
-
+特技关卡 2-1
+turnTo bridge
+step 15
+turnTo banana
+step 15
 
 
 ```
 
 ![image13.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image13.jpeg)
 ```js
+特技关卡 2-2
 
+turnTo bush
+step 20
+turnTo banana
+step 22
 
 
 ```
 
 ![image14.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image14.jpeg)
 ```js
-
+特技关卡 2-3
+turtle.step 10
+step 10
+turn left
+step 10
 
 
 ```
 
 ![image15.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image15.jpeg)
 ```js
-
+特技关卡 2-4
+step 10
+step -10
+turtle.step 20
+step 10
 
 
 ```
 
 ![image16.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image16.jpeg)
 ```js
+特技关卡 2-5
+step 15
+turn right
+step 15
+turn right
 
+turtle.step 15
+step 15
 
 
 ```
 
 ![image17.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image17.jpeg)
 ```js
+特技关卡 2-6
+turtle.turn left 
+monkey.step 10
 
+turtle.step 20
+
+monkey.step 10
 
 
 ```
 
 ![image18.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image18.jpeg)
 ```js
-
+特技关卡 2-7
+turtle.step 15
+monkey.turnTo turtle
+monkey.step 11
+turtle.step -14
+monkey.step -10
 
 
 ```
 
 ![image19.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image19.jpeg)
 ```js
-
+特技关卡 2-8
+turtle.turnTo banana
+monkey.turnTo turtle
+step 15
+turtle.step 15
 
 
 ```
 
 ![image20.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image20.jpeg)
 ```js
-
+特技关卡 2-9
+turtle.step 15
+turtle.step -30
 
 
 ```
 
 ![image21.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image21.jpeg)
 ```js
+特技关卡 2-10
+turtle.turnTo monkey
+turtle.step 10
+turtle.step -25
 
 
 
@@ -1156,3 +1201,71 @@ step 10
 
 ```
 
+
+![image157.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image157.jpeg)
+```js
+
+
+
+```
+
+![image158.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image158.jpeg)
+```js
+
+
+
+```
+
+![image159.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image159.jpeg)
+```js
+
+
+
+```
+
+![image160.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image160.jpeg)
+```js
+
+
+
+```
+
+![image161.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image161.jpeg)
+```js
+
+
+
+```
+
+![image162.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image162.jpeg)
+```js
+
+
+
+```
+
+![image163.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image163.jpeg)
+```js
+
+
+
+```
+
+![image164.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image164.jpeg)
+```js
+
+
+
+```
+![image165.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image165.jpeg)
+```js
+
+
+
+```
+![image166.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image166.jpeg)
+```js
+
+
+
+```
