@@ -907,106 +907,180 @@ for b in bananas
 
 ![image87.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image87.jpeg)
 ```js
-
-
+特技关卡 8-1
+until near banana
+    turnTo banana
+    step 1
 
 ```
 
 ![image88.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image88.jpeg)
 ```js
-
-
+特技关卡 8-2
+for b in bananas
+    until near b
+        turnTo b
+        step 1
 
 ```
 
 ![image89.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image89.jpeg)
 ```js
+特技关卡 8-3
+chase = (b) ->
+    until near b
+        turnTo b
+        step 1
 
-
+chase bananas[1]
+chase bridge
+chase bananas[0]
 
 ```
 
 ![image90.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image90.jpeg)
 ```js
-
-
+特技关卡 8-4
+until near banana
+    say "Not yet..."
+    crocodile.turn 45
 
 ```
 
 ![image91.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image91.jpeg)
 ```js
+特技关卡 8-5
+until beavers[0].near bananas[2]
+    beavers[0].step 1
+until beavers[2].near bananas[0]
+    beavers[2].step 1
+until beavers[1].near bananas[1]
+    beavers[1].step 1
 
-
+step distanceTo islands[1]
 
 ```
 
 ![image92.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image92.jpeg)
 ```js
-
-
+特技关卡 8-6
+until near banana
+    turtle.turnTo banana
+    turtle.step 1
 
 ```
 
 ![image93.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image93.jpeg)
 ```js
-
-
+特技关卡 8-7
+until cat.sleeping()
+    wait()
+    
+step distanceTo banana
 
 ```
 
 ![image94.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image94.jpeg)
 ```js
+特技关卡 8-8
 
+step distanceTo islands[4]
 
+until near banana
+    wait()
 
 ```
 
 ![image95.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image95.jpeg)
 ```js
-
-
+特技关卡 8-9
+i = 0
+for b in bridges
+    turnTo b
+    step distanceTo b
+    until near bananas[i]
+        wait()
+    i++
 
 ```
 
 ![image96.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image96.jpeg)
 ```js
-
+特技关卡 8-10
+for c in crocodiles
+    c.turn 90
+for b in bananas
+    
+    step 7
+    until near b
+        wait()
 
 
 ```
 
 ![image97.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image97.jpeg)
 ```js
-
-
+特技关卡 8-11
+for banana in bananas
+    until near banana
+        wait()
 
 ```
 
 ![image98.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image98.jpeg)
 ```js
-
-
+特技关卡 8-12
+for banana in bananas
+    until near banana
+        crocodile.turn 360
+        wait()
+        
 
 ```
 
 ![image99.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image99.jpeg)
 ```js
-
+特技关卡 8-13
+until cats[1].sleeping()
+        wait()
+    step 10
+until cats[0].sleeping()
+        wait()
+    step 10
 
 
 ```
 
 ![image100.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image100.jpeg)
 ```js
-
-
+特技关卡 8-14
+i = 0
+for t in turtles
+    step distanceTo t
+    d = distanceTo bushes[i]
+    t.step d
+    until near bananas[i]
+        wait()
+    t.step -d
+    i = i + 1
 
 ```
 
 ![image101.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image101.jpeg)
 ```js
-
-
+特技关卡 8-15
+goto = (t) ->
+    turnTo t
+    step distanceTo t
+until cat.sleeping()
+    wait()
+goto bananas[0]
+until cat.sleeping()
+    wait()
+goto bushes[6]
+goto bushes[15]
+until near bananas[1]
+    wait()
 
 ```
 
