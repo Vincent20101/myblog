@@ -258,41 +258,64 @@ turtle.step -25
 
 ![image22.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image22.jpeg)
 ```js
-
+特技关卡 3-1
+3.times ->
+    turn right
+    step 15
 
 
 ```
 
 ![image23.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image23.jpeg)
 ```js
-
+特技关卡 3-2
+7.times ->
+    step 8
+    turn 45
 
 
 ```
 
 ![image24.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image24.jpeg)
 ```js
-
-
+特技关卡 3-3
+15.times ->
+    turn 21 
+    step 3
 
 ```
 
 ![image25.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image25.jpeg)
 ```js
-
+特技关卡 3-4
+3.times ->
+    step 8
+    turn 140
+    step 8
+    turn -140
 
 
 ```
 
 ![image26.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image26.jpeg)
 ```js
-
-
+特技关卡 3-5
+4.times ->
+    step 5
+    turn left
+    step 5
+    turn right
+step -20
 
 ```
 
 ![image27.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image27.jpeg)
 ```js
+特技关卡 3-6
+step 4
+10.times ->
+    turtle.step 5
+    turtle.turn 36
 
 
 
@@ -300,28 +323,48 @@ turtle.step -25
 
 ![image28.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image28.jpeg)
 ```js
-
-
+特技关卡 3-7
+8.times ->
+    step 10
+    step -10
+    turn 45
 
 ```
 
 ![image29.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image29.jpeg)
 ```js
-
+特技关卡 3-8
+3.times ->
+    turn right
+    step 10
+    
+step 10
 
 
 ```
 
 ![image30.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image30.jpeg)
 ```js
-
-
+特技关卡 3-9
+turnTo turtle
+step 3
+10.times ->
+    turtle.turn -18
+    turtle.step 3
+turtle.step 5
+step 4
 
 ```
 
 ![image31.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image31.jpeg)
 ```js
-
+特技关卡 3-10
+turn left
+3.times ->
+    step 10
+    step -20
+    step 10
+    turtle.step 10
 
 
 ```
