@@ -651,107 +651,258 @@ turn left
 
 ![image72.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image72.jpeg)
 ```js
+特技关卡 7-1
 
+step distanceTo match
+grab()
+step -(distanceTo bush)
+turnTo pile
+step distanceTo pile
+drop()
 
 
 ```
 
 ![image73.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image73.jpeg)
 ```js
-
+特技关卡 7-2
+turnTo match
+step distanceTo match
+grab()
+turtle.step 10
+turnTo pile
+step distanceTo pile
+drop()
 
 
 ```
 
 ![image74.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image74.jpeg)
 ```js
+特技关卡 7-3
+goto = (m) ->
+    turnTo m
+    step distanceTo m
 
-
-
+goto match
+grab()
+goto pile
+drop()
 ```
 
 ![image75.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image75.jpeg)
 ```js
+特技关卡 7-4
+goto = (t) ->
+    turnTo t
+    step distanceTo t
 
-
+for m in matches
+    goto m
+    grab()
+    goto pile
+    drop()
 
 ```
 
 ![image76.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image76.jpeg)
 ```js
+特技关卡 7-5
+goto = (t) ->
+    turnTo t
+    step distanceTo t
 
+grab()
+newturtles = turtles.reverse()
+for t in newturtles
+    goto t
+    t.step 20
+goto pile
+
+drop()
 
 
 ```
 
 ![image77.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image77.jpeg)
 ```js
+特技关卡 7-6
+goto = (t) ->
+    turnTo t
+    step distanceTo t
 
+for m in matches
+    goto m
+    grab()
+    goto pile
+    drop()
 
 
 ```
 
 ![image78.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image78.jpeg)
 ```js
+特技关卡 7-7
+getAndReturn = (d) ->
+    step d
+    grab()
+    step -d
+    drop()
 
+x = 9
+4.times ->
+    getAndReturn x
+    x = x + 3
 
 
 ```
 
 ![image79.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image79.jpeg)
 ```js
+特技关卡 7-8
+halfCircle = () ->
+    18.times ->
+        step 2
+        turn 10
 
-
+halfCircle()
+grab()
+halfCircle()
+drop()
 
 ```
 
 ![image80.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image80.jpeg)
 ```js
+特技关卡 7-9
+goto = (t) ->
+    turnTo t
+    step distanceTo t
 
+grab()
+goto bushes[1]
+goto bushes[0]
 
+goto pile
+drop()
 
 ```
 
 ![image81.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image81.jpeg)
 ```js
-
-
+特技关卡 7-10
+goto = (t) ->
+    turnTo t
+    step distanceTo t
+goto bushes[13]
+goto pile
+goto match
+grab()
+goto pile
+drop()
 
 ```
 
 ![image82.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image82.jpeg)
 ```js
+特技关卡 7-11
+goto = (t) ->
+    turnTo t
+    step distanceTo t
 
+gotoBanana = (index) ->
+    #你只能修改这里的代码
+    goto bananas[index]
 
+gotoBanana 3
+gotoBanana 1
+gotoBanana 2
+gotoBanana 4
+gotoBanana 0
 
 ```
 
 ![image83.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image83.jpeg)
 ```js
-
-
+特技关卡 7-12
+goto = (d) ->
+    turnTo d
+    step distanceTo d
+rideTurtle = (t) ->
+    goto turtle
+    turtle.step t
+getMatches = () ->
+    for m in matches
+        rideTurtle 20
+        goto m
+        grab()
+        rideTurtle -20
+        goto pile
+        drop()
+getMatches()
 
 ```
 
 ![image84.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image84.jpeg)
 ```js
-
-
+特技关卡 7-13
+foo = (x) ->
+    beavers[x].step x*2
+goto = (t) ->
+    turnTo t
+    step distanceTo t
+i = 0
+4.times ->
+    foo i
+    i = i + 1
+grab()
+goto pile
+drop()
 
 ```
 
 ![image85.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image85.jpeg)
 ```js
+特技关卡 7-14
+goto = (t) ->
+    turnTo t
+    step distanceTo t
 
+allStep = (kind) ->
+    for a in kind
+        a.step 5
 
+#这两行应该建成两座桥
+allStep beavers
+#完成这里的代码
+
+goto match
+grab()
+allStep turtles
+
+goto pile
+drop()
 
 ```
 
 ![image86.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image86.jpeg)
 ```js
 
+特技关卡 7-15
+goto = (t) ->
+    turnTo t
+    step distanceTo t
+
+allCrocsTurn = (d) ->
+    for c in crocodiles
+        c.turn d
 
 
+allCrocsTurn right
+goto raft
+allCrocsTurn left
+for b in bananas
+    goto b
 ```
 
 ![image87.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image87.jpeg)
