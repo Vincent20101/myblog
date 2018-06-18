@@ -1249,57 +1249,145 @@ x = 0
 
 ![image113.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image113.jpeg)
 ```js
-
-
+特技关卡 10-1
+for b in bananas
+    if not b.green()
+        goto bridges[1]
+        goto b
+    else
+        goat.goto bridges[0]
+        goat.goto b
 
 ```
 
 ![image114.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image114.jpeg)
 ```js
-
-
+特技关卡 10-2
+for b in bananas
+    #山羊和猴子都不可以得到所有的香蕉
+    #完成编码
+    if b.green()
+        goat.goto crocodile
+        crocodile.turnTo b
+        goat.goto b
+    else
+        turtle.goto b
+        goto b
 
 ```
 
 ![image115.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image115.jpeg)
 ```js
-
-
+特技关卡 10-3
+for b in bananas
+    #首先，我们需要打破冰冻的香蕉
+    if b.frozen()
+        goat.goto b
+        goat.hit()
+        goat.goto turtles[1]
+    #现在，如果香蕉是绿色的，山羊会吃掉它
+    if b.green()
+        goat.goto b
+        goat.step -7
+    #如果不是，猴子会吃掉它
+    else
+        goto b
+        step -7
+    
+    for t in turtles
+        t.step 6
 
 ```
 
 ![image116.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image116.jpeg)
 ```js
+特技关卡 10-4
+#确定你可以解决这个
+#提示：检查哪只海狸可以帮助哪只动物
+#过河
+beavers[1].step 5
+beavers[0].step 5
 
+for b in bananas
+    if b.green()
+        goat.goto b
+    else
+        monkey.goto b
 
 
 ```
 
 ![image117.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image117.jpeg)
 ```js
+特技关卡 10-5
+breakBanana = (banana) ->
+    #对冰冻的香蕉增加山羊撞击的编码
+    say "frozen"
+    turtles[0].goto banana
+    goat.hit()
 
 
+eatBanana = (banana) ->
+    #增加山羊吃绿色香蕉的编码
+    if banana.green()
+        turtles[0].goto banana
+    else
+        turtles[1].goto banana
+
+    
+for b in bananas
+    if b.frozen()
+        breakBanana(b)
+    eatBanana b
+        
 
 ```
 
 ![image118.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image118.jpeg)
 ```js
 
-
-
+特技关卡 10-6
+for b in bananas
+    if b.green()
+        mover = goat
+    else
+        mover = monkey
+    say mover
+    mover.goto b
 ```
 
 ![image119.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image119.jpeg)
 ```js
-
-
+特技关卡 10-7
+mover = monkey
+for b in bananas
+    if b.green()
+        x = 5
+        mover = goat
+    else
+        x = 10
+        mover = monkey
+    mover.step x
 
 ```
 
 ![image120.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image120.jpeg)
 ```js
+特技关卡 10-8
+#如果x>0，那么乌龟前进
+#如果x<0，那么乌龟后退
 
-
+x = 12
+for b in bananas
+    if b.green()
+        turtle.step -x
+        goat.goto turtle
+        turtle.step 2*x
+        goat.goto b
+    else
+        monkey.goto turtle
+        turtle.step -2*x
+        monkey.goto b
 
 ```
 
