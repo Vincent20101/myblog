@@ -1086,78 +1086,164 @@ until near bananas[1]
 
 ![image102.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image102.jpeg)
 ```js
+特技关卡 9-1
 
-
-
+for b in bananas
+    if  b.frozen()
+        goat.goto b
+        goat.hit()
+    goto b
 ```
 
 ![image103.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image103.jpeg)
 ```js
-
-
+特技关卡 9-2
+goat.goto(bridge)
+for b in bananas
+    if b.frozen()
+        goat.goto(b)
+        goat.hit(b)
+    goto b
 
 ```
 
 ![image104.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image104.jpeg)
 ```js
+特技关卡 9-3
+for t in turtles
+    t.step 15
 
+for b in bananas
+    if b.frozen()
+        goat.goto(b)
+        goat.hit(b)
+    goto b
 
 
 ```
 
 ![image105.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image105.jpeg)
 ```js
+特技关卡 9-4
+x = 5
+
+6.times ->
+    if bananas[x].frozen()
+        goat.goto bananas[x]
+        goat.hit()
+    
+    
+    x = x - 1
 
 
+goto turtle
+turtle.step 20
+for b in bananas
+    goto b
 
 ```
 
 ![image106.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image106.jpeg)
 ```js
-
-
+特技关卡 9-5
+#你知道演习吗？谁先去？
+for b in bananas
+    if b.frozen()
+        turtle.goto b
+        goat.hit()
+        turtle.step -5
+step 12
 
 ```
 
 ![image107.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image107.jpeg)
 ```js
-
-
+特技关卡 9-6
+i = 0
+4.times ->
+    if bananas[i].frozen()
+        goats[i].goto bananas[i]
+        goats[i].hit()
+    monkey.goto bananas[i]
+    i = i + 1
 
 ```
 
 ![image108.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image108.jpeg)
 ```js
-
-
+特技关卡 9-7
+for b in bananas
+    if b.frozen()
+        turtle.goto b
+        goat.hit()
+        turtle.step -5
+    goto b
 
 ```
 
 ![image109.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image109.jpeg)
 ```js
+特技关卡 9-8
+#提示：这里我们有多少只乌龟？
 
-
+for b in bananas
+    if b.frozen()
+        goat.hit()
+    goto b
+    goto turtles[1]
+    for t in turtles
+        t.step 7
 
 ```
 
 ![image110.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image110.jpeg)
 ```js
+特技关卡 9-9
+#提示：猴子可以等待山羊完成
+#首先撞击所有的冰冻香蕉
 
-
+for b in bananas
+    if b.frozen()
+        goat.goto b
+        goat.hit()
+#现在让我们获得那些香蕉。
+#我们应该从哪里开始？并且多少次？
+x = 5
+6.times ->
+    goto bananas[x]
+    x = x - 1
+    
 
 ```
 
 ![image111.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image111.jpeg)
 ```js
-
-
+特技关卡 9-10
+x = 0
+for g in goats
+    3.times ->
+        g.goto bananas[x]
+        if bananas[x].frozen()
+            g.hit()
+        x = x + 1
+for b in bananas
+    goto b
 
 ```
 
 ![image112.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image112.jpeg)
 ```js
-
-
+特技关卡 9-11
+x = 0
+2.times ->
+    4.times ->
+        if bananas[x].frozen()
+            goat.goto bananas[x]
+            goat.hit()
+        goto bananas[x]
+        x = x + 1
+    goat.goto bridge
+    goto bridge
 
 ```
 
