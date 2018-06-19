@@ -1908,105 +1908,126 @@ for b in bananas
 
 ![image137.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image137.jpeg)
 ```js
+特技关卡 12-1
+a = yes
 
+if not a
+    turn left
 
+step 10
 
 ```
 
 ![image138.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image138.jpeg)
 ```js
-
-
+特技关卡 12-2
+for b in bananas
+    if b.green()
+        goat.goto b
+    else if not b.rotten()
+        goto b
 
 ```
 
 ![image139.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image139.jpeg)
 ```js
-
-
+特技关卡 12-3
+for b in bananas
+    if not b.green()
+        goto b
 
 ```
 
 ![image140.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image140.jpeg)
 ```js
-
-
+特技关卡 12-4
+for b in bananas
+    if not b.green() 
+        turtle.goto b
 
 ```
 
 ![image141.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image141.jpeg)
 ```js
-
-
+特技关卡 12-5
+for b in bananas
+    if not (b.green() or b.rotten())
+        goto b
 
 ```
 
 ![image142.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image142.jpeg)
 ```js
-
+特技关卡 12-6
+x = 6
+7.times ->
+    b = bananas[ x-- ]
+    if not b.green() and not b.rotten()
+        goto b
+        
 
 
 ```
 
 ![image143.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image143.jpeg)
 ```js
-
+特技关卡 13-1
 
 
 ```
 
 ![image144.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image144.jpeg)
 ```js
-
+特技关卡 13-2
 
 
 ```
 
 ![image145.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image145.jpeg)
 ```js
-
+特技关卡 13-3
 
 
 ```
 
 ![image146.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image146.jpeg)
 ```js
-
+特技关卡 13-4
 
 
 ```
 
 ![image147.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image147.jpeg)
 ```js
-
+特技关卡 13-5
 
 
 ```
 
 ![image148.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image148.jpeg)
 ```js
-
+特技关卡 13-6
 
 
 ```
 
 ![image149.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image149.jpeg)
 ```js
-
+特技关卡 13-7
 
 
 ```
 
 ![image150.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image150.jpeg)
 ```js
-
+特技关卡 13-8
 
 
 ```
 
 ![image151.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image151.jpeg)
 ```js
-
+特技关卡 13-9
 
 
 ```
