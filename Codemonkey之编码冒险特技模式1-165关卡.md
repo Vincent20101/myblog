@@ -1,3 +1,6 @@
+# Codemonkey之编码冒险之特技模式1-165关卡学习笔记与参考答案
+# CodeMonkey过关学习笔记系列1-165关卡
+
 ![image1.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image1.jpeg)
 ```js
 特技关卡 1-1
@@ -371,69 +374,132 @@ turn left
 
 ![image32.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image32.jpeg)
 ```js
-
-
+特技关卡 4-1
+x = 20
+step x
 
 ```
 
 ![image33.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image33.jpeg)
 ```js
-
+特技关卡 4-2
+x = 10
+5.times ->
+    turn 60
+    step x
+或者
+x = -10
+5.times ->
+    step x
+    turn -60
 
 
 ```
 
 ![image34.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image34.jpeg)
 ```js
+特技关卡 4-3
+num = 8
+distance = 7
+degree = 45
 
+num.times ->
+    step distance
+    turn degree
+或者
+num = 8
+distance = -7
+degree = -45
+num.times ->
+    turn degree
+    step distance
 
 
 ```
 
 ![image35.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image35.jpeg)
 ```js
+特技关卡 4-4
+d = 20
 
+13.times ->
+    step 6
+    turn d
+    d = d + 4
 
 
 ```
 
 ![image36.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image36.jpeg)
 ```js
+特技关卡 4-5
+x = 15
 
+turtle.step x
+step x
+turn left
+step x
 
 
 ```
 
 ![image37.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image37.jpeg)
 ```js
-
+特技关卡 4-6
+x = 8
+4.times ->
+    step x
+    step 0-x-x
+    step x
+    turtle.step 7.5
 
 
 ```
 
 ![image38.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image38.jpeg)
 ```js
+特技关卡 4-7
+x = 20
+say x
 
+turnTo banana
+step x
 
 
 ```
 
 ![image39.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image39.jpeg)
 ```js
-
+特技关卡 4-8
+x = 17
+turtle.step x
+2.times ->
+    turn right
+    step x
+ 
 
 
 ```
 
 ![image40.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image40.jpeg)
 ```js
-
+特技关卡 4-9
+x = distanceTo banana
+step x
 
 
 ```
 
 ![image41.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image41.jpeg)
 ```js
+特技关卡 4-10
+x = monkey.distanceTo bridge
+y = bridge.distanceTo banana
+
+step x
+turnTo banana
+step y
+
 
 
 
@@ -441,35 +507,62 @@ turn left
 
 ![image42.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image42.jpeg)
 ```js
+特技关卡 4-11
+d = distanceTo banana
 
+step -d
 
 
 ```
 
 ![image43.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image43.jpeg)
 ```js
+特技关卡 4-12
+x = turtle.distanceTo banana
+y = monkey.distanceTo banana
 
+turtle.turnTo banana
+turtle.step x
+monkey.step y
 
 
 ```
 
 ![image44.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image44.jpeg)
 ```js
+特技关卡 4-13
+d = turtle.distanceTo islands[4]
+turtle.step d
+m = monkey.distanceTo turtle
+step m
 
+turtle.step -d
+turtle.turnTo banana
+turtle.step m
 
 
 ```
 
 ![image45.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image45.jpeg)
 ```js
+特技关卡 4-14
+say "RUN!"
+monkey.step distanceTo bush
 
+monkey.turnTo banana
+monkey.step distanceTo banana
 
 
 ```
 
 ![image46.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image46.jpeg)
 ```js
-
+特技关卡 4-15
+x = 0
+3.times ->
+    turnTo bananas[x]
+    step 15
+    x = x + 1
 
 
 ```
