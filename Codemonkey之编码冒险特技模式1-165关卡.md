@@ -716,20 +716,34 @@ goats[1].hit()
 
 ![image57.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image57.jpeg)
 ```js
-
+特技关卡 6-1
+for b in bananas
+    turnTo b
+    step distanceTo b
 
 
 ```
 
 ![image58.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image58.jpeg)
 ```js
-
+特技关卡 6-2
+for b in bananas
+    turnTo bridge
+    step distanceTo bridge
+    turnTo b
+    step distanceTo b
 
 
 ```
 
 ![image59.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image59.jpeg)
 ```js
+特技关卡 6-3
+turnTo bridges[0]
+step distanceTo bridges[0]
+for b in bananas
+    turnTo b
+    step distanceTo b
 
 
 
@@ -737,62 +751,111 @@ goats[1].hit()
 
 ![image60.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image60.jpeg)
 ```js
-
+特技关卡 6-4
+for b in bushes
+    turnTo b
+    step distanceTo b
 
 
 ```
 
 ![image61.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image61.jpeg)
 ```js
-
+特技关卡 6-5
+for t in turtles
+    step distanceTo t
+    t.step 12
 
 
 ```
 
 ![image62.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image62.jpeg)
 ```js
-
+特技关卡 6-6
+for t in turtles
+    step distanceTo t
+    2.times ->
+        t.step 14
+        t.turn 360
+ 
 
 
 ```
 
 ![image63.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image63.jpeg)
 ```js
-
-
+特技关卡 6-7
+for t in turtles
+    t.step 8
+    step 3
 
 ```
 
 ![image64.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image64.jpeg)
 ```js
-
+特技关卡 6-8
+for b in bananas
+    turnTo b
+    step distanceTo b
 
 
 ```
 
 ![image65.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image65.jpeg)
 ```js
+特技关卡 6-9
+for c in crocodiles
+    c.turnTo bananas[6]
 
+for i in islands
+    turnTo i
+    step distanceTo i
 
 
 ```
 
 ![image66.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image66.jpeg)
 ```js
-
+特技关卡 6-10
+for c in crocodiles
+    step distanceTo c
+    c.turn left
+    step 10
+    step -10
+    c.turn right
+ 
 
 
 ```
 
 ![image67.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image67.jpeg)
 ```js
+特技关卡 6-11
+for c in crocodiles
+    turnTo c
+    step distanceTo c
 
+for r in rafts
+    turnTo r
+    step distanceTo r
+
+for i in islands
+    turnTo i
+    step distanceTo i
 
 
 ```
 
 ![image68.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image68.jpeg)
 ```js
+特技关卡 6-12
+i = 0
+for t in turtles
+    d = t.distanceTo bananas[i++]
+    t.step d
+    monkey.step distanceTo t
+    t.step -d
+    t.step d
 
 
 
@@ -800,6 +863,15 @@ goats[1].hit()
 
 ![image69.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image69.jpeg)
 ```js
+特技关卡 6-13
+for c in crocodiles
+    c.turn 360
+    step -6.5
+或者
+for c in crocodiles
+    c.turn 180
+    step 2
+    turn 180
 
 
 
@@ -807,13 +879,32 @@ goats[1].hit()
 
 ![image70.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image70.jpeg)
 ```js
-
+特技关卡 6-14
+x = 0
+#这个循环会帮助你拿到河边的香蕉
+3.times ->
+    turnTo bananas[x]
+    step distanceTo bananas[x]
+    beaver.step 6
+    x = x + 1
+#现在写一个 for 循环，拿到剩下的香蕉吧
+for b in bushes
+    turnTo b
+    step distanceTo b
 
 
 ```
 
 ![image71.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image71.jpeg)
 ```js
+特技关卡 6-15
+for g in goats
+    g.step 9
+    g.hit()
+monkey.step distanceTo bananas[3]
+    
+
+
 
 
 
