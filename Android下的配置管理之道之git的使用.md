@@ -2545,8 +2545,298 @@ git revert --continue
 git revert --quit  
 git revert --abort                                       
 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+```bash
+git revert [--[no-]edit] [-n] [-m parent-number] [-s] [-S[<keyid>]] <commit>...
+git revert --continue
+git revert --quit
+git revert --abort
+
+```
+-e, --edit进入到编辑界面，可以再次编辑提交信息。--no-edit
+```bash
+git revert --edit HEAD~3
+
+$ git revert --no-edit 96ed6df cdd80fa ef9faab                                                                                      
+[test d9bb334] Revert "touch c"
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 c
+[test ba0ff99] Revert "touch e"
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 e
+[test 0c19967] Revert "update b file"
+ 1 file changed, 1 deletion(-)
+$ git st                                                                                                                            
+On branch test
+nothing to commit, working tree clean
+$ git ll                                                                                                                           
+* 0c19967 - Revert "update b file"                                                                                                   — SCM life (HEAD -> test) - (3 seconds ago)
+* ba0ff99 - Revert "touch e"                                                                                                         — SCM life - (3 seconds ago)
+* d9bb334 - Revert "touch c"                                                                                                         — SCM life - (3 seconds ago)
+* ef9faab - update b file                                                                                                            — SCM life - (2 days ago)
+* 5211c8d - update a file                                                                                                            — SCM life - (2 days ago)
+* cdd80fa - touch e                                                                                                                  — SCM life - (2 days ago)
+* 34260fc - touch d                                                                                                                  — SCM life - (2 days ago)
+* 96ed6df - touch c                                                                                                                  — SCM life - (2 days ago)
+* f3480c7 - touch b                                                                                                                  — SCM life - (2 days ago)
+* a2b661e - touch a                                                                                                                  — SCM life - (2 days ago)
+* f7277c4 - init empty git                                                                                                           — Minghui Ma - (12 days ago)
+$                     
 
 
+在revert多个提交的时候如果没有联系，这个revert的顺序可以变的。如果代码是有联系的revert顺序变了会有冲突了。
+$ git revert --no-edit ef9faab  96ed6df cdd80fa                                                                                     
+[test 952062a] Revert "update b file"
+ 1 file changed, 1 deletion(-)
+[test 20aa374] Revert "touch c"
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 c
+[test dc48716] Revert "touch e"
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 e
+$ git ll                                                                                                                            
+* dc48716 - Revert "touch e"                                                                                                         — SCM life (HEAD -> test) - (3 seconds ago)
+* 20aa374 - Revert "touch c"                                                                                                         — SCM life - (3 seconds ago)
+* 952062a - Revert "update b file"                                                                                                   — SCM life - (3 seconds ago)
+* ef9faab - update b file                                                                                                            — SCM life - (2 days ago)
+* 5211c8d - update a file                                                                                                            — SCM life - (2 days ago)
+* cdd80fa - touch e                                                                                                                  — SCM life - (2 days ago)
+* 34260fc - touch d                                                                                                                  — SCM life - (2 days ago)
+* 96ed6df - touch c                                                                                                                  — SCM life - (2 days ago)
+* f3480c7 - touch b                                                                                                                  — SCM life - (2 days ago)
+* a2b661e - touch a                                                                                                                  — SCM life - (2 days ago)
+* f7277c4 - init empty git
+```
+
+```bash
+$ git ll                                                                                                                            [mamh@10.0.63.43 ] 18-06-19 13:57  /home/mamh/tmp/myconfig
+* ef9faab - update b file                                                                                                            — SCM life (HEAD -> test) - (2 days ago)
+* 5211c8d - update a file                                                                                                            — SCM life - (2 days ago)
+* cdd80fa - touch e                                                                                                                  — SCM life - (2 days ago)
+* 34260fc - touch d                                                                                                                  — SCM life - (2 days ago)
+* 96ed6df - touch c                                                                                                                  — SCM life - (2 days ago)
+* f3480c7 - touch b                                                                                                                  — SCM life - (2 days ago)
+* a2b661e - touch a                                                                                                                  — SCM life - (2 days ago)
+* f7277c4 - init empty git                                                                                                           — Minghui Ma - (12 days ago)
+
+这个范围写反是不对的 
+$ git revert --no-edit 5211c8d..96ed6df  
+error: empty commit set passed
+fatal: revert failed
+
+一次revert多个提交，可以是一个连续的提交区间，这里加上--no-edit选项就不用每次都进入到vim的编辑提交信息的界面了。 
+$ git revert --no-edit 96ed6df..5211c8d                                                                                             
+[test a8b374e] Revert "update a file"
+ 1 file changed, 1 deletion(-)
+[test d1cf5e7] Revert "touch e"
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 e
+[test 48b7718] Revert "touch d"
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 d
+$ git ll                                                                                                                            
+* 48b7718 - Revert "touch d"                                                                                                         — SCM life (HEAD -> test) - (3 seconds ago)
+* d1cf5e7 - Revert "touch e"                                                                                                         — SCM life - (3 seconds ago)
+* a8b374e - Revert "update a file"                                                                                                   — SCM life - (3 seconds ago)
+* ef9faab - update b file                                                                                                            — SCM life - (2 days ago)
+* 5211c8d - update a file                                                                                                            — SCM life - (2 days ago)
+* cdd80fa - touch e                                                                                                                  — SCM life - (2 days ago)
+* 34260fc - touch d                                                                                                                  — SCM life - (2 days ago)
+* 96ed6df - touch c                                                                                                                  — SCM life - (2 days ago)
+* f3480c7 - touch b                                                                                                                  — SCM life - (2 days ago)
+* a2b661e - touch a                                                                                                                  — SCM life - (2 days ago)
+* f7277c4 - init empty git                                                                                                           — Minghui Ma - (12 days ago)
+```
+                                                                                                                                   
+-n, --no-commit，只是revert一个提交而不进行commit，这是文件状态是绿色的。
+```
+下面我们试试这个-n选项的效果
+$ git ll                                                                                                                            
+* ef9faab - update b file                                                                                                            — SCM life (HEAD -> test) - (2 days ago)
+* 5211c8d - update a file                                                                                                            — SCM life - (2 days ago)
+* cdd80fa - touch e                                                                                                                  — SCM life - (2 days ago)
+* 34260fc - touch d                                                                                                                  — SCM life - (2 days ago)
+* 96ed6df - touch c                                                                                                                  — SCM life - (2 days ago)
+* f3480c7 - touch b                                                                                                                  — SCM life - (2 days ago)
+* a2b661e - touch a                                                                                                                  — SCM life - (2 days ago)
+* f7277c4 - init empty git                                                                                                           — Minghui Ma - (12 days ago)
+$                                                                                                                                   
+$  git revert -n HEAD~5..HEAD~2                                                                                                     
+到这里git revert执行成功了 
+
+通过git log看到并没有产生revert的那个提交
+$ git ll                                                                                                                            
+* ef9faab - update b file                                                                                                            — SCM life (HEAD -> test) - (2 days ago)
+* 5211c8d - update a file                                                                                                            — SCM life - (2 days ago)
+* cdd80fa - touch e                                                                                                                  — SCM life - (2 days ago)
+* 34260fc - touch d                                                                                                                  — SCM life - (2 days ago)
+* 96ed6df - touch c                                                                                                                  — SCM life - (2 days ago)
+* f3480c7 - touch b                                                                                                                  — SCM life - (2 days ago)
+* a2b661e - touch a                                                                                                                  — SCM life - (2 days ago)
+* f7277c4 - init empty git                                                                                                           — Minghui Ma - (12 days ago)
+
+通过git status我们查看工作区和暂存区的状态，发现3个删除状态的文件，这个3个文件就是我们命令参数中的3个提交加上的文件，这里是revert操作那就是要删除这3个文件了
+$ git st                                                                                                                            
+On branch test
+You are currently reverting commit 96ed6df.
+  (all conflicts fixed: run "git revert --continue")
+  (use "git revert --abort" to cancel the revert operation)
+
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	deleted:    c
+	deleted:    d
+	deleted:    e
+
+                                                                                                                                   
+```
+
+-m parent-number, --mainline parent-number当revert一个merge的提交需要加上
+```bash
+git revert -m 2 xxx
+
+$ cd tmp/myconfig                                                                                                                                
+$ git ll                                                                                                                            
+*   d322685 - Merge branch 'test' into empty                                                                                           — SCM life (HEAD -> empty) - (2 days ago)
+|\  
+| * ef9faab - update b file                                                                                                            — SCM life (test) - (2 days ago)
+| * 5211c8d - update a file                                                                                                            — SCM life - (2 days ago)
+| * cdd80fa - touch e                                                                                                                  — SCM life - (2 days ago)
+| * 34260fc - touch d                                                                                                                  — SCM life - (2 days ago)
+| * 96ed6df - touch c                                                                                                                  — SCM life - (2 days ago)
+| * f3480c7 - touch b                                                                                                                  — SCM life - (2 days ago)
+| * a2b661e - touch a                                                                                                                  — SCM life - (2 days ago)
+* | d826f8a - update file a                                                                                                            — SCM life - (2 days ago)
+* | 01b8625 - touch a                                                                                                                  — SCM life - (2 days ago)
+|/  
+* f7277c4 - init empty git                                                                                                           — Minghui Ma - (12 days ago)
+$                                                                                                                                   
+$                                                                                                                                   
+$ git revert d322685                                                                                                                
+error: commit d3226856737d20b4945ef6ff3454f093fe851052 is a merge but no -m option was given.
+fatal: revert failed
+这个时候不使用-m选项会报错的，这个提交有2个父提交，我们要通过-m来指定哪个父提交。
+
+$ git revert -m 3 d322685                                                                                                           
+error: commit d3226856737d20b4945ef6ff3454f093fe851052 does not have parent 3
+fatal: revert failed
+
+$ git revert -m 2 d322685                                                                                                           
+[empty 56049dc] Revert "Merge branch 'test' into empty"
+ 1 file changed, 1 insertion(+), 8 deletions(-)
+$ git ll                                                                                                                            
+* 56049dc - Revert "Merge branch 'test' into empty"                                                                                  — SCM life (HEAD -> empty) - (5 seconds ago)
+*   d322685 - Merge branch 'test' into empty                                                                                           — SCM life - (2 days ago)
+|\  
+| * ef9faab - update b file                                                                                                            — SCM life (test) - (2 days ago)
+| * 5211c8d - update a file                                                                                                            — SCM life - (2 days ago)
+| * cdd80fa - touch e                                                                                                                  — SCM life - (2 days ago)
+| * 34260fc - touch d                                                                                                                  — SCM life - (2 days ago)
+| * 96ed6df - touch c                                                                                                                  — SCM life - (2 days ago)
+| * f3480c7 - touch b                                                                                                                  — SCM life - (2 days ago)
+| * a2b661e - touch a                                                                                                                  — SCM life - (2 days ago)
+* | d826f8a - update file a                                                                                                            — SCM life - (2 days ago)
+* | 01b8625 - touch a                                                                                                                  — SCM life - (2 days ago)
+|/  
+* f7277c4 - init empty git                                                                                                           — Minghui Ma - (12 days ago)
+$                                                                                                                                   
+ 
+ 
+如果是-m 1这个时候revert的 “a2b661e - touch a”  到 “ef9faab - update b file” 这几个提交的改动
+$ git revert -m 1 d322685                                                                                                           
+[empty 03da93b] Revert "Merge branch 'test' into empty"
+ 4 files changed, 1 deletion(-)
+ delete mode 100644 b
+ delete mode 100644 c
+ delete mode 100644 d
+ delete mode 100644 e
+$ git ll                                                                                                                            
+* 03da93b - Revert "Merge branch 'test' into empty"                                                                                  — SCM life (HEAD -> empty) - (4 seconds ago)
+*   d322685 - Merge branch 'test' into empty                                                                                           — SCM life - (2 days ago)
+|\  
+| * ef9faab - update b file                                                                                                            — SCM life (test) - (2 days ago)
+| * 5211c8d - update a file                                                                                                            — SCM life - (2 days ago)
+| * cdd80fa - touch e                                                                                                                  — SCM life - (2 days ago)
+| * 34260fc - touch d                                                                                                                  — SCM life - (2 days ago)
+| * 96ed6df - touch c                                                                                                                  — SCM life - (2 days ago)
+| * f3480c7 - touch b                                                                                                                  — SCM life - (2 days ago)
+| * a2b661e - touch a                                                                                                                  — SCM life - (2 days ago)
+* | d826f8a - update file a                                                                                                            — SCM life - (2 days ago)
+* | 01b8625 - touch a                                                                                                                  — SCM life - (2 days ago)
+|/  
+* f7277c4 - init empty git                                                                                                                                    
+```
+
+```bash
+我们重置回原来
+$ git reset --hard d322685                                                                                                          
+HEAD is now at d322685 Merge branch 'test' into empty
+$ git ll                                                                                                                            
+*   d322685 - Merge branch 'test' into empty                                                                                           — SCM life (HEAD -> empty) - (2 days ago)
+|\  
+| * ef9faab - update b file                                                                                                            — SCM life (test) - (2 days ago)
+| * 5211c8d - update a file                                                                                                            — SCM life - (2 days ago)
+| * cdd80fa - touch e                                                                                                                  — SCM life - (2 days ago)
+| * 34260fc - touch d                                                                                                                  — SCM life - (2 days ago)
+| * 96ed6df - touch c                                                                                                                  — SCM life - (2 days ago)
+| * f3480c7 - touch b                                                                                                                  — SCM life - (2 days ago)
+| * a2b661e - touch a                                                                                                                  — SCM life - (2 days ago)
+* | d826f8a - update file a                                                                                                            — SCM life - (2 days ago)
+* | 01b8625 - touch a                                                                                                                  — SCM life - (2 days ago)
+|/  
+* f7277c4 - init empty git 
+
+此时看看b文件的内容
+$ cat b                                                                                                                             
+bbb
+
+我们可以看到这一行是在 ef9faabedab94293708588d93e4b6e8a6a697a3a 这个提交上加上的
+$ git show ef9faab                                                                                                                  
+commit ef9faabedab94293708588d93e4b6e8a6a697a3a (test)
+Author: SCM life <scm.life@scmlife.com>
+Date:   Sun Jun 17 12:35:10 2018 +0800
+
+    update b file
+    
+    Change-Id: Ic28a9e9434fe4cbc1d95ec4436289d9008689c31
+    Signed-off-by: SCM life <scm.life@scmlife.com>
+
+diff --git a/b b/b
+index e69de29..f761ec1 100644
+--- a/b
++++ b/b
+@@ -0,0 +1 @@
++bbb
+
+这个时候我们revert这个提交 
+$ git revert ef9faab                                                                                                                
+[empty a1cfaec] Revert "update b file"
+ 1 file changed, 1 deletion(-)
+
+$ git st                                                                                                                            
+On branch empty
+nothing to commit, working tree clean
+
+$ git ll                                                                                                                            
+* a1cfaec - Revert "update b file"                                                                                                   — SCM life (HEAD -> empty) - (5 seconds ago)
+*   d322685 - Merge branch 'test' into empty                                                                                           — SCM life - (2 days ago)
+|\  
+| * ef9faab - update b file                                                                                                            — SCM life (test) - (2 days ago)
+| * 5211c8d - update a file                                                                                                            — SCM life - (2 days ago)
+| * cdd80fa - touch e                                                                                                                  — SCM life - (2 days ago)
+| * 34260fc - touch d                                                                                                                  — SCM life - (2 days ago)
+| * 96ed6df - touch c                                                                                                                  — SCM life - (2 days ago)
+| * f3480c7 - touch b                                                                                                                  — SCM life - (2 days ago)
+| * a2b661e - touch a                                                                                                                  — SCM life - (2 days ago)
+* | d826f8a - update file a                                                                                                            — SCM life - (2 days ago)
+* | 01b8625 - touch a                                                                                                                  — SCM life - (2 days ago)
+|/  
+* f7277c4 - init empty git                                                                                                           — Minghui Ma - (12 days ago)
+
+这个时候revert之后我们再看这个b文件，这个文件内容已经没有了。
+$ cat b                                                                                                                             
+
+```
 
 # git apply
 git apply 命令应用一个通过 git diff 或者甚至使用 GNU diff 命令创建的补丁。 它跟补丁命令做了差不多的工作，但还是有一些小小的差别。  
