@@ -1654,113 +1654,255 @@ for b in bananas
 
 ![image121.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image121.jpeg)
 ```js
-
-
+特技关卡 11-1
+#提示：你应该等待直到什么时候？
+for b in bananas
+    until tiger.sleeping() and bear.sleeping()
+        wait()
+    goto b
 
 ```
 
 ![image122.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image122.jpeg)
 ```js
-
-
+特技关卡 11-2
+for b in bananas
+    
+    until tiger.sleeping() and bear.sleeping()
+        wait()    #在这里增加编码
+    if b.frozen()
+        goat.goto b
+        goat.hit()
+    until tiger.sleeping() and bear.sleeping()
+        wait() 
+    goto b
 
 ```
 
 ![image123.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image123.jpeg)
 ```js
-
-
+特技关卡 11-3
+x = 0
+2.times ->
+    until bears[x].sleeping() and tigers[x].sleeping()
+        wait()
+    goto bananas[x]
+    x = x + 1
 
 ```
 
 ![image124.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image124.jpeg)
 ```js
+特技关卡 11-4
 
-
+until tiger.sleeping() and bear.sleeping()
+    wait() 
+for b in bananas
+    goto b    
 
 ```
 
 ![image125.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image125.jpeg)
 ```js
-
-
+特技关卡 11-5
+for b in bananas
+    #我们需要等待直到熊睡觉或是玩耍
+    #或者意味着我们要等到其中之一的条件出现
+    until bear.sleeping() or bear.playing()
+            wait()
+        
+    #当安全条件错过时，我们应该怎么做？
+    if b.green()
+        goat.goto b
+    else
+        monkey.goto b
 
 ```
 
 ![image126.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image126.jpeg)
 ```js
-
-
+特技关卡 11-6
+for b in bananas
+    
+    if b.green()
+        until tiger.sleeping() or tiger.playing()
+            wait()
+        goat.goto b
+        #因此如果可以安全通行，谁应该获得香蕉呢？
+    else
+        until bear.sleeping() or bear.playing()
+            wait()
+        #在这里增加你的编码
+        goto b
 
 ```
 
 ![image127.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image127.jpeg)
 ```js
-
-
+特技关卡 11-7
+x = 2
+3.times ->
+    until bears[x].sleeping() or bears[x].playing()
+        wait()
+    #我们最好等待熊睡觉或是玩耍
+    goto bananas[x]
+    x = x - 1
 
 ```
 
 ![image128.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image128.jpeg)
 ```js
+特技关卡 11-8
+  
+until tiger.sleeping() or tiger.playing()
+    wait()
+goat.goto bridges[0]
+       
+    
+monkey.goto bridges[1]
 
-
+#都是你的…
+for b in bananas
+    if b.frozen()
+        goat.goto(b)
+        goat.hit()
+    monkey.goto b
 
 ```
 
 ![image129.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image129.jpeg)
 ```js
+特技关卡 11-9
+for b in bananas
+    #首先我们希望山羊走过所有的香蕉（绿色的或是冰冻的）
+    #打破冰冻的香蕉并拿到绿色的香蕉。
+    #然后，猴子只收集剩下的
+    if b.green() or b.frozen()
+        if b.frozen()
+            goat.goto b
+            goat.hit()
+        goat.goto b
 
-
+#现在轮到猴子了
+goto bananas[3]
 
 ```
 
 ![image130.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image130.jpeg)
 ```js
-
-
+特技关卡 11-10
+#首先让山羊走过所有的香蕉
+#打破冰冻的香蕉并获得绿色的香蕉
+for b in bananas
+    if b.green() or b.frozen()
+        if b.frozen()
+            goat.goto b
+            goat.hit()
+        goat.goto b
+    
+#现在这里只有非冰冻的黄色香蕉
+#猴子可以得到所有的香蕉
+2.times ->
+    step 20
+    turn left
 
 ```
 
 ![image131.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image131.jpeg)
 ```js
-
-
+特技关卡 11-11
+#变量chaser 可以在老虎和熊之间变换
+chaser = bear
+2.times ->
+    say chaser
+    until chaser.sleeping() or chaser.playing()
+        wait()
+    step 10
+    chaser= tiger
 
 ```
 
 ![image132.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image132.jpeg)
 ```js
+特技关卡 11-12
+#设置chaser 和 mover根据香蕉是绿色的或是其他
+#首先chaser是老虎，mover是猴子
+chaser = tiger
+mover = monkey
 
+for b in bananas
+    if b.green()
+        #完成我：
+        chaser = bear
+        mover = goat
+    else
+        #和我：
+        chaser = tiger
+        mover = monkey
 
+    until chaser.sleeping() or chaser.playing()
+        wait()
+    mover.goto b
 
 ```
 
 ![image133.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image133.jpeg)
 ```js
-
-
+特技关卡 11-13
+#首先猴子移动然后是山羊
+x = 0
+3.times ->
+    for stepper in [monkey,goat]
+        until tigers[x].sleeping() and bears[x].sleeping()
+            wait()
+        stepper.step 10   
+    x = x + 1
 
 ```
 
 ![image134.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image134.jpeg)
 ```js
-
-
+特技关卡 11-14
+waitFor = (b) ->
+    until b.sleeping() or b.playing()
+        wait()
+x = 0
+2.times ->
+    waitFor(bears[x])
+    goto bananas[x]
+    waitFor(bears[x])
+    goto turtle
+    turtle.step 10
+    x = x + 1
 
 ```
 
 ![image135.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image135.jpeg)
 ```js
+特技关卡 11-15
+#我们将使用圆括号检查他们中的条件
+#检查剩下的之前是yes还是no
 
+#这里，我们检查：
+#1.老虎是玩耍还是在睡觉
+#2.熊是在玩耍还是在睡觉
+#3.1是yes和2是yes
+until (tiger.playing() or tiger.sleeping()) and (bear.playing() or bear.sleeping())
+    wait()
 
+#现在可以安全通过
+goto banana
 
 ```
 
 ![image136.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image136.jpeg)
 ```js
-
-
+特技关卡 11-16
+for b in bananas
+    #在这里增加你的编码
+    until ( bear.playing() or bear.sleeping() ) and ( tiger.playing() or tiger.sleeping() ) 
+        wait()
+    goto b
 
 ```
 
