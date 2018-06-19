@@ -569,20 +569,41 @@ x = 0
 
 ![image47.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image47.jpeg)
 ```js
-
+特技关卡 5-1
+turtles[0].step 6
+turtles[2].step -8
+turtles[1].step 6+6
+step 19
 
 
 ```
 
 ![image48.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image48.jpeg)
 ```js
-
+特技关卡 5-2
+step 6
+turtles[2].step 20
+step 6
+turtles[1].step 8
+step 6
+turtles[0].step -12
 
 
 ```
 
 ![image49.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image49.jpeg)
 ```js
+特技关卡 5-3
+turtle.turnTo bananas[0]
+turtle.step 9
+
+turtle.turnTo bananas[1]
+turtle.step 19
+
+
+turtle.turnTo bananas[2]
+turtle.step 19
+
 
 
 
@@ -590,6 +611,18 @@ x = 0
 
 ![image50.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image50.jpeg)
 ```js
+特技关卡 5-4
+turnTo bananas[4]
+step distanceTo bananas[4]
+
+turnTo bananas[7]
+step distanceTo bananas[7]
+
+turnTo bananas[10]
+step distanceTo bananas[10]
+
+turnTo bananas[7*2]
+step distanceTo bananas[7*2]
 
 
 
@@ -597,27 +630,49 @@ x = 0
 
 ![image51.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image51.jpeg)
 ```js
-
+特技关卡 5-5
+step 15
+beavers[1].step 15
+beavers[0].step -15
+turn left
+step 15
+turn left
+step 15
 
 
 ```
 
 ![image52.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image52.jpeg)
 ```js
-
+特技关卡 5-6
+x=0
+4.times ->
+    beavers[x].step 2.5*(x+1)
+    x += 1
+step distanceTo banana
 
 
 ```
 
 ![image53.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image53.jpeg)
 ```js
-
+特技关卡 5-7
+beavers[0].step 5
+beavers[1].step 10
+beavers[2].step 10
+step distanceTo banana
 
 
 ```
 
 ![image54.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image54.jpeg)
 ```js
+特技关卡 5-8
+x = 0
+7.times ->
+    turnTo bananas[x]
+    step distanceTo bananas[x]
+    x = x+1
 
 
 
@@ -625,6 +680,17 @@ x = 0
 
 ![image55.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image55.jpeg)
 ```js
+特技关卡 5-9
+
+crocodiles[2].turn left
+crocodiles[0].turn -45
+
+
+step 9
+turn left
+step 9
+turn right
+step 9
 
 
 
@@ -632,7 +698,18 @@ x = 0
 
 ![image56.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image56.jpeg)
 ```js
-
+特技关卡 5-10
+goats[0].step 3
+goats[0].hit()
+goats[0].step -11
+goats[0].hit()
+goats[1].step 14
+goats[1].hit()
+goats[1].step -18
+goats[1].hit()
+4.times ->
+    step 20
+    turn right
 
 
 ```
