@@ -1972,49 +1972,82 @@ x = 6
 ![image143.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image143.jpeg)
 ```js
 特技关卡 13-1
-
+#奶牛会一直吃，直到大门上的条件变为真实的
+#然后，大门被打开了！
+until cow.weight() == 20
+    cow.eat()
+    
+goto banana
 
 ```
 
 ![image144.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image144.jpeg)
 ```js
 特技关卡 13-2
+#我们需要做什么直到奶牛的体重将打开大门？
+until cow.weight() == 30
+    cow.eat()
 
+goto banana
 
 ```
 
 ![image145.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image145.jpeg)
 ```js
 特技关卡 13-3
+turtle.step 10
+goto turtle
 
+#检查门上的条件来打开大门。
+until cow.weight() >= 22
+    cow.eat()
+
+for b in bananas
+    goto b
 
 ```
 
 ![image146.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image146.jpeg)
 ```js
 特技关卡 13-4
-
+until cow.weight() == 35
+    cow.eat()
+    
+goto banana
 
 ```
 
 ![image147.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image147.jpeg)
 ```js
 特技关卡 13-5
+for c in cows
+    until c.weight() == 20
+        #修复这里
+        c.eat()
 
+goto banana
 
 ```
 
 ![image148.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image148.jpeg)
 ```js
 特技关卡 13-6
-
+until cows[1].weight() == 30
+    cows[1].eat()
+    cows[0].eat()
+for b in bananas
+    goto b
 
 ```
 
 ![image149.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image149.jpeg)
 ```js
 特技关卡 13-7
-
+for c in cows
+    until c.weight() == 35
+        c.eat()
+for b in bananas
+    goto b
 
 ```
 
@@ -2022,13 +2055,31 @@ x = 6
 ```js
 特技关卡 13-8
 
+until cow.weight() == 18
+    cow.eat()
+for b in bananas
+    goto b
+    if health() < 50
+
+        goto healthZone
+
+        until monkey.health() == 100
+            wait()
+
 
 ```
 
 ![image151.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image151.jpeg)
 ```js
 特技关卡 13-9
-
+for cow in cows
+    until cow.weight() > 19
+        cow.eat()
+i = 3
+4.times ->
+    goto bananas[i--]
+    
+    
 
 ```
 
