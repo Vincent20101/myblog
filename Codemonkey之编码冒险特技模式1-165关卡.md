@@ -2085,104 +2085,303 @@ i = 3
 
 ![image152.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image152.jpeg)
 ```js
-
-
+特技关卡 14-1
+yummyBanana = (y) ->
+    if not y.green() and not y.rotten()
+        goto y
+for b in bananas
+    yummyBanana b
 
 ```
 
 ![image153.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image153.jpeg)
 ```js
+特技关卡 14-2
+#修复这个函数:
+yummyBanana = (y) ->
+    if y.green() or y.rotten()
+        return no
+    return yes
 
-
+#一旦你修复yummyBanana这个函数，这个编码是好的。
+x = 0
+3.times ->
+    2.times ->
+        if yummyBanana bananas[x]
+            goto bananas[x]
+        x = x + 1
+        goto turtle
+    turtle.step 12
 
 ```
 
 ![image154.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image154.jpeg)
 ```js
+特技关卡 14-3
+#nearestZone函数传回健康地带
+#那更接近猴子
+nearestZone = () ->
+    d0 = distanceTo healthZones[0]
+    d1 = distanceTo healthZones[1]
+    if d0 < d1
+        #修复函数来传回正确的对象
+        return healthZones[0]
+    else
+        return healthZones[1]
 
-
+#一旦你修复nearestZone函数，这个编码是有效的
+for b in bananas
+    goto b
+    if health() < 50
+        zone = nearestZone()
+        goto zone
+        until health() == 100
+            wait()
 
 ```
 
 ![image155.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image155.jpeg)
 ```js
+特技关卡 14-4
+#nearestBridge 函数传回最近的桥
+nearestBridge = () ->
+    d0 = distanceTo bridges[0]
+    d1 = distanceTo bridges[1]
+    #完成这个函数来传回最近的桥
+    if d0 <= d1
+        return bridges[0]
+    else
+        return bridges[1]
 
+#当健康值很低时，猴子后巷最近的桥
+#然后去健康地带
+#这个函数是正确的！
+getHealthy = () ->
+    goto nearestBridge()
+    goto healthZone
+    until health() == 100
+        wait()
+    goto nearestBridge()
 
+#这里不需要更改
+for b in bananas
+    goto b
+    if health() < 70
+        getHealthy()
 
 ```
 
 ![image156.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image156.jpeg)
 ```js
+特技关卡 14-5
+#safeFrom函数传回yes如果老虎
+#睡觉或是玩耍
+safeFrom = (a) ->
+    return a.sleeping() or a.playing()
 
-
+for t in tigers
+    until safeFrom t
+        wait()
+    step 8
+    #现在轮到谁了？
+    until safeFrom t
+        wait()
+    goat.step 8
 
 ```
 
 
 ![image157.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image157.jpeg)
 ```js
+特技关卡 14-6
+safeFrom = (a) ->
+    #这个函数应该传回什么呢？
+    return a.sleeping() or a.playing()
 
-
+#一旦你修复了 safeFrom这个函数，这个编码就是正确的。
+x = 0
+for stepper in [monkey, goat]
+    #首先猴子先过去，然后是山羊。
+    until safeFrom(tigers[x])
+        wait()
+    stepper.step 12
+    #等待熊
+    until safeFrom(bears[x])
+        wait()
+    stepper.step 12
+    x = x + 1
 
 ```
 
 ![image158.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image158.jpeg)
 ```js
+特技关卡 14-7
+# nearestGoat函数会获得一个对象
+#并比较每只山羊到对象的距离
+#函数传回哪只山羊距离对象最近
+nearestGoat = (y) ->
+    d0 = goats[0].distanceTo y
+    d1 = goats[1].distanceTo y
+    if d0 < d1
+        return goats[0]
+    else
+        return goats[1]
 
-
+for b in bananas
+    #这里有一个小修复
+    if b.green()
+        g = nearestGoat b
+        say g
+        g.goto b
+    else
+        goto b
 
 ```
 
 ![image159.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image159.jpeg)
 ```js
-
-
+特技关卡 14-8
+whichAnimal = (y) ->
+    if y.green()
+        return goat
+    return monkey
+for b in bananas
+    mover = whichAnimal b
+    mover.goto b
 
 ```
 
 ![image160.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image160.jpeg)
 ```js
+特技关卡 14-9
+whichAnimal = (y) ->
+    if y.green()
+        return goat
+    else
+        return monkey
 
 
+for b in bananas
+    mover = whichAnimal b
+    mover.goto b
 
 ```
 
 ![image161.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image161.jpeg)
 ```js
-
-
+特技关卡 14-10
+#修复函数useGoat传回yes
+#当香蕉是绿色的时候
+useGoat = (y) ->
+    return y.green()
+    
+nearestGoat = (y) ->
+    d0 = goats[0].distanceTo y
+    d1 = goats[1].distanceTo y
+    if d0 < d1
+        return goats[0]
+    else
+        return goats[1]
+        
+for b in bananas
+    mover = monkey
+    if useGoat b
+        mover = nearestGoat b
+    say mover
+    mover.goto b
 
 ```
 
 ![image162.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image162.jpeg)
 ```js
+特技关卡 14-11
+#这个函数传回哪只乌龟距离香蕉更近
+#这个函数的编码是正确的！
+nearestTurtle = (y) -> 
+    d0 = turtles[0].distanceTo y
+    d1 = turtles[1].distanceTo y
+    if d0 < d1
+        return turtles[0]
+    else
+        return turtles[1]
 
+for b in bananas
+    t = nearestTurtle(b)
+    t.goto b
 
 
 ```
 
 ![image163.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image163.jpeg)
 ```js
+特技关卡 14-12
+#这个函数传回多少次
+#奶牛吃：
+leftToEat = (c) ->
+    return 35 - c.weight()
 
 
+say leftToEat(cow)
+
+#修复这个条件，什么时候循环应该停止？
+until leftToEat(cow) == 0
+    cow.eat()
+
+goto banana
 
 ```
 
 ![image164.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image164.jpeg)
 ```js
+特技关卡 14-13
+#这个函数检测奶牛的重量是否
+#和门上的条件相同
+shouldNotEat = (c) ->
+    return c.weight() == 100
 
+say shouldNotEat(cow)
 
+until shouldNotEat(cow)
+    cow.eat()
+for b in bananas
+    goto b
 
 ```
 ![image165.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image165.jpeg)
 ```js
-
-
+特技关卡 14-14
+#修复这个函数传回如果奶牛的重量是
+#和门上的条件相同
+shouldNotEat = (c) ->
+    return c.weight()==60
+    
+#使用shouldNotEat函数打开大门
+for i in [0,1,2]
+    until shouldNotEat(cows[i]) 
+        cows[i].eat()
+    goto bananas[i]
 
 ```
 ![image166.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image166.jpeg)
 ```js
+特技关卡 14-15
+startWithBananaZero = () ->
+    d0 = distanceTo bananas[0]
+    d2 = distanceTo bananas[2]
+    if d0 < d2
+        return yes
+    else
+        return no
 
-
+if startWithBananaZero()
+    x = 0
+    3.times ->
+        goto bananas[x]
+        x = x + 1
+else
+    x = 2
+    3.times ->
+        goto bananas[x]
+        x = x - 1
 
 ```
