@@ -604,7 +604,28 @@ turtle.step 19
 turtle.turnTo bananas[2]
 turtle.step 19
 
+//或者利用distanceTo来测量距离
+turtle.turnTo bananas[0]
+turtle.step distanceTo bananas[0]
 
+turtle.turnTo bananas[1]
+turtle.step distanceTo bananas[1]
+
+
+turtle.turnTo bananas[2]
+turtle.step distanceTo bananas[2]
+
+//或者 使用之前我们学过的times循环
+i = 0
+3.times ->
+    turtle.turnTo bananas[i]
+    turtle.step distanceTo bananas[i]
+    i++
+
+//或者 使用我们还没学到的for循环
+for b in bananas
+    turtle.turnTo b
+    turtle.step distanceTo b
 
 
 ```
