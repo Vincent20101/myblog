@@ -732,7 +732,43 @@ goats[1].hit()
     step 20
     turn right
 
+//另外一种解法
+turnStepHit = (goat, banana) ->
+    goat.turnTo banana
+    goat.step goat.distanceTo banana
+    goat.hit()
+turnStepHit(goats[0], bananas[1])
+turnStepHit(goats[0], bananas[2])
+turnStepHit(goats[1], bananas[0])
+turnStepHit(goats[1], bananas[3])
+4.times ->
+    step 20
+    turn right
 
+//另外一种解法   
+eatBananas = (monkey, goat, banana, next) ->
+    goat.turnTo(banana)
+    goat.step(goat.distanceTo(banana))
+    goat.hit()
+    monkey.step(monkey.distanceTo(banana))
+    monkey.turnTo(next)
+
+eatBananas(monkey, goats[1], bananas[0], bananas[1])
+eatBananas(monkey, goats[0], bananas[1], bananas[2])
+eatBananas(monkey, goats[0], bananas[2], bananas[3])
+eatBananas(monkey, goats[1], bananas[3], bananas[0])
+
+//monkey eat bananas with goat help
+eatBananas = (banana, next, goat) ->
+    goat.turnTo(banana)
+    goat.step(goat.distanceTo(banana))
+    goat.hit()
+    step(distanceTo(banana))
+    turnTo(next)
+eatBananas(bananas[0], bananas[1],goats[1])  # 第一个参数顺序很重要
+eatBananas(bananas[1], bananas[2],goats[0])
+eatBananas(bananas[2], bananas[3],goats[0])
+eatBananas(bananas[3], bananas[0],goats[1])
 ```
 
 ![image57.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_SkillMode/image57.jpeg)
