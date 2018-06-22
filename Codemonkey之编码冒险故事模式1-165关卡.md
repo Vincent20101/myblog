@@ -300,7 +300,28 @@ For I in [1..11]
    if I % 3 == 0
       s -= 5
 
-
+//另外的解法：
+s=20
+I=1
+11.times ->
+    step s
+    turn left
+    if I % 3 == 0
+        s -= 5
+    I++
+//另外的解法：
+2.times ->
+    turn 45
+    step 30
+    step -30
+    turn -45
+    step -5
+//另外的解法：
+2.times ->
+    turn 45
+    step 28
+    turn 135
+    step 5
 
 
 
@@ -379,7 +400,33 @@ step 20
     step 10
 
 
+//另外一种方法
+step 20
+2.times ->
+    step -7.5
+    turn right
+    step 10
+    turn left
+    step 7.5
 
+//还有一种
+step 20
+turn 180
+2.times ->
+    step -10
+    turn left
+    step 10
+    turn right
+    step 10
+//还有一种
+step 20
+2.times ->
+    2.times ->
+        step 10
+        turn right
+    step 10
+    turn 180
+    turtle.step 20
 ```
 ![image48.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image48.jpeg)
 ```js
