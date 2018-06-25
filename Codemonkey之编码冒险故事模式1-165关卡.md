@@ -912,8 +912,44 @@ for b in bananas
     turnTo b
     step distanceTo b
 
+//增加了要求，吃第香蕉0时候只能0,1鳄鱼转.吃香蕉1时候只能2,3鳄鱼转. 吃香蕉2时候只能4,5鳄鱼转.
+x = 0
+3.times ->
+    crocodiles[2*x].turnTo b
+    crocodiles[2*x + 1].turnTo b
+    turnTo bananas[x]
+    step  distanceTo bananas[x]
+    x++
 
+//增加了要求，吃第香蕉0时候只能0,1鳄鱼转.吃香蕉1时候只能2,3鳄鱼转. 吃香蕉2时候只能4,5鳄鱼转.
+x=0
+for b in bananas
+    2.times ->
+        crocodiles[x].turnTo b
+        x++
+    turnTo b
+    step  distanceTo b
+
+//增加了要求，吃第香蕉0时候只能0,1鳄鱼转.吃香蕉1时候只能2,3鳄鱼转. 吃香蕉2时候只能4,5鳄鱼转.
+x=0
+for b in bananas
+    crocodiles[x++].turnTo b
+    crocodiles[x++].turnTo b
+    turnTo b
+    step  distanceTo b
+
+//增加了要求，吃第香蕉0时候只能0,1鳄鱼转.吃香蕉1时候只能2,3鳄鱼转. 吃香蕉2时候只能4,5鳄鱼转.
+x=0
+for b in bananas
+    crocodiles[2*x].turnTo b
+    crocodiles[2*x + 1].turnTo b
+    turnTo b
+    step  distanceTo b
+    x++
+这个增加的要求特别注意的就是 奇数怎么表示，偶数怎么表示，2x是偶数，2x+1是奇数。
 ```
+
+
 ![image88.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image88.jpeg)
 ```js
 第 71 关挑战
