@@ -1211,7 +1211,24 @@ for m in matches
     goto turtle
     turtle.step 8
 
+//我们把去火柴的的过程也封装为一个函数
+goto = (p) ->
+    turnTo p
+    step distanceTo p
 
+grabAndReturn = (r) ->
+    goto r
+    grab()
+    goto turtle
+dropAndReturn=()->
+    goto pile
+    drop()
+    goto turtle
+
+for m in matches
+    grabAndReturn m
+    dropAndReturn()
+    turtle.step 8
 ```
 ![image102.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/codemonkey/CodingAdventure_StoryMode/image102.jpeg)
 ```js
