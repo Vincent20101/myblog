@@ -1,6 +1,8 @@
 JPA 学习笔记
 
 
+## jpa的hello world程序
+
 首先弄个jpa的helloworld程序
 
 persistence.xml 文件。这个要放到resources目录下面的META-INF目录下面.  
@@ -482,7 +484,7 @@ public class CustomerTest {
 
 
 ```
-
+## jpa中常用的注解
 
 @Entity 放到实体类上面
 
@@ -500,6 +502,7 @@ public class CustomerTest {
 
 @Temporal(TemporalType.TIMESTAMP) 设置时间日期对应到数据库表列的类型的
 
+## jpa中常用的类
 
 Persistence类
 
@@ -619,6 +622,8 @@ EntityManager.merge()方法
 
 ```
 
+## 多对一关联关系
+
 多对一在插入数据的情况：
 ```java
     @Test
@@ -671,6 +676,8 @@ Hibernate:
 Process finished with exit code 0
 
 ```
+
+
 保存的时候建议先保存一的那一端对象，也就是先保存customer。
 然后再保存多的那一端，也就是order。这样不会多出sql语句。
 
@@ -792,7 +799,10 @@ Process finished with exit code 0
     }
 
 ```
-这种情况下是不让删除的，应为有个外键。
+这种情况下是不让删除的，因为有个外键。
+
+
+##一对多关联关系
 
 一对多关联关系插入数据的情况
 ```java
@@ -835,7 +845,7 @@ Process finished with exit code 0
 默认是懒加载的情况。
 通用可以使用    @OneToMany(fetch = FetchType.EAGER) 来修改。然后那个查询会变为左外链接。
 
-双向一对多关联关系
+## 双向一对多关联关系
 ```java
     /**
      * 双向一对多关联关系
@@ -915,7 +925,7 @@ Process finished with exit code 0
 
 
 
-双向一对一的关联关系
+## 双向一对一的关联关系
 ```java
 package com.mamh.jpa;
 
@@ -1136,11 +1146,12 @@ Hibernate:
 com.mamh.jpa.Manager@14bb2297
 
 ```
+## 双向一对一的关联关系
+基于主键来做这个一对一关联关系，可以使用“@PrimaryKeyJoinColumn(name = "id")”
 
 
 
-
-
+## 双向多对多关联关系
 
 
 
