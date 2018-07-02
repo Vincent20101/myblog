@@ -1153,8 +1153,325 @@ com.mamh.jpa.Manager@14bb2297
 
 ## 双向多对多关联关系
 
+```java
+package com.mamh.jpa;
+
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "jpa_item")
+public class Item {
+
+    private Integer id;
+    private String itemName;
+
+    private Set<Category> categories = new HashSet<Category>();
+
+    @GeneratedValue
+    @Id
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Column(name = "item_name")
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    @ManyToMany
+    @JoinTable( name = "jpa_item_category",
+            joinColumns = {
+                    @JoinColumn(name = "item_id", referencedColumnName = "id")
+            },
+            inverseJoinColumns = {   //对方那个表
+                    @JoinColumn(name = "categroy_id", referencedColumnName = "id")
+            }
+    )
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+}
+
+
+```
+
+```java
+package com.mamh.jpa;
+
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "jpa_category")
+public class Category {
+    private Integer id;
+    private String categoryName;
+
+    private Set<Item> items = new HashSet<Item>();
+
+
+    @GeneratedValue
+    @Id
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Column(name = "category_name")
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    @ManyToMany(mappedBy = "categories")
+    public Set<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(Set<Item> items) {
+        this.items = items;
+    }
+}
 
 
 
+```
+
+使用@ManyToMany注解来映射多对多关联关系。使用@JoinTable来映射中间表
+```text
+    @ManyToMany
+    @JoinTable( name = "jpa_item_category", //name指定中间表的表名
+            joinColumns = {   // joinColumns映射当前类所在表在中间表中的外键。
+                    @JoinColumn(name = "item_id", referencedColumnName = "id")
+            },
+            inverseJoinColumns = {   //对方那个表
+                    @JoinColumn(name = "categroy_id", referencedColumnName = "id")
+            }
+    )
+
+```
+```text
+    @ManyToMany(mappedBy = "categories")
+    public Set<Item> getItems() {
+        return items;
+    }
+
+```
+
+多对多的保存
+```text
+    @Test
+    public void testManyToMany() {
+        Item i1 = new Item();
+        i1.setItemName("i - 1");
+        Item i2 = new Item();
+        i2.setItemName("i - 2");
 
 
+        Category c1 = new Category();
+        c1.setCategoryName("c - 1");
+        Category c2 = new Category();
+        c2.setCategoryName("c - 2");
+
+        i1.getCategories().add(c1);
+        i1.getCategories().add(c2);
+
+        i2.getCategories().add(c1);
+        i2.getCategories().add(c2);
+
+        c1.getItems().add(i1);
+        c1.getItems().add(i2);
+
+        c2.getItems().add(i1);
+        c2.getItems().add(i2);
+
+        entityManager.persist(i1);
+        entityManager.persist(i2);
+        entityManager.persist(c1);
+        entityManager.persist(c2);
+    }
+
+```
+输出结果
+```text
+Hibernate: 
+    insert 
+    into
+        jpa_item
+        (item_name) 
+    values
+        (?)
+Hibernate: 
+    insert 
+    into
+        jpa_item
+        (item_name) 
+    values
+        (?)
+Hibernate: 
+    insert 
+    into
+        jpa_category
+        (category_name) 
+    values
+        (?)
+Hibernate: 
+    insert 
+    into
+        jpa_category
+        (category_name) 
+    values
+        (?)
+Hibernate: 
+    insert 
+    into
+        jpa_item_category
+        (item_id, categroy_id) 
+    values
+        (?, ?)
+Hibernate: 
+    insert 
+    into
+        jpa_item_category
+        (item_id, categroy_id) 
+    values
+        (?, ?)
+Hibernate: 
+    insert 
+    into
+        jpa_item_category
+        (item_id, categroy_id) 
+    values
+        (?, ?)
+Hibernate: 
+    insert 
+    into
+        jpa_item_category
+        (item_id, categroy_id) 
+    values
+        (?, ?)
+
+Process finished with exit code 0
+
+
+```
+
+多对多的查询
+1.先获取维护关联关系的，也就是先获取Item。
+```text
+
+    @Test
+    public void testManyToManyFind() {
+        Item item = entityManager.find(Item.class, 2);
+        System.out.println(item.getItemName());
+        System.out.println(item.getCategories().size());
+    }
+
+```
+```text
+Hibernate: 
+    select
+        item0_.id as id1_3_0_,
+        item0_.item_name as item_nam2_3_0_ 
+    from
+        jpa_item item0_ 
+    where
+        item0_.id=?
+i - 2
+Hibernate: 
+    select
+        categories0_.item_id as item_id1_3_0_,
+        categories0_.categroy_id as categroy2_4_0_,
+        category1_.id as id1_0_1_,
+        category1_.category_name as category2_0_1_ 
+    from
+        jpa_item_category categories0_ 
+    inner join
+        jpa_category category1_ 
+            on categories0_.categroy_id=category1_.id 
+    where
+        categories0_.item_id=?
+2
+
+Process finished with exit code 0
+
+```
+
+2. 获取 不维护关联关系的，也就是先获取Category。
+
+```text
+
+    @Test
+    public void testManyToManyFind() {
+        Category category = entityManager.find(Category.class, 1);
+        System.out.println(category.getCategoryName());
+        System.out.println(category.getItems().size());
+    }
+
+```
+
+```text
+Hibernate: 
+    select
+        category0_.id as id1_0_0_,
+        category0_.category_name as category2_0_0_ 
+    from
+        jpa_category category0_ 
+    where
+        category0_.id=?
+c - 1
+Hibernate: 
+    select
+        items0_.categroy_id as categroy2_0_0_,
+        items0_.item_id as item_id1_4_0_,
+        item1_.id as id1_3_1_,
+        item1_.item_name as item_nam2_3_1_ 
+    from
+        jpa_item_category items0_ 
+    inner join
+        jpa_item item1_ 
+            on items0_.item_id=item1_.id 
+    where
+        items0_.categroy_id=?
+2
+
+Process finished with exit code 0
+
+
+```
+通过以上两种方式获取的，效果是一样的，因为是有一张中间表，获取那边都是一样的。
