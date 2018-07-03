@@ -1,6 +1,33 @@
 JPA 学习笔记
 
 
+##jpa是什么
+```java
+Java Persistence API：用于对象持久化的 API
+
+Java EE 5.0 平台标准的 ORM 规范，使得应用程序以统一的方式访问持久层
+
+
+```
+
+## JPA和Hibernate的关系
+
+```text
+
+JPA 是 hibernate 的一个抽象（就像JDBC和JDBC驱动的关系）：
+
+JPA 是规范：JPA 本质上就是一种  ORM 规范，不是ORM 框架 —— 
+因为 JPA 并未提供 ORM 实现，它只是制订了一些规范，提供了一些编程的 API 接口，但具体实现则由 ORM 厂商提供实现
+
+
+Hibernate 是实现：Hibernate 除了作为 ORM 框架之外，它也是一种 JPA 实现
+
+
+从功能上来说， JPA 是 Hibernate 功能的一个子集
+
+
+```
+
 ## jpa的hello world程序
 
 首先弄个jpa的helloworld程序
@@ -487,32 +514,155 @@ public class CustomerTest {
 ## jpa中常用的注解
 
 @Entity 放到实体类上面
+```text
+@Entity 标注用于实体类声明语句之前，指出该Java 类为实体类，将映射到指定的数据库表。
+如声明一个实体类 Customer，它将映射到数据库中的 customer 表上。
+
+
+```
 
 @Table(name = "jpa_customer")设置表名
+```text
+当实体类与其映射的数据库表名不同名时需要使用 @Table 标注说明，该标注与 @Entity 标注并列使用，
+置于实体类声明语句之前，可写于单独语句行，也可与声明语句同行。
+
+@Table 标注的常用选项是 name，用于指明数据库的表名
+
+@Table标注还有一个两个选项 catalog 和 schema 用于设置表所属的数据库目录或模式，通常为数据库名。
+uniqueConstraints 选项用于设置约束条件，通常不须设置。
+
+
+```
 
 @Id映射主键的，放到getter方法上
+```text
+@Id 标注用于声明一个实体类的属性映射为数据库的主键列。该属性通常置于属性声明语句之前，可与声明语句同行，也可写在单独行上。
+
+@Id标注也可置于属性的getter方法之前。
+
+
+```
 
 @GeneratedValue(strategy = GenerationType.AUTO)设置生成主键的策略
+```text
+@GeneratedValue  用于标注主键的生成策略，通过 strategy 属性指定。默认情况下，
+JPA 自动选择一个最适合底层数据库的主键生成策略：
+    SqlServer 对应 identity，
+    MySQL 对应 auto increment。
 
+在 javax.persistence.GenerationType 中定义了以下几种可供选择的策略：
+    IDENTITY：采用数据库 ID自增长的方式来自增主键字段，Oracle 不支持这种方式；
+    AUTO： JPA自动选择合适的策略，是默认选项；
+    SEQUENCE：通过序列产生主键，通过 @SequenceGenerator 注解指定序列名，MySql 不支持这种方式
+    TABLE：通过表产生主键，框架借由表模拟序列产生主键，使用该策略可以使应用更易于数据库移植。
+
+
+
+```
 @Basic 默认的注解
+```text
+@Basic 表示一个简单的属性到数据库表的字段的映射,对于没有任何标注的 getXxxx() 方法,默认即为@Basic
+
+fetch: 表示该属性的读取策略,有 EAGER 和 LAZY 两种,分别表示主支抓取和延迟加载,默认为 EAGER.
+
+optional:表示该属性是否允许为null, 默认为true
+
+
+```
 
 @Column(name = "last_name") 设置列,name映射到数据库表中的列名
+```text
+当实体的属性与其映射的数据库表的列不同名时需要使用@Column 标注说明，
+该属性通常置于实体的属性声明语句之前，还可与 @Id 标注一起使用。
+
+@Column 标注的常用属性是 name，用于设置映射数据库表的列名。此外，
+该标注还包含其它多个属性，如：unique 、nullable、length 等。
+
+@Column 标注的 columnDefinition 属性: 表示该字段在数据库中的实际类型.
+通常 ORM 框架可以根据属性类型自动判断数据库中字段的类型,但是对于Date类型
+仍无法确定数据库中字段类型究竟是DATE,TIME还是TIMESTAMP.此外,String的
+默认映射类型为VARCHAR, 如果要将 String 类型映射到特定数据库的 BLOB 或TEXT 字段类型.
+
+
+@Column标注也可置于属性的getter方法之前
+
+
+```
 
 @Transient 不需要影响为数据库表的列的方法上加上这个注解
+```text
+表示该属性并非一个到数据库表的字段的映射,ORM框架将忽略该属性.
+如果一个属性并非数据库表的字段映射,就务必将其标示为@Transient,否则,ORM框架默认其注解为@Basic
+
+```
 
 @Temporal(TemporalType.TIMESTAMP) 设置时间日期对应到数据库表列的类型的
+```text
+在核心的 Java API 中并没有定义 Date 类型的精度(temporal precision).  
+而在数据库中,表示 Date 类型的数据有 DATE, TIME, 和 TIMESTAMP 三种精度(即单纯的日期,时间,或者两者 兼备). 
+在进行属性映射时可使用@Temporal注解来调整精度.
+
+
+```
 
 ## jpa中常用的类
 
 Persistence类
+```text
+Persistence  类是用于获取 EntityManagerFactory 实例。该类包含一个名为 createEntityManagerFactory 的 静态方法 。
+
+createEntityManagerFactory 方法有如下两个重载版本。
+    带有一个参数的方法以 JPA 配置文件 persistence.xml 中的持久化单元名为参数
+    带有两个参数的方法：前一个参数含义相同，后一个参数 Map类型，用于设置 JPA 的相关属性，
+    这时将忽略其它地方设置的属性。Map 对象的属性名必须是 JPA 实现库提供商的名字空间约定的属性名。
+
+
+```
 
 EntityManagerFactory
+```text
+EntityManagerFactory 接口主要用来创建 EntityManager 实例。该接口约定了如下4个方法：
+    createEntityManager()：用于创建实体管理器对象实例。
+    
+    createEntityManager(Map map)：用于创建实体管理器对象实例的重载方法，Map 参数用于提供 EntityManager 的属性。
+    
+    isOpen()：检查 EntityManagerFactory 是否处于打开状态。实体管理器工厂创建后一直处于打开状态，除非调用close()方法将其关闭。
+    
+    close()：关闭 EntityManagerFactory 。 EntityManagerFactory 关闭后将释放所有资源，
+    isOpen()方法测试将返回 false，其它方法将不能调用，否则将导致IllegalStateException异常。
+
+
+```
 
 EntityManager
+```text
+在 JPA 规范中, EntityManager 是完成持久化操作的核心对象。实体作为普通 Java 对象，
+只有在调用 EntityManager 将其持久化后才会变成持久化对象。EntityManager 对象在一
+组实体类与底层数据源之间进行 O/R 映射的管理。它可以用来管理和更新 Entity Bean, 
+根椐主键查找 Entity Bean, 还可以通过JPQL语句查询实体。
+ 
+ 
+ 实体的状态:
+    新建状态:   新创建的对象，尚未拥有持久性主键。
+    持久化状态：已经拥有持久性主键并和持久化建立了上下文环境
+    游离状态：拥有持久化主键，但是没有与持久化建立上下文环境
+    删除状态:  拥有持久化主键，已经和持久化建立上下文环境，但是从数据库中删除。
+
+
+
+```
 
 
 EntityManager.find()方法
+```text
+find (Class<T> entityClass,Object primaryKey)：返回指定的 OID 对应的实体类对象，
+如果这个实体存在于当前的持久化环境，则返回一个被缓存的对象；否则会创建一个新的 Entity, 
+并加载数据库中相关信息；若 OID 不存在于数据库中，则返回一个 null。第一个参数为被查询的
+实体类类型，第二个参数为待查找实体的主键值。
+```
 ```java
+
+
 
     @Test
     public void testFind(){
@@ -523,6 +673,11 @@ EntityManager.find()方法
 ```
 
 EntityManager.getReference()方法,只有在使用对象的时候才去数据库中查询。会出现懒加载异常。
+```text
+getReference (Class<T> entityClass,Object primaryKey)：与find()方法类似，不同的是：如果缓存中不存在指定的 Entity, EntityManager 会创建一个 Entity 类的代理，但是不会立即加载数据库中的信息，只有第一次真正使用此 Entity 的属性才加载，所以如果此 OID 在数据库不存在，getReference() 不会返回 null 值, 而是抛出EntityNotFoundException
+
+
+```
 ```java
 
     @Test
@@ -535,7 +690,15 @@ EntityManager.getReference()方法,只有在使用对象的时候才去数据库
 
 ```
 
-EntityManager.persist()方法,使对象由临时状态变为持久化状态。  
+EntityManager.persist()方法,使对象由临时状态变为持久化状态。 
+```text
+persist (Object entity)：用于将新创建的 Entity 纳入到 EntityManager 的管理。该方法执行后，传入 persist() 方法的 Entity 对象转换成持久化状态。
+如果传入 persist() 方法的 Entity 对象已经处于持久化状态，则 persist() 方法什么都不做。
+如果对删除状态的 Entity 进行 persist() 操作，会转换为持久化状态。
+如果对游离状态的实体执行 persist() 操作，可能会在 persist() 方法抛出 EntityExistException(也有可能是在flush或事务提交后抛出)。
+
+
+``` 
 ```java
 
 
@@ -557,7 +720,12 @@ EntityManager.persist()方法,使对象由临时状态变为持久化状态。
 如果这时设置了customer的ID，则会报错的。
 
 
-EntityManager.remove()方法,删除数据库记录，只能删除持久化对象，游离对象不行。  
+EntityManager.remove()方法,删除数据库记录，只能删除持久化对象，游离对象不行。
+```text
+remove (Object entity)：删除实例。如果实例是被管理的，即与数据库实体记录关联，则同时会删除关联的数据库记录。
+
+
+```  
 ```java
     @Test
     public void testRemove() {
@@ -579,7 +747,8 @@ EntityManager.remove()方法,删除数据库记录，只能删除持久化对象
 
 ```
 
-EntityManager.merge()方法  
+EntityManager.merge()方法 merge (T entity)：merge() 用于处理 Entity 的同步。即数据库的插入和更新操作
+ 
 会创建一个新的对象，把临时对象的属性复制到新的对象中，然后对新的对象执行持久化操作，新的对象中会有id，之前的对象没有id了。
 ```java
 
@@ -619,6 +788,56 @@ EntityManager.merge()方法
         System.out.println(customer);
         System.out.println(merge);
     }
+
+```
+
+```text
+flush ()：同步持久上下文环境，即将持久上下文环境的所有未保存实体的状态信息保存到数据库中。
+
+setFlushMode (FlushModeType flushMode)：设置持久上下文环境的Flush模式。参数可以取2个枚举
+    FlushModeType.AUTO 为自动更新数据库实体，
+    FlushModeType.COMMIT 为直到提交事务时才更新数据库记录。
+
+
+getFlushMode ()：获取持久上下文环境的Flush模式。返回FlushModeType类的枚举值。
+
+refresh (Object entity)：用数据库实体记录的值更新实体对象的状态，即更新实例的属性值。
+
+clear ()：清除持久上下文环境，断开所有关联的实体。如果这时还有未提交的更新则会被撤消。
+
+contains (Object entity)：判断一个实例是否属于当前持久上下文环境管理的实体。
+
+isOpen ()：判断当前的实体管理器是否是打开状态。
+
+getTransaction ()：返回资源层的事务对象。EntityTransaction实例可以用于开始和提交多个事务。
+
+close ()：关闭实体管理器。之后若调用实体管理器实例的方法或其派生的查询对象的方法都将抛出 IllegalstateException 异常，除了getTransaction 和 isOpen方法(返回 false)。不过，当与实体管理器关联的事务处于活动状态时，调用 close 方法后持久上下文将仍处于被管理状态，直到事务完成。
+
+
+
+```
+EntityTransaction
+```text
+EntityTransaction 接口用来管理资源层实体管理器的事务操作。通过调用实体管理器的getTransaction方法 获得其实例。
+
+begin ()
+用于启动一个事务，此后的多个数据库操作将作为整体被提交或撤消。若这时事务已启动则会抛出 IllegalStateException 异常。
+
+commit ()
+用于提交当前事务。即将事务启动以后的所有数据库更新操作持久化至数据库中。
+
+rollback ()
+撤消(回滚)当前事务。即撤消事务启动后的所有数据库更新操作，从而不对数据库产生影响。
+
+setRollbackOnly ()
+使当前事务只能被撤消。
+
+
+getRollbackOnly ()
+查看当前事务是否设置了只能撤消标志。
+
+isActive ()
+查看当前事务是否是活动的。如果返回true则不能调用begin方法，否则将抛出 IllegalStateException 异常；如果返回 false 则不能调用 commit、rollback、setRollbackOnly 及 getRollbackOnly 方法，否则将抛出 IllegalStateException 异常。
 
 ```
 
@@ -2358,3 +2577,36 @@ Process finished with exit code 0
 
 
 ```
+
+
+## spring整合JPA
+
+有这么三种整合方式
+```java
+LocalEntityManagerFactoryBean：适用于那些仅使用 JPA 进行数据访问的项目，
+该 FactoryBean 将根据JPA PersistenceProvider 自动检测配置文件进行工作，
+一般从“META-INF/persistence.xml”读取配置信息，这种方式最简单，但不能设置 
+Spring 中定义的DataSource，且不支持 Spring 管理的全局事务
+
+
+从JNDI中获取：用于从 Java EE 服务器获取指定的EntityManagerFactory，
+这种方式在进行 Spring 事务管理时一般要使用 JTA 事务管理
+
+
+LocalContainerEntityManagerFactoryBean：适用于所有环境的 FactoryBean，
+能全面控制 EntityManagerFactory 配置,如指定 Spring 定义的 DataSource 等等。
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
