@@ -2599,9 +2599,204 @@ LocalContainerEntityManagerFactoryBean：适用于所有环境的 FactoryBean，
 
 ```
 
+```java
+package com.mamh.jpa;
 
 
+public class JPATest {
 
+    private ApplicationContext context = null;
+    private PersonService personService;
+
+    @Before
+    public void init() {
+        context = new ClassPathXmlApplicationContext("spring.xml");
+        personService = context.getBean(PersonService.class);
+    }
+
+    @Test
+    public void testPersonService(){
+        Person p1 = new Person();
+        p1.setAge(12);
+        p1.setEmail("aa@163.com");
+        p1.setLastName("aa");
+
+        Person p2 = new Person();
+        p2.setAge(13);
+        p2.setEmail("BB@163.com");
+        p2.setLastName("bb");
+
+        System.out.println(personService.getClass().getName());
+        personService.savePerson(p1);
+        personService.savePerson(p2);
+    }
+
+    @Test
+    public void testDataSource() {
+        DataSource dataSource = context.getBean(DataSource.class);
+        EntityManagerFactory entityManagerFactory = (EntityManagerFactory) context.getBean("entityManagerFactory");
+
+        try {
+            System.out.println(dataSource.getConnection());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+}
+
+
+```
+
+```java
+
+package com.mamh.jpa.service;
+
+@Service
+public class PersonService {
+
+    @Autowired
+    private PersonDao personDao;
+
+    @Transactional
+    public void savePerson(Person p){
+        personDao.save(p);
+    }
+}
+
+
+```
+```java
+package com.mamh.jpa.dao;
+
+@Repository
+public class PersonDao {
+
+    /**
+     * 如何获取到和当前事务关联的entitymanger
+     * 对象呢？
+     */
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public void save(Person person) {
+        entityManager.persist(person);
+    }
+}
+
+
+```
+```java
+
+package com.mamh.jpa.entities;
+
+@Table(name = "jpa_person")
+@Entity
+public class Person {
+    private Integer id;
+    private String lastName;
+    private String email;
+    private int age;
+
+    @Id
+    @GeneratedValue
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Column(name = "last_name")
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    @Column(name = "email")
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Column(name = "age")
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
+
+
+```
+
+```xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+    <context:property-placeholder location="classpath:db.prop"/>
+    <context:component-scan base-package="com.mamh.jpa.dao"/>
+    <context:component-scan base-package="com.mamh.jpa.service"/>
+
+    <!-- 配置数据源 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="user" value="${jdbc.user}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="driverClass" value="${jdbc.driverClass}"/>
+        <property name="initialPoolSize" value="${jdbc.initPoolSize}"/>
+        <property name="maxPoolSize" value="${jdbc.maxPoolSize}"/>
+    </bean>
+
+
+    <!-- 配置 EntityMangerFactory -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 配置jpa提供商适配器 -->
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <property name="packagesToScan" value="com.mamh.jpa.entities"/>
+
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- 配置jpa使用的事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <!-- 配置支持基于注解事务配置 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+
+</beans>
+
+```
 
 
 
