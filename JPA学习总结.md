@@ -2174,7 +2174,128 @@ Customer{id=10, lastName='aa', email='aa', age=112, createTime=2018-06-04 11:41:
 
 
 
+## 关联查询
+```java
+    @Test
+    public void testLeftOuterJoinFetch() {
+        //String jsql = "from Customer  c left outer join fetch c.orders where c.id=?";
+        String jsql = "from Customer  c   where c.id=?";
+        Query query = entityManager.createQuery(jsql);
+        query.setParameter(1, 10);
+        Customer customer = (Customer) query.getSingleResult();
+        System.out.println(customer.getLastName());
+        System.out.println(customer.getOrders().size());
+    }
+
+
+```
+如上代码没有使用left outer join fetch，这样先获取customer会发送一条sql语句。然后在获取oder又会发送一条sql语句的。
+```text
+Hibernate: 
+    select
+        customer0_.id as id1_1_,
+        customer0_.age as age2_1_,
+        customer0_.birth as birth3_1_,
+        customer0_.createTime as createTi4_1_,
+        customer0_.email as email5_1_,
+        customer0_.last_name as last_nam6_1_ 
+    from
+        jpa_customer customer0_ 
+    where
+        customer0_.id=?
+aa
+Hibernate: 
+    select
+        orders0_.customer_id as customer3_1_0_,
+        orders0_.id as id1_6_0_,
+        orders0_.id as id1_6_1_,
+        orders0_.customer_id as customer3_6_1_,
+        orders0_.order_name as order_na2_6_1_ 
+    from
+        jpa_order orders0_ 
+    where
+        orders0_.customer_id=?
+3
+
+```
+
+
+以下代码加上left outer join fetch，效果就不一样了。
+```java
+
+    @Test
+    public void testLeftOuterJoinFetch() {
+        String jsql = "from Customer  c left outer join fetch c.orders where c.id=?";
+        Query query = entityManager.createQuery(jsql);
+        query.setParameter(1, 10);
+        Customer customer = (Customer) query.getSingleResult();
+        System.out.println(customer.getLastName());
+        System.out.println(customer.getOrders().size());
+    }
+
+```
+```text
+
+Hibernate: 
+    select
+        customer0_.id as id1_1_0_,
+        orders1_.id as id1_6_1_,
+        customer0_.age as age2_1_0_,
+        customer0_.birth as birth3_1_0_,
+        customer0_.createTime as createTi4_1_0_,
+        customer0_.email as email5_1_0_,
+        customer0_.last_name as last_nam6_1_0_,
+        orders1_.customer_id as customer3_6_1_,
+        orders1_.order_name as order_na2_6_1_,
+        orders1_.customer_id as customer3_1_0__,
+        orders1_.id as id1_6_0__ 
+    from
+        jpa_customer customer0_ 
+    left outer join
+        jpa_order orders1_ 
+            on customer0_.id=orders1_.customer_id 
+    where
+        customer0_.id=?
+aa
+3
+
+```
+
+如果不加fetch，返回的结果会是多个
+```java
+    @Test
+    public void testLeftOuterJoinFetch1() {
+        String jsql = "from Customer  c left outer join  c.orders where c.id=?";
+        //String jsql = "from Customer  c   where c.id=?";
+        Query query = entityManager.createQuery(jsql);
+        query.setParameter(1, 10);
+        List list = query.getResultList();
+
+        System.out.println(list);
+    }
+
+```
+```text
+Hibernate: 
+    select
+        customer0_.id as id1_1_0_,
+        orders1_.id as id1_6_1_,
+        customer0_.age as age2_1_0_,
+        customer0_.birth as birth3_1_0_,
+        customer0_.createTime as createTi4_1_0_,
+        customer0_.email as email5_1_0_,
+        customer0_.last_name as last_nam6_1_0_,
+        orders1_.customer_id as customer3_6_1_,
+        orders1_.order_name as order_na2_6_1_ 
+    from
+        jpa_customer customer0_ 
+    left outer join
+        jpa_order orders1_ 
+            on customer0_.id=orders1_.customer_id 
+    where
+        customer0_.id=?
+[[Ljava.lang.Object;@6622a690, [Ljava.lang.Object;@30b9eadd, [Ljava.lang.Object;@497570fb]
 
 
 
-
+```
