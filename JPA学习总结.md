@@ -1475,3 +1475,79 @@ Process finished with exit code 0
 
 ```
 通过以上两种方式获取的，效果是一样的，因为是有一张中间表，获取那边都是一样的。
+
+## jpql
+
+
+
+
+
+```
+    @Test
+    public void testJpql() {
+
+        String jpsql = "select new Customer(c.lastName,c.age) FROM Customer  c where c.age > ?";
+
+        Query query = entityManager.createQuery(jpsql);
+        query.setParameter(1, 1);
+        List resultList = query.getResultList();
+        System.out.println(resultList);
+
+    }
+
+
+```
+
+
+命名查询
+
+需要在实体类上面加上注解@NamedQuery(name = "testNamedQuery", query = "select c from Customer c where c.id = ?")
+
+```java
+    @Test
+    public void testNamedQuery() {
+
+        Query query = entityManager.createNamedQuery("testNamedQuery");
+        query.setParameter(1, 3);
+        List resultList = query.getResultList();
+        System.out.println(resultList);
+
+
+    }
+
+```
+
+
+
+
+```java
+
+    @Test
+    public void testNativeQuery() {
+        String sql = "SELECT age FROM jpa_customer WHERE id = ?";
+        Query query = entityManager.createNativeQuery(sql);
+        query.setParameter(1, 3);
+        List resultList = query.getResultList();
+        System.out.println(resultList);
+    }
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
