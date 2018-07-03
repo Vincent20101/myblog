@@ -1534,8 +1534,560 @@ Process finished with exit code 0
 ```
 
 
+## 一级缓存
+jpa默认是有一级缓存的。
+
+```java
+    @Test
+    public void testCache() {
+        Customer customer = entityManager.find(Customer.class, 3); //这里一级缓存为什么没有生效呢？？？？
+
+        System.out.println(customer.getLastName());
+
+        System.out.println("");
+        Customer customer1 = entityManager.find(Customer.class, 3);
+        System.out.println(customer1.getLastName());
+
+    }
+
+```
+上面的代码查询2次，只会发送一条sql语句的。特别注意 查询出来的数据要存在，如果不存在也是发送2条sql语句了。
+
+## 二级缓存
+```java
+
+    @Test
+    public void testCache1() {
+        Customer customer = entityManager.find(Customer.class, 3); //这里一级缓存为什么没有生效呢？？？？
+
+        System.out.println(customer.getLastName());
+        transaction.commit();
+        entityManager.close();
+        System.out.println("");
+
+        entityManager = entityManagerFactory.createEntityManager();
+        transaction = entityManager.getTransaction();
+        transaction.begin();
+
+        Customer customer1 = entityManager.find(Customer.class, 3);
+        System.out.println(customer1.getLastName());
+
+    }
+
+```
+
+配置文件
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+    <persistence-unit name="jpa-1" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!-- 添加持久化类 -->
+        <class>com.mamh.jpa.Customer</class>
+        <class>com.mamh.jpa.Order</class>
+        <class>com.mamh.jpa.Department</class>
+        <class>com.mamh.jpa.Manager</class>
+        <class>com.mamh.jpa.Item</class>
+        <class>com.mamh.jpa.Category</class>
+
+        <!--
+            配置二级缓存的策略
+            ALL：所有的实体类都被缓存
+            NONE：所有的实体类都不被缓存.
+            ENABLE_SELECTIVE：标识 @Cacheable(true) 注解的实体类将被缓存
+            DISABLE_SELECTIVE：缓存除标识 @Cacheable(false) 以外的所有实体类
+            UNSPECIFIED：默认值，JPA 产品默认值将被使用
+        -->
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql:///atguigu"/>
+            <property name="javax.persistence.jdbc.user" value="atguigu"/>
+            <property name="javax.persistence.jdbc.password" value="123456"/>
+
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+
+            <!--二级缓存相关的 -->
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory"/>
+            <property name="hibernate.cache.use_query_cache" value="true"/>
+        </properties>
+
+    </persistence-unit>
+
+</persistence>
 
 
+```
+
+最后实体类上面要加上@Cacheable(true)注解
+
+这样最后的输出就只会发送一个sql语句了
+```text
+Hibernate: 
+    select
+        customer0_.id as id1_1_0_,
+        customer0_.age as age2_1_0_,
+        customer0_.birth as birth3_1_0_,
+        customer0_.createTime as createTi4_1_0_,
+        customer0_.email as email5_1_0_,
+        customer0_.last_name as last_nam6_1_0_ 
+    from
+        jpa_customer customer0_ 
+    where
+        customer0_.id=?
+Tom
+
+Tom
+
+
+```
+
+## 查询缓存
+
+需要在配置文件中配置启用查询缓存
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+    <persistence-unit name="jpa-1" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!-- 添加持久化类 -->
+        <class>com.mamh.jpa.Customer</class>
+        <class>com.mamh.jpa.Order</class>
+        <class>com.mamh.jpa.Department</class>
+        <class>com.mamh.jpa.Manager</class>
+        <class>com.mamh.jpa.Item</class>
+        <class>com.mamh.jpa.Category</class>
+
+
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql:///atguigu"/>
+            <property name="javax.persistence.jdbc.user" value="atguigu"/>
+            <property name="javax.persistence.jdbc.password" value="123456"/>
+
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+
+            <!--二级缓存相关的 -->
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory"/>
+            <property name="hibernate.cache.use_query_cache" value="true"/>
+        </properties>
+
+    </persistence-unit>
+
+</persistence>
+
+
+```
+还有就是jar的版本要对。 hibernate-ehcache的版本要对。
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>mage</groupId>
+    <artifactId>jpa</artifactId>
+    <packaging>war</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>jpa Maven Webapp</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <spring.version>5.0.4.RELEASE</spring.version>
+
+        <hibernate.version>4.3.11.Final</hibernate.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <!--spring jar包-->
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/taglibs/standard -->
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+
+        <!--spring相关包, 在web中需要使用spring-web和spring-webmvc这2个jar包的-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-orm -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-aop -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>1.8.0.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-websocket</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>6.0.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-commons-annotations</artifactId>
+            <version>3.2.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.0.Final</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>4.3.2.Final</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-ehcache</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <!--日志jar-->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.9.13</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.13</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-lgpl</artifactId>
+            <version>1.9.13</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-lgpl</artifactId>
+            <version>1.9.13</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/com.mchange/c3p0 -->
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.5.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>jcifs</groupId>
+            <artifactId>jcifs</artifactId>
+            <version>1.3.17</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-websocket</artifactId>
+            <version>8.0.23</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/jaxen/jaxen -->
+        <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+            <version>1.1.6</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.8.13</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.8.13</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.9.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-dbutils/commons-dbutils -->
+        <dependency>
+            <groupId>commons-dbutils</groupId>
+            <artifactId>commons-dbutils</artifactId>
+            <version>1.7</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/org.apache.struts/struts2-core -->
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-core</artifactId>
+            <version>2.5.16</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.struts/struts2-spring-plugin -->
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-spring-plugin</artifactId>
+            <version>2.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.9.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.9.5</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>jpa</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.1</version>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+```
+
+
+```java
+
+    @Test
+    public void testQueryCache() {
+        String jpsql = "select new Customer(c.lastName,c.age) FROM Customer  c where c.age > ?";
+
+        //Query query = entityManager.createQuery(jpsql);
+        Query query = entityManager.createQuery(jpsql).setHint(QueryHints.HINT_CACHEABLE, true);
+        query.setParameter(1, 1);
+        List resultList = query.getResultList();
+        System.out.println(resultList);
+
+        //query = entityManager.createQuery(jpsql);  //默认是发送2条sql查询语句的
+        query = entityManager.createQuery(jpsql).setHint(QueryHints.HINT_CACHEABLE,true);  //默认是发送2条sql查询语句的
+        query.setParameter(1, 1);
+        resultList = query.getResultList();
+        System.out.println(resultList);
+
+    }
+
+```
+
+本来是发送2个sql语句的，现在使用了查询缓存只发送1个sql语句。
+```text
+Hibernate: 
+    select
+        customer0_.last_name as col_0_0_,
+        customer0_.age as col_1_0_ 
+    from
+        jpa_customer customer0_ 
+    where
+        customer0_.age>?
+[
+Customer{id=null, lastName='Tom', email='null', age=12, createTime=null, birth=null}, 
+Customer{id=null, lastName='Jerry', email='null', age=12, createTime=null, birth=null}, 
+Customer{id=null, lastName='b', email='null', age=112, createTime=null, birth=null}, 
+Customer{id=null, lastName='dsf', email='null', age=112, createTime=null, birth=null}, 
+Customer{id=null, lastName='zz', email='null', age=112, createTime=null, birth=null}, 
+Customer{id=null, lastName='zz', email='null', age=112, createTime=null, birth=null}, 
+Customer{id=null, lastName='zz', email='null', age=112, createTime=null, birth=null}, 
+Customer{id=null, lastName='aa', email='null', age=112, createTime=null, birth=null}, 
+Customer{id=null, lastName='Tim', email='null', age=12, createTime=null, birth=null}]
+[
+Customer{id=null, lastName='Tom', email='null', age=12, createTime=null, birth=null}, 
+Customer{id=null, lastName='Jerry', email='null', age=12, createTime=null, birth=null}, 
+Customer{id=null, lastName='b', email='null', age=112, createTime=null, birth=null}, 
+Customer{id=null, lastName='dsf', email='null', age=112, createTime=null, birth=null}, 
+Customer{id=null, lastName='zz', email='null', age=112, createTime=null, birth=null}, 
+Customer{id=null, lastName='zz', email='null', age=112, createTime=null, birth=null}, 
+Customer{id=null, lastName='zz', email='null', age=112, createTime=null, birth=null}, 
+Customer{id=null, lastName='aa', email='null', age=112, createTime=null, birth=null}, 
+Customer{id=null, lastName='Tim', email='null', age=12, createTime=null, birth=null}]
+
+Process finished with exit code 0
+
+```
 
 
 
