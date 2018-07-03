@@ -2092,10 +2092,85 @@ Process finished with exit code 0
 
 
 
+## order by 和 group by 子句
+```java
+
+    @Test
+    public void testOrderBy() {
+        String jsql = "from Customer c where c.age > ? order by c.id asc";
+        Query query = entityManager.createQuery(jsql);
+        query.setParameter(1, 1);
+        List resultList = query.getResultList();
+        System.out.println(resultList);
+    }
+
+```
+```text
+
+Hibernate: 
+    select
+        customer0_.id as id1_1_,
+        customer0_.age as age2_1_,
+        customer0_.birth as birth3_1_,
+        customer0_.createTime as createTi4_1_,
+        customer0_.email as email5_1_,
+        customer0_.last_name as last_nam6_1_ 
+    from
+        jpa_customer customer0_ 
+    where
+        customer0_.age>? 
+    order by
+        customer0_.id asc
+[
+Customer{id=3, lastName='Tom', email='tom@tom.com', age=12, createTime=2018-05-31 09:32:04.0, birth=2018-05-30}, 
+Customer{id=4, lastName='Jerry', email='jerry@163.com', age=12, createTime=2018-05-31 09:32:12.0, birth=2018-05-30}, 
+Customer{id=5, lastName='b', email='b', age=112, createTime=2018-05-31 13:34:20.0, birth=2018-05-31}, 
+Customer{id=6, lastName='dsf', email='adfa', age=112, createTime=2018-05-31 13:36:33.0, birth=2018-05-31}, 
+Customer{id=7, lastName='zz', email='zzzzz', age=112, createTime=2018-05-31 16:02:17.0, birth=2018-05-31}, 
+Customer{id=8, lastName='zz', email='zzzzz', age=112, createTime=2018-06-04 11:33:16.0, birth=2018-06-03}, 
+Customer{id=9, lastName='zz', email='zzzzz', age=112, createTime=2018-06-04 11:34:05.0, birth=2018-06-03}, 
+Customer{id=10, lastName='aa', email='aa', age=112, createTime=2018-06-04 11:41:09.0, birth=2018-06-03}, 
+Customer{id=100, lastName='Tim', email='fdadfa', age=12, createTime=2018-05-31 09:33:39.0, birth=2018-05-30}]
 
 
+```
 
 
+```java
+
+    @Test
+    public void testGroupBy() {
+        String jsql = "select o.customer FROM  Order o group by o.customer HAVING count(o.id)>2";
+        Query query = entityManager.createQuery(jsql);
+        List resultList = query.getResultList();
+        System.out.println(resultList);
+    }
+
+
+```
+```text
+Hibernate: 
+    select
+        customer1_.id as id1_1_,
+        customer1_.age as age2_1_,
+        customer1_.birth as birth3_1_,
+        customer1_.createTime as createTi4_1_,
+        customer1_.email as email5_1_,
+        customer1_.last_name as last_nam6_1_ 
+    from
+        jpa_order order0_ 
+    inner join
+        jpa_customer customer1_ 
+            on order0_.customer_id=customer1_.id 
+    group by
+        order0_.customer_id 
+    having
+        count(order0_.id)>2
+[
+Customer{id=10, lastName='aa', email='aa', age=112, createTime=2018-06-04 11:41:09.0, birth=2018-06-03}]
+
+
+```
 
 
 
