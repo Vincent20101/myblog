@@ -2339,3 +2339,22 @@ Hibernate:
 Process finished with exit code 0
 
 ```
+## jpql的udpate操作
+```java
+    @Test
+    public void testUpdate(){
+        String jsql = "update  Customer  c set c.lastName = ? where c.id = ?";
+        Query query = entityManager.createQuery(jsql);
+        query.setParameter(1, "aaa");
+        query.setParameter(2, 10);
+        query.executeUpdate();
+
+    }
+
+```
+
+## jpql的delete操作
+```java
+
+
+```
