@@ -2299,3 +2299,43 @@ Hibernate:
 
 
 ```
+
+
+## 子查询
+```java
+
+    @Test
+    public void testSubQuery() {
+        String jsql = "select o from Order  o where o.customer = (select c from  Customer c where c.lastName = ?)";
+
+        Query query = entityManager.createQuery(jsql);
+        query.setParameter(1, "aa");
+        List list = query.getResultList();
+
+        System.out.println(list);
+    }
+
+
+```
+```text
+Hibernate: 
+    select
+        order0_.id as id1_6_,
+        order0_.customer_id as customer3_6_,
+        order0_.order_name as order_na2_6_ 
+    from
+        jpa_order order0_ 
+    where
+        order0_.customer_id=(
+            select
+                customer1_.id 
+            from
+                jpa_customer customer1_ 
+            where
+                customer1_.last_name=?
+        )
+[Order{id=11, oderName='o-ff-1'}, Order{id=12, oderName='o-ff-2'}, Order{id=13, oderName='o-ff-3'}]
+
+Process finished with exit code 0
+
+```
