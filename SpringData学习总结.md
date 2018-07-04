@@ -361,6 +361,7 @@ public interface PeopleRepository extends Repository<People, Integer> {
 }
 
 ```
+
 在使用修改的情况下面，如果不加上@Modifying就会报错“Not supported for DML operations ”
 
 加上了@Modifying还是会报另外一个错误nested exception is javax.persistence.TransactionRequiredException: Executing an update/delete query
@@ -369,17 +370,76 @@ public interface PeopleRepository extends Repository<People, Integer> {
 
 ```
 
-```
 Spring Data 提供了默认的事务处理方式，即所有的查询均声明为只读事务。
 对于自定义的方法，如需改变 Spring Data 提供的事务默认方式，可以在方法上注解 @Transactional 声明 
 
 进行多个 Repository 操作时，也应该使它们在同一个事务中处理，按照分层架构的思想，
 这部分属于业务逻辑层，因此，需要在 Service 层实现对多个 Repository 的调用，并在相应的方法上声明事务。 
+
+默认情况下，spring data的每个方法上有事务，但都是一个只读的事务，他们不能完成修改操作！
+
 ```
 
 
+## CrudRepository 接口
+
+```java
+CrudRepository 接口提供了最基本的对实体类的添删改查操作 
+
+T save(T entity);//保存单个实体 
+
+Iterable<T> save(Iterable<? extends T> entities);//保存集合        
+
+T findOne(ID id);//根据id查找实体         
+
+boolean exists(ID id);//根据id判断实体是否存在         
+
+Iterable<T> findAll();//查询所有实体,不用或慎用!         
+
+long count();//查询实体数量         
+
+void delete(ID id);//根据Id删除实体         
+
+void delete(T entity);//删除一个实体 
+
+void delete(Iterable<? extends T> entities);//删除一个实体的集合         
 
 
+void deleteAll();//删除所有实体,不用或慎用! 
+
+
+
+
+```
+保存还是需要放到service，加上事务的。
+```java
+
+public interface PeopleCrudRepository extends CrudRepository<People, Integer> {
+
+}
+
+
+@Service
+public class PeopleService {
+
+    @Autowired
+    private PeopleRepository peopleRepository;
+
+    @Autowired
+    private PeopleCrudRepository peopleCrudRepository;
+
+    @Transactional
+    public void savePeoples(List<People> peoples) {
+        peopleCrudRepository.saveAll(peoples);
+
+    }
+
+    @Transactional
+    public void update(Integer id, String email) {
+        peopleRepository.updatePeopleEmail(id, email);
+    }
+}
+```
 
 
 
