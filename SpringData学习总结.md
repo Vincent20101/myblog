@@ -221,20 +221,125 @@ People{id=1, lastName='aa', email='aa', birth=2018-07-05 03:14:42.0}
 ```
 
 
+## Repository 接口概述
+```java
 
 
 
+Repository是一个空接口，即一个标记接口。
+
+若我们继承了Repository接口，则该接口会被IOC容器识别为一个Repository bean，
+纳入到IOC容器中，进而可以在该接口中定义满足一端规范的方法。
+
+纳入IOC容器需要满足 base-package扫描的repository的包名. 和 extends Repository.
+另外一个方式：//@RepositoryDefinition(domainClass = People.class, idClass = Integer.class)
 
 
+Repository 接口是 Spring Data 的一个核心接口，它不提供任何方法，开发者需要在自己定义的接口中声明需要的方法 
+    public interface Repository<T, ID extends Serializable> { } 
+Spring Data可以让我们只定义接口，只要遵循 Spring Data的规范，就无需写实现类。  
+与继承 Repository 等价的一种方式，就是在持久层接口上使用 @RepositoryDefinition 注解，并为其指定 domainClass 和 idClass 属性。如下两种方式是完全等价的
+
+```
+
+## Repository 的子接口
+```
+基础的 Repository 提供了最基本的数据访问功能，其几个子接口则扩展了一些功能。它们的继承关系如下： 
+
+Repository： 仅仅是一个标识，表明任何继承它的均为仓库接口类
+
+CrudRepository： 继承 Repository，实现了一组 CRUD 相关的方法 
+
+PagingAndSortingRepository： 继承 CrudRepository，实现了一组分页排序相关的方法 
+
+JpaRepository： 继承 PagingAndSortingRepository，实现一组 JPA 规范相关的方法 
+自定义的 XxxxRepository 需要继承 JpaRepository，这样的 XxxxRepository 接口就具备了通用的数据访问控制层的能力。
+
+JpaSpecificationExecutor： 不属于Repository体系，实现一组 JPA Criteria 查询相关的方法 
 
 
+```
+
+## Repository 的接口方法声明规范
+```java
+
+简单条件查询: 查询某一个实体类或者集合 
+按照 Spring Data 的规范，查询方法以 find | read | get 开头
+涉及条件查询时，条件的属性用条件关键字连接，要注意的是：条件属性以首字母大写。 
+
+例如：定义一个 Entity 实体类 
+class User｛ 
+    private String firstName; 
+    private String lastName; 
+｝
+
+使用And条件连接时，应这样写： 
+    findByLastNameAndFirstName(String lastName, String firstName); 
+
+条件的属性名称与个数要与参数的位置与个数一一对应 
 
 
+查询方法解析流程
+
+假如创建如下的查询：findByUserDepUuid()，框架在解析该方法时，首先剔除 findBy，然后对剩下的属性进行解析，假设查询实体为Doc
+先判断 userDepUuid （根据 POJO 规范，首字母变为小写）是否为查询实体的一个属性，如果是，则表示根据该属性进行查询；如果没有该属性，继续第二步；
+从右往左截取第一个大写字母开头的字符串(此处为Uuid)，然后检查剩下的字符串是否为查询实体的一个属性，如果是，则表示根据该属性进行查询；如果没有该属性，则重复第二步，继续从右往左截取；最后假设 user 为查询实体的一个属性；
+接着处理剩下部分（DepUuid），先判断 user 所对应的类型是否有depUuid属性，如果有，则表示该方法最终是根据 “ Doc.user.depUuid” 的取值进行查询；否则继续按照步骤 2 的规则从右往左截取，最终表示根据 “Doc.user.dep.uuid” 的值进行查询。
+可能会存在一种特殊情况，比如 Doc包含一个 user 的属性，也有一个 userDep 属性，此时会存在混淆。可以明确在属性之间加上 "_" 以显式表达意图，比如 "findByUser_DepUuid()" 或者 "findByUserDep_uuid()"
+特殊的参数： 还可以直接在方法的参数上加入分页或排序的参数，比如：
+Page<UserModel> findByName(String name, Pageable pageable);
+List<UserModel> findByName(String name, Sort sort);
 
 
+```
+## 使用@Query自定义查询
+
+这种查询可以声明在 Repository 方法中，摆脱像命名查询那样的约束，
+将查询直接在相应的接口方法中声明，结构更为清晰，这是 Spring data 的特有实现。
+
+```java
+
+//@RepositoryDefinition(domainClass = People.class, idClass = Integer.class)
+public interface PeopleRepository extends Repository<People, Integer> {
+
+    /**
+     * 通过last name获取people对象
+     *
+     * @param lastName
+     * @return
+     */
+    People getByLastName(String lastName);
 
 
+    //where lastName like ?% and id < ?
+    List<People> getByLastNameStartingWithAndIdLessThan(String lastName, Integer id);
 
+    //where lastName like %? and id < ?
+    List<People> getByLastNameEndingWithAndIdLessThan(String lastName, Integer id);
+
+    //where email in (?, ?, ?)  or birth < ?
+    List<People> getByEmailInOrBirthLessThan(List<String> emails, Date birth);
+
+
+    //查询id最大的people
+    @Query("select p from People p where p.id = (select max(p2.id) from People p2)")
+    People getMaxIdPeople();
+
+
+    //使用占位符的方式传递参数
+    @Query("select p from People p where p.lastName = ?1 and p.email = ?2")
+    List<People> getPeople(String last, String email);
+    
+    //命名参数的方式
+    @Query("select p from People p where p.lastName = :lastName and p.email = :email")
+    List<People> getPeople1(@Param("lastName") String last, @Param("email") String email);
+    
+    
+    @Query("select p from People p where p.lastName like %:lastName% and p.email like %:email%")
+    List<People> getPeople2(@Param("lastName") String last, @Param("email") String email);
+}
+
+```
 
 
 
