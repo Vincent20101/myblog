@@ -337,8 +337,44 @@ public interface PeopleRepository extends Repository<People, Integer> {
     
     @Query("select p from People p where p.lastName like %:lastName% and p.email like %:email%")
     List<People> getPeople2(@Param("lastName") String last, @Param("email") String email);
+
 }
 
+```
+
+
+
+
+
+##@Modifying 注解和事务
+@Query 与 @Modifying 这两个 annotation一起声明，可定义个性化更新操作，例如只涉及某些字段更新时最为常用，示例如下：   
+注意：  
+方法的返回值应该是 int，表示更新语句所影响的行数  
+在调用的地方必须加事务，没有事务不能正常执行  
+
+```java
+public interface PeopleRepository extends Repository<People, Integer> {    
+    
+    @Modifying
+    @Query("update People  p set p.email = :email where  p.id = :id")
+    void updatePeopleEmail(@Param("id") String id,@Param("email") String email);
+}
+
+```
+在使用修改的情况下面，如果不加上@Modifying就会报错“Not supported for DML operations ”
+
+加上了@Modifying还是会报另外一个错误nested exception is javax.persistence.TransactionRequiredException: Executing an update/delete query
+这个因为需要事务，我需要把这个update（）放到service中，其中加上    @Transactional注解
+
+
+```
+
+```
+Spring Data 提供了默认的事务处理方式，即所有的查询均声明为只读事务。
+对于自定义的方法，如需改变 Spring Data 提供的事务默认方式，可以在方法上注解 @Transactional 声明 
+
+进行多个 Repository 操作时，也应该使它们在同一个事务中处理，按照分层架构的思想，
+这部分属于业务逻辑层，因此，需要在 Service 层实现对多个 Repository 的调用，并在相应的方法上声明事务。 
 ```
 
 
