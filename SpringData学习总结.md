@@ -443,5 +443,115 @@ public class PeopleService {
 
 
 
+## PagingAndSortingRepository接口
 
+分页和排序相关的一个接口
+```java
+
+
+/**
+ * Extension of {@link CrudRepository} to provide additional methods to retrieve entities using the pagination and
+ * sorting abstraction.
+ * 
+ * @author Oliver Gierke
+ * @see Sort
+ * @see Pageable
+ * @see Page
+ */
+@NoRepositoryBean
+public interface PagingAndSortingRepository<T, ID> extends CrudRepository<T, ID> {
+
+	/**
+	 * Returns all entities sorted by the given options.
+	 * 
+	 * @param sort
+	 * @return all entities sorted by the given options
+	 */
+	Iterable<T> findAll(Sort sort);
+
+	/**
+	 * Returns a {@link Page} of entities meeting the paging restriction provided in the {@code Pageable} object.
+	 * 
+	 * @param pageable
+	 * @return a page of entities
+	 */
+	Page<T> findAll(Pageable pageable);
+}
+
+
+
+
+
+public interface PeoplePagingAndSortingRepository extends PagingAndSortingRepository<People, Integer> {
+
+
+}
+
+
+
+
+```
+
+测试代码
+```java
+    @Test
+    public void testPageing() {
+        int pageNo = 1 - 1;
+        int pageSize = 5;
+
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        Page<People> page = peoplePagingAndSortingRepository.findAll(pageRequest);
+
+        System.out.println("总记录数： " + page.getTotalElements());
+        System.out.println("当前第几页： " + (page.getNumber() + 1));
+        System.out.println("当前页面的list： " + page.getContent());
+        System.out.println("当前页面的记录数： " + page.getNumberOfElements());
+
+    }
+
+```
+
+排序
+```java
+    @Test
+    public void testSorting() {
+        int pageNo = 2 - 1;
+        int pageSize = 5;
+        Sort.Order order1 = new Sort.Order(Sort.Direction.ASC, "id");
+        Sort.Order order2 = new Sort.Order(Sort.Direction.DESC, "email");
+        Sort sort = Sort.by(order1, order2);
+
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, sort);
+        Page<People> page = peoplePagingAndSortingRepository.findAll(pageRequest);
+
+        System.out.println("总记录数： " + page.getTotalElements());
+        System.out.println("当前第几页： " + (page.getNumber() + 1));
+        System.out.println("当前页面的list： " + page.getContent());
+        System.out.println("当前页面的记录数： " + page.getNumberOfElements());
+
+    }
+
+```
+注意输出的sql语句就带有order by 子句的。
+```java
+Hibernate: 
+    select
+        people0_.id as id1_1_,
+        people0_.address_id as address_5_1_,
+        people0_.birth as birth2_1_,
+        people0_.email as email3_1_,
+        people0_.last_name as last_nam4_1_ 
+    from
+        jpa_people people0_ 
+    order by
+        people0_.id asc,
+        people0_.email desc limit ?,
+        ?
+Hibernate: 
+    select
+        count(people0_.id) as col_0_0_ 
+    from
+        jpa_people people0_
+
+```
 
