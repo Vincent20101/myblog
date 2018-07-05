@@ -555,3 +555,183 @@ Hibernate:
 
 ```
 
+
+## JpaRepository接口
+
+```java
+该接口提供了JPA的相关功能 
+
+List<T> findAll(); //查找所有实体 
+
+List<T> findAll(Sort sort); //排序、查找所有实体 
+
+List<T> save(Iterable<? extends T> entities);//保存集合 
+
+void flush();//执行缓存与数据库同步 
+
+T saveAndFlush(T entity);//强制执行持久化 
+
+void deleteInBatch(Iterable<T> entities);//删除一个实体集合 
+
+
+
+
+@NoRepositoryBean
+public interface JpaRepository<T, ID> extends PagingAndSortingRepository<T, ID>, QueryByExampleExecutor<T> {
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.data.repository.CrudRepository#findAll()
+	 */
+	List<T> findAll();
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.data.repository.PagingAndSortingRepository#findAll(org.springframework.data.domain.Sort)
+	 */
+	List<T> findAll(Sort sort);
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.data.repository.CrudRepository#findAll(java.lang.Iterable)
+	 */
+	List<T> findAllById(Iterable<ID> ids);
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.data.repository.CrudRepository#save(java.lang.Iterable)
+	 */
+	<S extends T> List<S> saveAll(Iterable<S> entities);
+
+	/**
+	 * Flushes all pending changes to the database.
+	 */
+	void flush();
+
+	/**
+	 * Saves an entity and flushes changes instantly.
+	 *
+	 * @param entity
+	 * @return the saved entity
+	 */
+	<S extends T> S saveAndFlush(S entity);
+
+	/**
+	 * Deletes the given entities in a batch which means it will create a single {@link Query}. Assume that we will clear
+	 * the {@link javax.persistence.EntityManager} after the call.
+	 *
+	 * @param entities
+	 */
+	void deleteInBatch(Iterable<T> entities);
+
+	/**
+	 * Deletes all entities in a batch call.
+	 */
+	void deleteAllInBatch();
+
+	/**
+	 * Returns a reference to the entity with the given identifier.
+	 *
+	 * @param id must not be {@literal null}.
+	 * @return a reference to the entity with the given identifier.
+	 * @see EntityManager#getReference(Class, Object)
+	 * @throws javax.persistence.EntityNotFoundException if no entity exists for given {@code id}.
+	 */
+	T getOne(ID id);
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.data.repository.query.QueryByExampleExecutor#findAll(org.springframework.data.domain.Example)
+	 */
+	@Override
+	<S extends T> List<S> findAll(Example<S> example);
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.data.repository.query.QueryByExampleExecutor#findAll(org.springframework.data.domain.Example, org.springframework.data.domain.Sort)
+	 */
+	@Override
+	<S extends T> List<S> findAll(Example<S> example, Sort sort);
+}
+
+
+
+
+```
+
+
+```java
+
+    @Test
+    public void testJpqRepository() {
+        People people = new People();
+        people.setLastName("xyz");
+        people.setEmail("xy@mage.com");
+        people.setBirth(new Date());
+        
+        //people.setId(27);
+
+
+        People people1 = peopleJpaRepository.saveAndFlush(people);
+
+        System.out.println(people == people1);
+
+    }
+
+```
+上面代码如果设置了people.setId(27);，会先查询，然后在更新的。
+```java
+Hibernate: 
+    select
+        people0_.id as id1_1_0_,
+        people0_.address_id as address_5_1_0_,
+        people0_.birth as birth2_1_0_,
+        people0_.email as email3_1_0_,
+        people0_.last_name as last_nam4_1_0_ 
+    from
+        jpa_people people0_ 
+    where
+        people0_.id=?
+Hibernate: 
+    update
+        jpa_people 
+    set
+        address_id=?,
+        birth=?,
+        email=?,
+        last_name=? 
+    where
+        id=?
+false
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
