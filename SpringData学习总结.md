@@ -781,8 +781,39 @@ public interface JpaSpecificationExecutor<T> {
 
 ```
 
+## 自定义 Repository 方法
+先定义一个接口
+```java
+public interface PeopleDao {
+
+    void test();
+}
 
 
+```
+然后弄一个实现类，类名后缀要是Impl
+
+```java
+public class PeopleRepoImpl implements PeopleDao {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Override
+    public void test() {
+        People people = entityManager.find(People.class, 1);
+        System.out.println(people);
+    }
+}
+
+```
+还要有个对应的接口PeopleRepo
+```java
+public interface PeopleRepo extends PeopleDao, Repository<People, Integer> {
+}
+
+
+```
 
 
 
