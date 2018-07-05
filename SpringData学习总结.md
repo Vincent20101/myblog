@@ -707,6 +707,79 @@ false
 ```
 
 
+## JpaSpecificationExecutor接口
+
+```java
+不属于Repository体系，实现一组 JPA Criteria 查询相关的方法 
+
+Specification：封装  JPA Criteria 查询条件。通常使用匿名内部类的方式来创建该接口的对象
+
+
+```
+```java
+
+public interface JpaSpecificationExecutor<T> {
+
+
+	Optional<T> findOne(@Nullable Specification<T> spec);  //Specification：封装  JPA Criteria 查询条件。通常使用匿名内部类的方式来创建该接口的对象
+
+
+
+	List<T> findAll(@Nullable Specification<T> spec);
+
+
+	Page<T> findAll(@Nullable Specification<T> spec, Pageable pageable);
+
+
+	List<T> findAll(@Nullable Specification<T> spec, Sort sort);
+
+
+	long count(@Nullable Specification<T> spec);
+}
+
+
+```
+
+一个带查询条件的分页。
+
+```java
+    @Test
+    public void testJpaSpecificationExecutor() {
+        /**
+         * 带查询条件的分页， 条件是 ID 大于 5.
+         */
+        int pageNo = 1 - 1;
+        int pageSize = 5;
+
+        Sort.Order order1 = new Sort.Order(Sort.Direction.ASC, "id");
+        Sort.Order order2 = new Sort.Order(Sort.Direction.DESC, "email");
+        Sort sort = Sort.by(order1, order2);
+
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, sort);
+
+        Specification<People> specification = new Specification<People>() {
+
+            public Predicate toPredicate(Root<People> root, CriteriaQuery<?> query,
+                                         CriteriaBuilder criteriaBuilder) {
+
+                Path path = root.get("id");
+
+                Predicate predicate = criteriaBuilder.gt(path, 5);//这个就是  id  大于 5
+
+
+                return predicate;
+
+            }
+        };
+        Page page = peopleRepository.findAll(specification, pageRequest);
+
+        System.out.println("总记录数： " + page.getTotalElements());
+        System.out.println("当前第几页： " + (page.getNumber() + 1));
+        System.out.println("当前页面的list： " + page.getContent());
+        System.out.println("当前页面的记录数： " + page.getNumberOfElements());
+    }
+
+```
 
 
 
