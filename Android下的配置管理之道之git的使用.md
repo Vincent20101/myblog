@@ -2027,12 +2027,113 @@ git lc   = log --left-right --cherry-pick --date=short --pretty='%m || %h ||  %<
 ```
 
 # git stash
+```
 git stash 命令用来临时地保存一些还没有提交的工作，以便在分支上不需要提交未完成工作就可以清理工作目录。  
-git stash list 查看现有的储藏   
-git stash apply 重新应用你刚刚实施的储藏  
+git stash用于想要保存当前的修改,但是想回到之前最后一次提交的干净的工作仓库时进行的操作.git stash将本地的修改保存起来,并且将当前代码切换到HEAD提交上.
+通过git stash存储的修改列表,可以通过git stash list查看.git stash show用于校验,git stash apply用于重新存储.直接执行git stash等同于git stash save.
+
+最新的存储保存在refs/stash中.老的存储可以通过相关的参数获得,例如stash@{0}获取最新的存储,stash@{1}获取次新.stash@{2.hour.ago}获取两小时之前的.存储可以直接通过索引的位置来获得stash@{n}.
+
+
+git stash   save [-p|--patch] [-k|--[no-]keep-index] [-u|--include-untracked] [-a|--all] [-q|--quiet] [<message>]
+
+git stash   push [-p|--patch] [-k|--[no-]keep-index] [-u|--include-untracked] [-a|--all] [-q|--quiet] [-m|--message <message>] [--] [<pathspec>…​]
+
+save和push命令都可以用于存储修改.并且将git的工作状态切回到HEAD也就是上一次合法提交上.后面的<message>是选填项.
+
+save 子命令最后可以跟上一个描述信息。用push的话需要加上-m选项的。
+push子命令最后可以跟上多个patspec。
+
+--keep-index(简写为-k)只会存储为加入git管理的文件，未追踪的文件不会加入。
+--include-untracked未追踪的文件也会被缓存,当前的工作空间会被恢复为完全清空的状态.
+--all,那么除了未加入管理的文件,被git忽略(ignore)的文件也会被缓存.
+ 
+ 
+git stash list 查看现有的储藏 
+  
+git stash apply 重新应用你刚刚实施的储藏 
+ 
 git stash apply stash@{2}。指定应用第二个。如果你不指明，Git 默认使用最近的储藏并尝试应用它.  
-git stash drop，加上你希望移除的储藏的名字  
+
+git stash drop，加上你希望移除的储藏的名字
+
+git stash show 展示存储单元和最新提交的diff结果.如果没有给定<stash>参数时,会对比最新的存储单元.
+
+git stash pop 移除单个存储单元.和git stash save的作用相反  
+```
+开发到一半,同步远端代码
+```
+
+当你的开发进行到一半,但是代码还不想进行提交 ,然后需要同步去关联远端代码时.如果你本地的代码和远端代码没有冲突时,
+可以直接通过git pull解决.但是如果可能发生冲突怎么办.直接git pull会拒绝覆盖当前的修改.
+
+遇到这种情况,需要先保存本地的代码,进行git pull,然后再pop出本地代码:
+```
+
+
+工作流被打断,需要先做别的需求
+```
+
+当开发进行到一半,老板过来跟你说"线上有个bug,你现在给我改好,不然扣你鸡腿".当然,你可以开一个新的分支,
+把当前代码提交过去,回头再merge,具体代码如下 
+繁琐的工作流示例
+# ... hack hack hack ...
+ git checkout -b my_wip
+ git commit -a -m "WIP"
+ git checkout master
+ edit emergency fix
+ git commit -a -m "Fix in a hurry"
+ git checkout my_wip
+ git reset --soft HEAD^
+# ... continue hacking ...
+
+我们可以通过git stash来简化这个流程
+正确姿势
+# ... hack hack hack ...
+ git stash        //保存开发到一半的代码
+ edit emergency fix
+ git commit -a -m "Fix in a hurry"
+ git stash pop   //将代码追加到最新的提交之后
+# ... continue hacking ...
+
+ 
+
+
+ 
 欢迎光临 马哥私房菜 淘宝https://shop592330910.taobao.com/
+```
+
+
+#git worktree
+```bash
+管理多个工作目录的一个命令
+
+git worktree add [-f] [--detach] [--checkout] [--lock] [-b <new-branch>] <path> [<commit-ish>]
+git worktree list [--porcelain]
+git worktree lock [--reason <string>] <worktree>
+git worktree move <worktree> <new-path>
+git worktree prune [-n] [-v] [--expire <expire>]
+git worktree remove [-f] <worktree>
+git worktree unlock <worktree> 
+
+
+
+这个命令和git stash有相似的使用场景。当工作被打断了，有不想取储存，就可以使用这个新建个干净的工作目录。
+You are in the middle of a refactoring session and your boss comes in and demands that you fix something immediately. You might typically use git-stash(1) to store your changes away temporarily, however, your working
+tree is in such a state of disarray (with new, moved, and removed files, and other bits and pieces strewn around) that you don’t want to risk disturbing any of it. Instead, you create a temporary linked working tree to
+make the emergency fix, remove it when done, and then resume your earlier refactoring session.
+
+$ git worktree add -b emergency-fix ../temp master
+$ pushd ../temp
+# ... hack hack hack ...
+$ git commit -a -m 'emergency fix for boss'
+$ popd
+$ rm -rf ../temp
+$ git worktree prune
+
+
+```
+
 
 # git tag
 git tag 命令用来为代码历史记录中的某一个点指定一个永久的书签。  
