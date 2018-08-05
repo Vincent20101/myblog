@@ -207,6 +207,17 @@ PipedOutputStream 是管道输出流 ， 继承自OutputStream。
 
 
 ```
+java IO 之 PipedReader和PipedWriter
+```text
+
+PipedWriter 是字符管道输出流，它继承于Writer。
+PipedReader 是字符管道输入流，它继承于Writer。
+PipedWriter和PipedReader的作用是可以通过管道进行线程间的通讯。在使用管道通信时，必须将PipedWriter和PipedReader配套使用。
+
+
+
+
+```
 
 java IO 之 对象流 ObjectInputStream 和 ObjectOutputStream 
 ```
@@ -247,7 +258,163 @@ writeExternal()与readExternal()方法声明为public，恶意类可以用这些
 
 ```
 
+java IO 之 DataInputStream  和 DataInputStream 
+```text
+DataInputStream 是数据输入流。它继承于FilterInputStream。
+DataInputStream 是用来装饰其它输入流，它“允许应用程序以与机器无关方式从底层输入流中读取基本 Java 数据类型”。
+应用程序可以使用DataOutputStream(数据输出流)写入，由DataInputStream(数据输入流)读取的数据。
 
+DataInputStream(InputStream in)
+final int     read(byte[] buffer, int offset, int length)
+final int     read(byte[] buffer)
+final boolean     readBoolean()
+final byte     readByte()
+final char     readChar()
+final double     readDouble()
+final float     readFloat()
+final void     readFully(byte[] dst)
+final void     readFully(byte[] dst, int offset, int byteCount)
+final int     readInt()
+final String     readLine()
+final long     readLong()
+final short     readShort()
+final static String     readUTF(DataInput in)
+final String     readUTF()
+final int     readUnsignedByte()
+final int     readUnsignedShort()
+final int     skipBytes(int count)
+
+DataInputStream 中比较难以理解的函数就只有 readUTF(DataInput in)；
+说明：
+readUTF()的作用，是从输入流中读取UTF-8编码的数据，并以String字符串的形式返回。
+
+DataOutputStream 是数据输出流。它继承于FilterOutputStream。
+DataOutputStream 是用来装饰其它输出流，将DataOutputStream和DataInputStream输入流配合使用，“允许应用程序以与机器无关方式从底层输入流中读写基本 Java 数据类型”。
+
+
+```
+java IO 之 PrintStream(打印输出流)
+```text
+PrintStream 是打印输出流，它继承于FilterOutputStream。
+PrintStream 是用来装饰其它输出流。它能为其他输出流添加了功能，使它们能够方便地打印各种数据值表示形式。
+与其他输出流不同，PrintStream 永远不会抛出 IOException；它产生的IOException会被自身的函数所捕获并设置错误标记， 用户可以通过 checkError() 返回错误标记，从而查看PrintStream内部是否产生了IOException。
+另外，PrintStream 提供了自动flush 和 字符集设置功能。所谓自动flush，就是往PrintStream写入的数据会立刻调用flush()函数。
+
+
+我们先看看System.out.println的流程。先看看System.java中out的定义，源码如下：
+    public final static PrintStream out = null;
+
+
+```
+
+java IO 之 CharArrayReader 和 CharArrayWriter 
+```text
+CharArrayReader 是字符数组输入流。它和ByteArrayInputStream类似，只不过ByteArrayInputStream是字节数组输入流，
+而CharArray是字符数组输入流。CharArrayReader 是用于读取字符数组，它继承于Reader。操作的数据是以字符为单位！
+说明：
+CharArrayReader实际上是通过“字符数组”去保存数据。
+
+(01) 通过 CharArrayReader(char[] buf) 或 CharArrayReader(char[] buf, int offset, int length) ，我们可以根据buf数组来创建CharArrayReader对象。
+(02) read()的作用是从CharArrayReader中“读取下一个字符”。
+(03) read(char[] buffer, int offset, int len)的作用是从CharArrayReader读取字符数据，并写入到字符数组buffer中。offset是将字符写入到buffer的起始位置，len是写入的字符的长度。
+(04) markSupported()是判断CharArrayReader是否支持“标记功能”。它始终返回true。
+(05) mark(int readlimit)的作用是记录标记位置。记录标记位置之后，某一时刻调用reset()则将“CharArrayReader下一个被读取的位置”重置到“mark(int readlimit)所标记的位置”；也就是说，reset()之后再读取CharArrayReader时，是从mark(int readlimit)所标记的位置开始读取。
+
+
+CharArrayWriter 用于写入数据符，它继承于Writer。操作的数据是以字符为单位！
+说明：
+CharArrayWriter实际上是将数据写入到“字符数组”中去。
+(01) 通过CharArrayWriter()创建的CharArrayWriter对应的字符数组大小是32。
+(02) 通过CharArrayWriter(int size) 创建的CharArrayWriter对应的字符数组大小是size。
+(03) write(int oneChar)的作用将int类型的oneChar换成char类型，然后写入到CharArrayWriter中。
+(04) write(char[] buffer, int offset, int len) 是将字符数组buffer写入到输出流中，offset是从buffer中读取数据的起始偏移位置，len是读取的长度。
+(05) write(String str, int offset, int count) 是将字符串str写入到输出流中，offset是从str中读取数据的起始位置，count是读取的长度。
+(06) append(char c)的作用将char类型的c写入到CharArrayWriter中，然后返回CharArrayWriter对象。
+注意：append(char c)与write(int c)都是将单个字符写入到CharArrayWriter中。它们的区别是，append(char c)会返回CharArrayWriter对象，但是write(int c)返回void。
+(07) append(CharSequence csq, int start, int end)的作用将csq从start开始(包括)到end结束(不包括)的数据，写入到CharArrayWriter中。
+注意：该函数返回CharArrayWriter对象！
+(08) append(CharSequence csq)的作用将csq写入到CharArrayWriter中。
+注意：该函数返回CharArrayWriter对象！
+(09) writeTo(OutputStream out) 将该“字符数组输出流”的数据全部写入到“输出流out”中。
+
+
+```
+
+java IO 之 InputStreamReader 和 OutputStreamWriter
+```text
+InputStreamReader和OutputStreamWriter 是字节流通向字符流的桥梁：它使用指定的 charset 读写字节并将其解码为字符。
+InputStreamReader 的作用是将“字节输入流”转换成“字符输入流”。它继承于Reader。
+OutputStreamWriter 的作用是将“字节输出流”转换成“字符输出流”。它继承于Writer。
+
+```
+java IO 之 FileReader和FileWriter
+```text
+
+FileReader 是用于读取字符流的类，它继承于InputStreamReader。要读取原始字节流，请考虑使用 FileInputStream。
+FileWriter 是用于写入字符流的类，它继承于OutputStreamWriter。要写入原始字节流，请考虑使用 FileOutputStream。
+
+```
+
+java IO 之 BufferedReader(字符缓冲输入流) 和 BufferedWriter(字符缓冲输出流)
+```text
+BufferedReader 是缓冲字符输入流。它继承于Reader。
+BufferedReader 的作用是为其他字符输入流添加一些缓冲功能。
+// 构造函数
+BufferedReader(Reader in)
+BufferedReader(Reader in, int size)
+
+void     close()
+void     mark(int markLimit)
+boolean  markSupported()
+int      read()
+int      read(char[] buffer, int offset, int length)
+String   readLine()
+boolean  ready()
+void     reset()
+long     skip(long charCount)
+
+
+BufferedWriter 是缓冲字符输出流。它继承于Writer。
+BufferedWriter 的作用是为其他字符输出流添加一些缓冲功能。
+// 构造函数
+BufferedWriter(Writer out) 
+BufferedWriter(Writer out, int sz) 
+ 
+void    close()                              // 关闭此流，但要先刷新它。
+void    flush()                              // 刷新该流的缓冲。
+void    newLine()                            // 写入一个行分隔符。
+void    write(char[] cbuf, int off, int len) // 写入字符数组的某一部分。
+void    write(int c)                         // 写入单个字符。
+void    write(String s, int off, int len)    // 写入字符串的某一部分。
+
+
+```
+
+java IO 之 PrintWriter (字符打印输出流)
+```text
+PrintWriter 是字符类型的打印输出流，它继承于Writer。
+
+PrintStream 用于向文本输出流打印对象的格式化表示形式。它实现在 PrintStream 中的所有 print 方法。
+它不包含用于写入原始字节的方法，对于这些字节，程序应该使用未编码的字节流进行写入。
+
+
+
+```
+java IO 之 RandomAccessFile
+```text
+RandomAccessFile 是随机访问文件(包括读/写)的类。它支持对文件随机访问的读取和写入，即我们可以从指定的位置读取/写入文件数据。
+需要注意的是，RandomAccessFile 虽然属于java.io包，但它不是InputStream或者OutputStream的子类；
+它也不同于FileInputStream和FileOutputStream。 FileInputStream 只能对文件进行读操作，而FileOutputStream 只能对文件进行写操作；
+但是，RandomAccessFile 同时支持文件的读和写，并且它支持随机访问。
+
+RandomAccessFile共有4种模式："r", "rw", "rws"和"rwd"。
+"r"    以只读方式打开。调用结果对象的任何 write 方法都将导致抛出 IOException。  
+"rw"   打开以便读取和写入。
+"rws"  打开以便读取和写入。相对于 "rw"，"rws" 还要求对“文件的内容”或“元数据”的每个更新都同步写入到基础存储设备。  
+"rwd"  打开以便读取和写入，相对于 "rw"，"rwd" 还要求对“文件的内容”的每个更新都同步写入到基础存储设备。
+
+
+```
 
 
 java NIO
