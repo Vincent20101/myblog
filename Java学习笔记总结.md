@@ -586,7 +586,11 @@ ps：线程安全会带来额外的系统开销，所以StringBuilder的效率�
 ```
 
 集合相关面试分析
+![image182.jpeg](https://raw.githubusercontent.com/mageSFC/myblog/master/images/Java学习笔记总结_00.jpg)
+
 ```text
+Java集合是java提供的工具包，包含了常用的数据结构：集合、链表、队列、栈、数组、映射等。Java集合工具包位置是java.util.*
+Java集合主要可以划分为4个部分：List列表、Set集合、Map映射、工具类(Iterator迭代器、Enumeration枚举类、Arrays和Collections)、。
 java集合分为两类，collection 和  map 两种，两种是并列的。
 
 collection 存的值。
@@ -604,7 +608,114 @@ map存 键和值。
     LinkedHashMap
     HashTable
 
+Arrays和Collections。它们是操作数组、集合的两个工具类。
 ```
+ArrayList遍历方式
+```text
+(01) 第一种，通过迭代器遍历。即通过Iterator去遍历。
+Integer value = null;
+Iterator iter = list.iterator();
+while (iter.hasNext()) {
+    value = (Integer)iter.next();
+}
+
+
+(02) 第二种，随机访问，通过索引值去遍历。
+Integer value = null;
+int size = list.size();
+for (int i=0; i<size; i++) {
+    value = (Integer)list.get(i);        
+}
+
+(03) 第三种，for循环遍历。如下：
+Integer value = null;
+for (Integer integ:list) {
+    value = integ;
+}
+
+ 遍历ArrayList时，使用随机访问(即，通过索引序号访问)效率最高，而使用迭代器的效率最低！
+ 
+```
+
+
+LinkedList遍历方式
+```text
+(01) 第一种，通过迭代器遍历。即通过Iterator去遍历。
+for(Iterator iter = list.iterator(); iter.hasNext();)
+    iter.next();
+    
+(02) 通过快速随机访问遍历LinkedList
+int size = list.size();
+for (int i=0; i<size; i++) {
+    list.get(i);        
+}
+    
+(03) 通过另外一种for循环来遍历LinkedList
+for (Integer integ:list) 
+    ;
+
+(04) 通过pollFirst()来遍历LinkedList
+while(list.pollFirst() != null)
+    ;
+
+(05) 通过pollLast()来遍历LinkedList
+while(list.pollLast() != null)
+    ;
+
+(06) 通过removeFirst()来遍历LinkedList
+try {
+    while(list.removeFirst() != null)
+        ;
+} catch (NoSuchElementException e) {
+}
+
+(07) 通过removeLast()来遍历LinkedList
+try {
+    while(list.removeLast() != null)
+        ;
+} catch (NoSuchElementException e) {
+}
+由此可见，遍历LinkedList时，使用removeFist()或removeLast()效率最高。但用它们遍历时，会删除原始数据；若单纯只读取，而不删除，应该使用第3种遍历方式。
+无论如何，千万不要通过随机访问去遍历LinkedList！
+
+
+```
+Vector遍历方式
+```text
+(01) 第一种，通过迭代器遍历。即通过Iterator去遍历。
+Integer value = null;
+int size = vec.size();
+for (int i=0; i<size; i++) {
+    value = (Integer)vec.get(i);        
+}
+
+(02) 第二种，随机访问，通过索引值去遍历。
+Integer value = null;
+int size = vec.size();
+for (int i=0; i<size; i++) {
+    value = (Integer)vec.get(i);        
+}
+
+(03) 第三种，另一种for循环。如下：
+Integer value = null;
+for (Integer integ:vec) {
+    value = integ;
+}
+(04) 第四种，Enumeration遍历。如下： 
+Integer value = null;
+Enumeration enu = vec.elements();
+while (enu.hasMoreElements()) {
+    value = (Integer)enu.nextElement();
+}
+
+总结：遍历Vector，使用索引的随机访问方式最快，使用迭代器最慢。
+索引变量 > 增强for循环 >  Enumeration遍历 >    迭代器遍历
+
+```
+
+
+
+
 ```text
 Comparable可以认为是一个内比较器，实现了Comparable接口的类有一个特点，就是这些类是可以和自己比较的，
 至于具体和另一个实现了Comparable接口的类如何比较，则依赖compareTo方法的实现，compareTo方法也被称为自然比较方法。
@@ -651,7 +762,17 @@ Vector、ArrayList都是list接口的实现类,也都继承了AbstractList类。
 List l = new ArrayList();
 jdk8当中在添加第一个元素的时候才去创建底层的那个数组，jdk7一开始就创建一个默认长度10的数组。
 
+(01) List 是一个接口，它继承于Collection的接口。它代表着有序的队列。
+(02) AbstractList 是一个抽象类，它继承于AbstractCollection。AbstractList实现List接口中除size()、get(int location)之外的函数。
+(03) AbstractSequentialList 是一个抽象类，它继承于AbstractList。AbstractSequentialList 实现了“链表中，根据index索引值操作链表的全部函数”。
 
+(04) ArrayList, LinkedList, Vector, Stack是List的4个实现类。
+    ArrayList 是一个数组队列，相当于动态数组。它由数组实现，随机访问效率高，随机插入、随机删除效率低。
+    LinkedList 是一个双向链表。它也可以被当作堆栈、队列或双端队列进行操作。LinkedList随机访问效率低，但随机插入、随机删除效率低。
+    Vector 是矢量队列，和ArrayList一样，它也是一个动态数组，由数组实现。但是ArrayList是非线程安全的，而Vector是线程安全的。
+    Stack 是栈，它继承于Vector。它的特性是：先进后出(FILO, First In Last Out)。
+
+ 
 ```
 
 HashTable, HashMap，TreeMap 区别？
@@ -694,6 +815,111 @@ TreeMap实现SortMap接口，能够把它保存的记录根据键排序,默认�
 hashMap使用array和list俩表示，根据键的hashcode来计算在数组中哪个位置存放数据，然后在数据存放到list中。
 当数据量很大的时候，会把list转为红黑树来存放的（此数组i位置上的链表元素个数大于8且整个数组长度大于64才使用红黑树）。
 ```
+
+HashMap遍历方式
+```text
+
+遍历HashMap的键值对
+
+第一步：根据entrySet()获取HashMap的“键值对”的Set集合。
+第二步：通过Iterator迭代器遍历“第一步”得到的集合。
+// 假设map是HashMap对象
+// map中的key是String类型，value是Integer类型
+Integer integ = null;
+Iterator iter = map.entrySet().iterator();
+while(iter.hasNext()) {
+    Map.Entry entry = (Map.Entry)iter.next();
+    
+    key = (String)entry.getKey();// 获取key
+        
+    integ = (Integer)entry.getValue();// 获取value
+}
+
+
+
+ 遍历HashMap的键
+
+第一步：根据keySet()获取HashMap的“键”的Set集合。
+第二步：通过Iterator迭代器遍历“第一步”得到的集合。
+// 假设map是HashMap对象
+// map中的key是String类型，value是Integer类型
+String key = null;
+Integer integ = null;
+Iterator iter = map.keySet().iterator();
+while (iter.hasNext()) {
+       
+    key = (String)iter.next(); // 获取key
+        
+    integ = (Integer)map.get(key);// 根据key，获取value
+}
+
+
+遍历HashMap的值
+第一步：根据value()获取HashMap的“值”的集合。
+第二步：通过Iterator迭代器遍历“第一步”得到的集合。
+// 假设map是HashMap对象
+// map中的key是String类型，value是Integer类型
+Integer value = null;
+Collection c = map.values();
+Iterator iter= c.iterator();
+while (iter.hasNext()) {
+    value = (Integer)iter.next();
+}
+
+
+
+
+```
+Hashtable遍历方式
+```text
+
+通过Enumeration遍历Hashtable的键
+
+第一步：根据keys()获取Hashtable的集合。
+第二步：通过Enumeration遍历“第一步”得到的集合。
+Enumeration enu = table.keys();
+while(enu.hasMoreElements()) {
+    System.out.println(enu.nextElement());
+}   
+
+
+
+通过Enumeration遍历Hashtable的值
+
+第一步：根据elements()获取Hashtable的集合。
+第二步：通过Enumeration遍历“第一步”得到的集合。
+Enumeration enu = table.elements();
+while(enu.hasMoreElements()) {
+    System.out.println(enu.nextElement());
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 GET，POST区别？
 ```text
