@@ -99,7 +99,34 @@ void                    write(int oneByte)  // 写入字节oneByte到“文件�
 
 
 ```
+java IO 之  BufferedInputStream  和 BufferedOutputStream
+```text
+BufferedInputStream 是缓冲输入流。它继承于FilterInputStream。
+BufferedInputStream 的作用是为另一个输入流添加一些功能，例如，提供“缓冲功能”以及支持“mark()标记”和“reset()重置方法”。
+BufferedInputStream 本质上是通过一个内部缓冲区数组实现的( byte buf[];)。
+例如，在新建某输入流对应的BufferedInputStream后，当我们通过read()读取输入流的数据时，BufferedInputStream会将该输入流的数据分批的填入到缓冲区中。
+每当缓冲区中的数据被读完之后，输入流会再次填充数据缓冲区；如此反复，直到我们读完输入流数据位置。
 
+说明：
+要想读懂BufferedInputStream的源码，就要先理解它的思想。BufferedInputStream的作用是为其它输入流提供缓冲功能。
+创建BufferedInputStream时，我们会通过它的构造函数指定某个输入流为参数。BufferedInputStream会将该输入流数据分批读取，每次读取一部分到缓冲中；操作完缓冲中的这部分数据之后，再从输入流中读取下一部分的数据。
+为什么需要缓冲呢？原因很简单，效率问题！缓冲中的数据实际上是保存在内存中，而原始数据可能是保存在硬盘或NandFlash等存储介质中；而我们知道，从内存中读取数据的速度比从硬盘读取数据的速度至少快10倍以上。
+那干嘛不干脆一次性将全部数据都读取到缓冲中呢？第一，读取全部的数据所需要的时间可能会很长。第二，内存价格很贵，容量不像硬盘那么大。
+
+
+BufferedOutputStream 是缓冲输出流。它继承于FilterOutputStream。
+BufferedOutputStream 的作用是为另一个输出流提供“缓冲功能”。
+说明：
+BufferedOutputStream的源码非常简单，这里就BufferedOutputStream的思想进行简单说明：B
+ufferedOutputStream通过字节数组来缓冲数据，当缓冲区满或者用户调用flush()函数时，它就会将缓冲区的数据写入到输出流中。
+ 
+
+当写入缓冲区小于实际的缓冲区大小，他不会执行情况缓冲区操作（即，将缓冲数据写入到输出流中），在执行close()后 它会关闭输出流；在关闭输出流之前，会将缓冲区的数据写入到输出流中。
+如果手动执行了flush()操作会将缓冲区的数据写入到输出流中。
+如果写入缓冲区的大于实际缓冲区大小，他会直接 写入都输出流中，而不经过缓冲区。
+
+
+```
 
 java IO 之 FileDescriptor
 ```
