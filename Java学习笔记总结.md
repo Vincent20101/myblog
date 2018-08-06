@@ -841,29 +841,7 @@ static ThreadFactory privilegedThreadFactory()
 static ExecutorService unconfigurableExecutorService(ExecutorService executor)
 // 返回一个将所有已定义的 ExecutorService 方法委托给指定执行程序的对象，但是使用强制转换可能无法访问其他方法。
 static ScheduledExecutorService unconfigurableScheduledExecutorService(ScheduledExecutorService executor)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 ```
 
@@ -1266,10 +1244,6 @@ AtomicLong 是作用是对长整形进行原子操作。
 在32位操作系统中，64位的long 和 double 变量由于会被JVM当作两个分离的32位来进行操作，所以不具有原子性。而使用AtomicLong能让long的操作保持原子型。
 
 
-
-
-
-
 ``` 
 
 同步锁
@@ -1283,7 +1257,7 @@ AtomicLong 是作用是对长整形进行原子操作。
 
 JUC包中的锁 
 ```text
-　　相比同步锁，JUC包中的锁的功能更加强大，它为锁提供了一个框架，该框架允许更灵活地使用锁，只是它的用法更难罢了。
+相比同步锁，JUC包中的锁的功能更加强大，它为锁提供了一个框架，该框架允许更灵活地使用锁，只是它的用法更难罢了。
 
 JUC包中的锁，包括：Lock接口，ReadWriteLock接口，LockSupport阻塞原语，Condition条件，
 AbstractOwnableSynchronizer/AbstractQueuedSynchronizer/AbstractQueuedLongSynchronizer三个抽象类，
@@ -1591,6 +1565,68 @@ ConcurrentHashMap与Segment是组合关系，1个ConcurrentHashMap对象包含�
 
 
 
+```
+
+
+Java是如何实现跨平台的？
+```text
+
+
+跨平台是怎样实现的呢？这就要谈及Java虚拟机（Java Virtual Machine，简称 JVM）。
+
+JVM也是一个软件，不同的平台有不同的版本。我们编写的Java源码，编译后会生成一种 .class 文件，称为字节码文件。Java虚拟机就是负责将字节码文件翻译成特定平台下的机器码然后运行。也就是说，只要在不同平台上安装对应的JVM，就可以运行字节码文件，运行我们编写的Java程序。
+
+而这个过程中，我们编写的Java程序没有做任何改变，仅仅是通过JVM这一”中间层“，就能在不同平台上运行，真正实现了”一次编译，到处运行“的目的。
+
+JVM是一个”桥梁“，是一个”中间件“，是实现跨平台的关键，Java代码首先被编译成字节码文件，再由JVM将字节码文件翻译成机器语言，从而达到运行Java程序的目的。
+
+注意：编译的结果不是生成机器码，而是生成字节码，字节码不能直接运行，必须通过JVM翻译成机器码才能运行。不同平台下编译生成的字节码是一样的，但是由JVM翻译成的机器码却不一样。
+
+所以，运行Java程序必须有JVM的支持，因为编译的结果不是机器码，必须要经过JVM的再次翻译才能执行。即使你将Java程序打包成可执行文件（例如 .exe），仍然需要JVM的支持。
+
+注意：跨平台的是Java程序，不是JVM。JVM是用C/C++开发的，是编译后的机器码，不能跨平台，不同平台下需要安装不同版本的JVM。
+
+```
+
+JVM内存模型
+```text
+堆
+你的Java程序中所分配的每一个对象都需要存储在内存里。堆是这些实例化的对象所存储的地方。是的——都怪new操作符，是它把你的Java堆都占满了的！
+它由所有线程共享
+当堆耗尽的时候，JVM会抛出java.lang.OutOfMemoryError 异常
+堆的大小可以通过JVM选项-Xms和-Xmx来进行调整
+堆被分为：
+    Eden区 —— 新对象或者生命周期很短的对象会存储在这个区域中，这个区的大小可以通过-XX:NewSize和-XX:MaxNewSize参数来调整。新生代GC（垃圾回收器）会清理这一区域。
+    Survivor区 —— 那些历经了Eden区的垃圾回收仍能存活下来的依旧存在引用的对象会待在这个区域。这个区的大小可以由JVM参数-XX:SurvivorRatio来进行调节。
+    老年代 —— 那些在历经了Eden区和Survivor区的多次GC后仍然存活下来的对象（当然了，是拜那些挥之不去的引用所赐）会存储在这个区里。
+    这个区会由一个特殊的垃圾回收器来负责。年老代中的对象的回收是由老年代的GC（major GC）来进行的。
+
+
+方法区
+也被称为非堆区域（在HotSpot JVM的实现当中）
+它被分为两个主要的子区域
+    持久代 —— 这个区域会 存储包括类定义，结构，字段，方法（数据及代码）以及常量在内的类相关数据。
+    它可以通过-XX:PermSize及 -XX:MaxPermSize来进行调节。如果它的空间用完了，会导致java.lang.OutOfMemoryError: PermGen space的异常。
+    代码缓存——这个缓存区域是用来存储编译后的代码。编译后的代码就是本地代码（硬件相关的），它是由JIT（Just In Time)编译器生成的，这个编译器是Oracle HotSpot JVM所特有的。
+
+JVM栈
+    和Java类中的方法密切相关
+    它会存储局部变量以及方法调用的中间结果及返回值
+    Java中的每个线程都有自己专属的栈，这个栈是别的线程无法访问的。
+    可以通过JVM选项-Xss来进行调整
+
+本地栈
+    用于本地方法（非Java代码）
+    按线程分配
+
+
+PC寄存器
+    特定线程的程序计数器
+    包含JVM正在执行的指令的地址（如果是本地方法的话它的值则未定义）
+
+
+
+
 
 
 
@@ -1602,13 +1638,19 @@ ConcurrentHashMap与Segment是组合关系，1个ConcurrentHashMap对象包含�
 
 ```
 
+Java中object常用方法
+```text
 
+1、clone() 
+2、equals() 
+3、finalize() 
+4、getclass() 
+5、hashcode() 
+6、notify() 
+7、notifyAll() 
+8、toString()
 
-
-
-
-
-
+```
 
 
 
@@ -1656,8 +1698,115 @@ Session, Cookie区别
 5、Session、Cookie都有失效时间，过期后会自动删除，减少系统开销。
 
 
+1.cookie 是一种发送到客户浏览器的文本串句柄，并保存在客户机硬盘上，可以用来在某个WEB站点会话间持久的保持数据。
+
+2.session其实指的就是访问者从到达某个特定主页到离开为止的那段时间。 Session其实是利用Cookie进行信息处理的，当用户首先进行了请求后，服务端就在用户浏览器上创建了一个Cookie，当这个Session结束时，其实就是意味着这个Cookie就过期了。
+注：为这个用户创建的Cookie的名称是aspsessionid。这个Cookie的唯一目的就是为每一个用户提供不同的身份认证。
+
+3.cookie和session的共同之处在于：cookie和session都是用来跟踪浏览器用户身份的会话方式。
+
+4.cookie 和session的区别是：cookie数据保存在客户端，session数据保存在服务器端。
+  简单的说，当你登录一个网站的时候，
+
+ 如果web服务器端使用的是session，那么所有的数据都保存在服务器上，客户端每次请求服务器的时候会发送当前会话的sessionid，服务器根据当前sessionid判断相应的用户数据标志，以确定用户是否登录或具有某种权限。由于数据是存储在服务器上面，所以你不能伪造，但是如果你能够获取某个登录用户的 sessionid，用特殊的浏览器伪造该用户的请求也是能够成功的。sessionid是服务器和客户端链接时候随机分配的，一般来说是不会有重复，但如果有大量的并发请求，也不是没有重复的可能性.
+
+ 如果浏览器使用的是cookie，那么所有的数据都保存在浏览器端，比如你登录以后，服务器设置了cookie用户名，那么当你再次请求服务器的时候，浏览器会将用户名一块发送给服务器，这些变量有一定的特殊标记。服务器会解释为cookie变量，所以只要不关闭浏览器，那么cookie变量一直是有效的，所以能够保证长时间不掉线。如果你能够截获某个用户的 cookie变量，然后伪造一个数据包发送过去，那么服务器还是认为你是合法的。所以，使用 cookie被攻击的可能性比较大。如果设置了的有效时间，那么它会将 cookie保存在客户端的硬盘上，下次再访问该网站的时候，浏览器先检查有没有 cookie，如果有的话，就读取该 cookie，然后发送给服务器。如果你在机器上面保存了某个论坛 cookie，有效期是一年，如果有人入侵你的机器，将你的  cookie拷走，然后放在他的浏览器的目录下面，那么他登录该网站的时候就是用你的的身份登录的。所以 cookie是可以伪造的。当然，伪造的时候需要主意，直接copy    cookie文件到 cookie目录，浏览器是不认的，他有一个index.dat文件，存储了 cookie文件的建立时间，以及是否有修改，所以你必须先要有该网站的 cookie文件，并且要从保证时间上骗过浏览器
+
+ 
+
+5.两个都可以用来存私密的东西，同样也都有有效期的说法,区别在于session是放在服务器上的，过期与否取决于服务期的设定，cookie是存在客户端的，过去与否可以在cookie生成的时候设置进去。
+
+(1)cookie数据存放在客户的浏览器上，session数据放在服务器上
+(2)cookie不是很安全，别人可以分析存放在本地的COOKIE并进行COOKIE欺骗,如果主要考虑到安全应当使用session
+(3)session会在一定时间内保存在服务器上。当访问增多，会比较占用你服务器的性能，如果主要考虑到减轻服务器性能方面，应当使用COOKIE
+(4)单个cookie在客户端的限制是3K，就是说一个站点在客户端存放的COOKIE不能3K。
+(5)所以：将登陆信息等重要信息存放为SESSION;其他信息如果需要保留，可以放在COOKIE中
+```
+
+
+单例模式
+```text
+解法一：只适合单线程环境（不好）
+public class Singleton {
+    private static Singleton instance=null;
+    private Singleton(){
+    }
+    public static Singleton getInstance(){
+        if(instance==null){
+            instance=new Singleton();
+        }
+        return instance;
+    }
+}
+注解:Singleton的静态属性instance中，只有instance为null的时候才创建一个实例，构造函数私有，确保每次都只创建一个，避免重复创建。
+缺点：只在单线程的情况下正常运行，在多线程的情况下，就会出问题。例如：当两个线程同时运行到判断instance是否为空的if语句，并且instance确实没有创建好时，那么两个线程都会创建一个实例。
+
+解法二：多线程的情况可以用。（懒汉式，不好）
+public class Singleton {
+    private static Singleton instance=null;
+    private Singleton(){
+        
+    }
+    public static synchronized Singleton getInstance(){
+        if(instance==null){
+            instance=new Singleton();
+        }
+        return instance;
+    }
+}
+注解：在解法一的基础上加上了同步锁，使得在多线程的情况下可以用。例如：当两个线程同时想创建实例，由于在一个时刻只有一个线程能得到同步锁，当第一个线程加上锁以后，第二个线程只能等待。第一个线程发现实例没有创建，创建之。第一个线程释放同步锁，第二个线程才可以加上同步锁，执行下面的代码。由于第一个线程已经创建了实例，所以第二个线程不需要创建实例。保证在多线程的环境下也只有一个实例。
+缺点：每次通过getInstance方法得到singleton实例的时候都有一个试图去获取同步锁的过程。而众所周知，加锁是很耗时的。能避免则避免。
+
+解法三：加同步锁时，前后两次判断实例是否存在（可行）
+public class Singleton {
+    private static Singleton instance=null;
+    private Singleton(){
+        
+    }
+    public static Singleton getInstance(){
+        if(instance==null){
+            synchronized(Singleton.class){
+                if(instance==null){
+                    instance=new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+注解：只有当instance为null时，需要获取同步锁，创建一次实例。当实例被创建，则无需试图加锁。
+缺点：用双重if判断，复杂，容易出错。
+
+解法四：饿汉式（建议使用）
+public class Singleton {
+    private static Singleton instance=new Singleton();
+    private Singleton(){
+    }
+    public static Singleton getInstance(){
+        return instance;
+    }
+}
+注解：初试化静态的instance创建一次。如果我们在Singleton类里面写一个静态的方法不需要创建实例，它仍然会早早的创建一次实例。而降低内存的使用率。
+缺点：没有lazy loading的效果，从而降低内存的使用率。
+
+解法五：静态内部内。（建议使用）
+public class Singleton {
+    private Singleton(){
+    }
+    private static class SingletonHolder{
+        private final static Singleton instance=new Singleton();
+    }
+    public static Singleton getInstance(){
+        return SingletonHolder.instance;
+    }
+}
+注解：定义一个私有的内部类，在第一次用这个嵌套类时，会创建一个实例。而类型为SingletonHolder的类，只有在Singleton.getInstance()中调用，由于私有的属性，他人无法使用SingleHolder，不调用Singleton.getInstance()就不会创建实例。
+优点：达到了lazy loading的效果，即按需创建实例。
+
+
 
 ```
+
 
 Servlet的生命周期
 ```text
@@ -1971,6 +2120,74 @@ Spring中AOP技术是设计模式中的动态代理模式。只需实现jdk提�
 
 Spring中IOC则利用了Java强大的反射机制来实现。所谓依赖注入即组件之间的依赖关系由容器在运行期决定。
 其中依赖注入的方法有两种，通过构造函数注入，通过set方法进行注入。
+
+
+什么是AOP
+AOP（Aspect-OrientedProgramming，面向方面编程），可以说是OOP（Object-Oriented Programing，面向对象编程）的补充和完善。OOP引入封装、继承和多态性等概念来建立一种对象层次结构，用以模拟公共行为的一个集合。当我们需要为分散的对象引入公共行为的时候，OOP则显得无能为力。也就是说，OOP允许你定义从上到下的关系，但并不适合定义从左到右的关系。例如日志功能。日志代码往往水平地散布在所有对象层次中，而与它所散布到的对象的核心功能毫无关系。对于其他类型的代码，如安全性、异常处理和透明的持续性也是如此。这种散布在各处的无关的代码被称为横切（cross-cutting）代码，在OOP设计中，它导致了大量代码的重复，而不利于各个模块的重用。
+
+AOP使用场景
+AOP用来封装横切关注点，具体可以在下面的场景中使用:
+
+ 
+
+Authentication 权限
+
+Caching 缓存
+
+Context passing 内容传递
+
+Error handling 错误处理
+
+Lazy loading　懒加载
+
+Debugging　　调试
+
+logging, tracing, profiling and monitoring　记录跟踪　优化　校准
+
+Performance optimization　性能优化
+
+Persistence　　持久化
+
+Resource pooling　资源池
+
+Synchronization　同步
+
+Transactions 事务
+
+AOP相关概念
+方面（Aspect）：一个关注点的模块化，这个关注点实现可能另外横切多个对象。事务管理是J2EE应用中一个很好的横切关注点例子。方面用Spring的 Advisor或拦截器实现。
+
+连接点（Joinpoint）: 程序执行过程中明确的点，如方法的调用或特定的异常被抛出。
+
+通知（Advice）: 在特定的连接点，AOP框架执行的动作。各种类型的通知包括“around”、“before”和“throws”通知。通知类型将在下面讨论。许多AOP框架包括Spring都是以拦截器做通知模型，维护一个“围绕”连接点的拦截器链。Spring中定义了四个advice: BeforeAdvice, AfterAdvice, ThrowAdvice和DynamicIntroductionAdvice
+
+切入点（Pointcut）: 指定一个通知将被引发的一系列连接点的集合。AOP框架必须允许开发者指定切入点：例如，使用正则表达式。 Spring定义了Pointcut接口，用来组合MethodMatcher和ClassFilter，可以通过名字很清楚的理解， MethodMatcher是用来检查目标类的方法是否可以被应用此通知，而ClassFilter是用来检查Pointcut是否应该应用到目标类上
+
+引入（Introduction）: 添加方法或字段到被通知的类。 Spring允许引入新的接口到任何被通知的对象。例如，你可以使用一个引入使任何对象实现 IsModified接口，来简化缓存。Spring中要使用Introduction, 可有通过DelegatingIntroductionInterceptor来实现通知，通过DefaultIntroductionAdvisor来配置Advice和代理类要实现的接口
+
+目标对象（Target Object）: 包含连接点的对象。也被称作被通知或被代理对象。POJO
+
+AOP代理（AOP Proxy）: AOP框架创建的对象，包含通知。 在Spring中，AOP代理可以是JDK动态代理或者CGLIB代理。
+
+织入（Weaving）: 组装方面来创建一个被通知对象。这可以在编译时完成（例如使用AspectJ编译器），也可以在运行时完成。Spring和其他纯Java AOP框架一样，在运行时完成织入。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ```
 
