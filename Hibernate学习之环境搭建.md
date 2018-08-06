@@ -343,3 +343,232 @@ maven. pom.xml 文件，使用maven来管理依赖的jar包文件。用idea新�
 
 
 
+
+
+Statement与PreparedStatement的区别,什么是SQL注入，如何防止SQL注入
+```text
+PreparedStatement接口 继承 statment接口。
+
+1、PreparedStatement支持动态设置参数，Statement不支持。
+
+2、PreparedStatement可避免如类似 单引号 的编码麻烦，Statement不可以。
+
+3、PreparedStatement支持预编译，Statement不支持。
+preparedStatement = connection.prepareStatement(sql);
+preparedStatement.setObject(i + 1, args[i]);
+
+4、在sql语句出错时PreparedStatement不易检查，而Statement则更便于查错。
+
+5、PreparedStatement可防止Sql助于，更加安全，而Statement不行。
+
+ 
+
+什么是SQL注入： 通过sql语句的拼接达到无参数查询数据库数据目的的方法。
+
+ 如将要执行的sql语句为 select * from table where name = "+appName+"，利用appName参数值的输入，来生成恶意的sql语句，如将['or'1'='1'] 传入可在数据库中执行。
+
+ 因此可以采用PrepareStatement来避免Sql注入，在服务器端接收参数数据后，进行验证，此时PrepareStatement会自动检测，而Statement不行，需要手工检测。
+```
+
+
+
+谈谈Hibernate的理解，一级和二级缓存的作用，在项目中Hibernate都是怎么使用缓存的。
+```text
+
+Hibernate是一个开发的对象关系映射框架（ORM）。它对JDBC进行了非常对象封装，Hibernate允许程序员采用面向对象的方式来操作关系数据库。
+
+Hibernate的优点：
+    
+    1、程序更加面向对象
+    
+    2、提高了生产率
+    
+    3、方便移植
+    
+    4、无入侵性。
+
+缺点：
+    
+    1、效率比JDBC略差
+    
+    2、不适合批量操作
+    
+    3、只能配置一种关联关系
+
+Hibernate有四种查询方式：
+    
+    1、get、load方法，根据id号查询对象。
+    
+    2、Hibernate query language   (HQL)
+    
+    3、标准查询语言
+    
+    4、通过sql查询
+
+
+Hibernage工作原理：
+
+    1、配置hibernate对象关系映射文件、启动服务器
+    
+    2、服务器通过实例化Configuration对象，读取hibernate.cfg.xml文件的配置内容，并根据相关的需求建好表以及表之间的映射关系。
+    
+    3、通过实例化的Configuration对象建立SeesionFactory实例，通过SessionFactory实例创建Session对象。
+    
+    4、通过Seesion对象完成数据库的增删改查操作。
+    
+    
+Hibernate中的状态转移
+
+临时状态（transient）
+    
+    1、不处于session缓存中
+    
+    2、数据库中没有对象记录
+    
+    java是如何进入临时状态的：
+        1、通过new语句创建一个对象时。
+        2、刚调用session的delete方法时，从seesion缓存中删除一个对象时。
+
+持久化状态(persisted)
+
+    1、处于session缓存中
+    
+    2、持久化对象数据库中没有对象记录
+    
+    3、seesion在特定的时刻会保存两者同步
+    
+    java如何进入持久化状态：
+        1、seesion的save()方法。
+        2、seesion的load().get()方法返回的对象。
+        3、seesion的find()方法返回的list集合中存放的对象。
+        4、Session的update().save()方法。
+
+流离状态（detached）
+
+    1、不再位于session缓存中
+    
+    2、游离对象由持久化状态转变而来，数据库中还没有相应记录。
+    
+    java如何进入流离状态：
+        1、Session的close()。Session的evict()方法，从缓存中删除一个对象。
+
+ 
+
+Hibernate中的缓存主要有Session缓存（一级缓存）和SessionFactory缓存（二级缓存，一般由第三方提供）。 
+
+Session的缓存是内置的，不能被卸载，也被称为Hibernate的第一级缓存（Session的一些集合属性包含的数据）。在第一级缓存中，持久化类的每个实例都具有唯一的OID。
+
+ 
+
+SessionFactory的缓存又可以分为两类：
+
+    内置缓存（存放SessionFactory对象的一些集合属性包含的数据，SessionFactory的内置缓存中存放了映射元数据和预定义SQL语句，
+    映射元数据是映射文件中数据的拷贝，而预定义SQL语句是在Hibernate初始化阶段根据映射元数据推导出来，SessionFactory的内置缓存是只读的，
+    应用程序不能修改缓存中的映射元数据和预定义SQL语句，因此SessionFactory不需要进行内置缓存与映射文件的同步。）
+
+    外置缓存。SessionFactory的外置缓存是一个可配置的插件。在默认情况下，SessionFactory不会启用这个插件。
+    外置缓存的数据是数据库数据的拷贝，外置缓存的介质可以是内存或者硬盘。SessionFactory的外置缓存也被称为Hibernate的第二级缓存。
+
+ 
+
+缓存的范围分为三类。
+    1 事务范围：缓存只能被当前事务访问。
+    2 进程范围：缓存被进程内的所有事务共享。
+    3 集群范围：在集群环境中，缓存被一个机器或者多个机器的进程共享。
+
+ 
+
+持久化层可以提供多种范围的缓存。如果在事务范围的缓存中没有查到相应的数据，还可以到进程范围或集群范围的缓存内查询，如果还是没有查到，那么只有到数据库中查询。事务范围的缓存是持久化层的第一级缓存，通常它是必需的；进程范围或集群范围的缓存是持久化层的第二级缓存，通常是可选的。
+
+在进程范围或集群范围的缓存，即第二级缓存，会出现并发问题。因此可以设定以下四种类型的并发访问策略，每一种策略对应一种事务隔离级别。
+
+ 
+
+事务型、读写型、非严格读写型、只读型
+
+    什么样的数据适合存放到第二级缓存中？
+    1 很少被修改的数据
+    2 不是很重要的数据，允许出现偶尔并发的数据
+    3 不会被并发访问的数据
+    4 参考数据
+    不适合存放到第二级缓存的数据？
+    1 经常被修改的数据
+    2 财务数据，绝对不允许出现并发
+    3 与其他应用共享的数据。
+
+    Hibernate的二级缓存策略的一般过程如下：
+    1) 条件查询的时候，总是发出一条select * from table_name where …. （选择所有字段）这样的SQL语句查询数据库，一次获得所有的数据对象。
+    2) 把获得的所有数据对象根据ID放入到第二级缓存中。
+    3) 当Hibernate根据ID访问数据对象的时候，首先从Session一级缓存中查；查不到，如果配置了二级缓存，那么从二级缓存中查；查不到，再查询数据库，把结果按照ID放入到缓存。
+    4) 删除、更新、增加数据的时候，同时更新缓存。
+
+
+关系映射：对象之间的对应数量关系
+
+1 对 1：（双向外键关联的意思：在程序中两边都设置对方的引用，但是在数据库中一样的，注意设置 mappedBy属性）
+     单向（主键、外键）
+
+       外键关联：@OneToOne
+            属性：fetch，cascade…
+            @JoinColumn(name=”wife”)
+
+    双向（主键、外键）
+       外键关联：互有引用
+           @OneToOne(mappedBy=”wife”)
+       规律：凡是双向关联，必设mappedBy
+   
+多对1：（数据库中两张表，并在多的那个表中加上1的外键）
+     2.1单： 
+     在程序中在多方类中增加单方类的引用，并在引用对象的get方法上增加 @Many2One
+
+
+    2.2双：
+    1) 在多方类(User) 的单方引用的get方法上设置：@Many2One
+
+    2) 在单方类（group）的多方类引用哈希表对象的get方法上设置一个注解：
+      @One2Many(mappedBy=”group”)
+
+      
+1对多：（数据库表中有三张表，还生成了一张中间表（默认当成多对多））
+     3.1 单：在单方类中增加多的引用的HashSet<User>
+          @One2Many 注解
+
+          @JoinColumn(name=”groupId”)
+          Ps:感觉不太好理解。。。
+
+             
+
+     3.2双      
+
+多对多：
+      5.1 单：
+
+    在数据库中增加一张中间关联表，有两个字段：两个表的id，且这两个id构成联合主键、每个id分别为其中一张表的主键作为外键。
+
+       @ManyToMany
+
+ 
+      5.2 双：
+  
+  
+Eager 加载 和 lazy 加载的区别：
+eager 加载: 会将需要加载的类(user)以及其关联的对象（group）一起放入内存中。如果session关闭了仍能处理其关联的对象(group)
+lazy  加载: 只有当要访问关联的对象(user)时，才从数据库中取得。如果session关闭后被关联的对象不在内存中，此时是无法再取得被关联对象(group) 的。 
+
+ 
+```
+谈谈Hibernate与Ibatis的区别，哪个性能会更高一些
+```text
+1、Hibernate偏向于对象的操作达到数据库相关操作的目的；而ibatis更偏向于sql语句的优化。
+
+2、Hibernate的使用的查询语句是自己的hql，而ibatis则是标准的sql语句。
+
+3、Hibernate相对复杂，不易学习；ibatis类似sql语句，简单易学。
+
+性能方面：
+
+1、如果系统数据处理量巨大，性能要求极为苛刻时，往往需要人工编写高性能的sql语句或存储过程，此时ibatis具有更好的可控性，因此性能优于Hibernate。
+
+2、同样的需求下，由于hibernate可以自动生成hql语句，而ibatis需要手动写sql语句，此时采用Hibernate的效率高于ibatis。
+
+```
