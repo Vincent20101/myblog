@@ -1152,6 +1152,18 @@ public class FirstInterceptor implements HandlerInterceptor {
 
 
 
+Redirect, foward区别
+```text
+
+1、foward是服务器端控制页面转向，在客户端的浏览器地址中不会显示转向后的地址；sendRedirect则是完全的跳转，浏览器中会显示跳转的地址并重新发送请求链接。
+
+原理：forward是服务器请求资源，服务器直接访问目标地址的URL，把那个URL的响应内容读取过来，然后再将这些内容返回给浏览器，
+浏览器根本不知道服务器发送的这些内容是从哪来的，所以地址栏还是原来的地址。
+
+redirect是服务器端根据逻辑，发送一个状态码，告诉浏览器重新去请求的那个地址，浏览器会用刚才的所有参数重新发送新的请求。
+
+
+```
 
 
 
