@@ -749,6 +749,123 @@ java 中有两种线程：用户线程和守护线程。可以通过isDaemon()�
 每一个线程都被标记为“守护线程”或“用户线程”。当只有守护线程运行时，JVM会自动退出。
 ```
 
+java 线程池
+```text
+
+<interface>Executor 
+        ^
+        |
+<interface>ExecutorService    
+        ^
+        |
+AbstractExecutorService
+        ^
+        |
+ThreadPoolExecutor        
+
+
+
+1. Executor
+
+它是"执行者"接口，它是来执行任务的。准确的说，Executor提供了execute()接口来执行已提交的 Runnable 任务的对象。Executor存在的目的是提供一种将"任务提交"与"任务如何运行"分离开来的机制。
+它只包含一个函数接口：
+
+2. ExecutorService
+
+ExecutorService继承于Executor。它是"执行者服务"接口，它是为"执行者接口Executor"服务而存在的；准确的话，ExecutorService提供了"将任务提交给执行者的接口(submit方法)"，"让执行者执行任务(invokeAll, invokeAny方法)"的接口等等。
+
+3. AbstractExecutorService
+
+AbstractExecutorService是一个抽象类，它实现了ExecutorService接口。
+AbstractExecutorService存在的目的是为ExecutorService中的函数接口提供了默认实现。 
+
+
+4. ThreadPoolExecutor
+
+ThreadPoolExecutor就是大名鼎鼎的"线程池"。它继承于AbstractExecutorService抽象类
+
+
+5. ScheduledExecutorService
+
+ScheduledExecutorService是一个接口，它继承于于ExecutorService。它相当于提供了"延时"和"周期执行"功能的ExecutorService。
+ScheduledExecutorService提供了相应的函数接口，可以安排任务在给定的延迟后执行，也可以让任务周期的执行。
+
+
+
+6. ScheduledThreadPoolExecutor
+
+ScheduledThreadPoolExecutor继承于ThreadPoolExecutor，并且实现了ScheduledExecutorService接口。它相当于提供了"延时"和"周期执行"功能的ScheduledExecutorService。
+ScheduledThreadPoolExecutor类似于Timer，但是在高并发程序中，ScheduledThreadPoolExecutor的性能要优于Timer。
+
+
+7. Executors
+
+Executors是个静态工厂类。它通过静态工厂方法返回ExecutorService、ScheduledExecutorService、ThreadFactory 和 Callable 等类的对象。
+// 返回 Callable 对象，调用它时可运行给定特权的操作并返回其结果。
+static Callable<Object> callable(PrivilegedAction<?> action)
+// 返回 Callable 对象，调用它时可运行给定特权的异常操作并返回其结果。
+static Callable<Object> callable(PrivilegedExceptionAction<?> action)
+// 返回 Callable 对象，调用它时可运行给定的任务并返回 null。
+static Callable<Object> callable(Runnable task)
+// 返回 Callable 对象，调用它时可运行给定的任务并返回给定的结果。
+static <T> Callable<T> callable(Runnable task, T result)
+// 返回用于创建新线程的默认线程工厂。
+static ThreadFactory defaultThreadFactory()
+// 创建一个可根据需要创建新线程的线程池，但是在以前构造的线程可用时将重用它们。
+static ExecutorService newCachedThreadPool()
+// 创建一个可根据需要创建新线程的线程池，但是在以前构造的线程可用时将重用它们，并在需要时使用提供的 ThreadFactory 创建新线程。
+static ExecutorService newCachedThreadPool(ThreadFactory threadFactory)
+// 创建一个可重用固定线程数的线程池，以共享的无界队列方式来运行这些线程。
+static ExecutorService newFixedThreadPool(int nThreads)
+// 创建一个可重用固定线程数的线程池，以共享的无界队列方式来运行这些线程，在需要时使用提供的 ThreadFactory 创建新线程。
+static ExecutorService newFixedThreadPool(int nThreads, ThreadFactory threadFactory)
+// 创建一个线程池，它可安排在给定延迟后运行命令或者定期地执行。
+static ScheduledExecutorService newScheduledThreadPool(int corePoolSize)
+// 创建一个线程池，它可安排在给定延迟后运行命令或者定期地执行。
+static ScheduledExecutorService newScheduledThreadPool(int corePoolSize, ThreadFactory threadFactory)
+// 创建一个使用单个 worker 线程的 Executor，以无界队列方式来运行该线程。
+static ExecutorService newSingleThreadExecutor()
+// 创建一个使用单个 worker 线程的 Executor，以无界队列方式来运行该线程，并在需要时使用提供的 ThreadFactory 创建新线程。
+static ExecutorService newSingleThreadExecutor(ThreadFactory threadFactory)
+// 创建一个单线程执行程序，它可安排在给定延迟后运行命令或者定期地执行。
+static ScheduledExecutorService newSingleThreadScheduledExecutor()
+// 创建一个单线程执行程序，它可安排在给定延迟后运行命令或者定期地执行。
+static ScheduledExecutorService newSingleThreadScheduledExecutor(ThreadFactory threadFactory)
+// 返回 Callable 对象，调用它时可在当前的访问控制上下文中执行给定的 callable 对象。
+static <T> Callable<T> privilegedCallable(Callable<T> callable)
+// 返回 Callable 对象，调用它时可在当前的访问控制上下文中，使用当前上下文类加载器作为上下文类加载器来执行给定的 callable 对象。
+static <T> Callable<T> privilegedCallableUsingCurrentClassLoader(Callable<T> callable)
+// 返回用于创建新线程的线程工厂，这些新线程与当前线程具有相同的权限。
+static ThreadFactory privilegedThreadFactory()
+// 返回一个将所有已定义的 ExecutorService 方法委托给指定执行程序的对象，但是使用强制转换可能无法访问其他方法。
+static ExecutorService unconfigurableExecutorService(ExecutorService executor)
+// 返回一个将所有已定义的 ExecutorService 方法委托给指定执行程序的对象，但是使用强制转换可能无法访问其他方法。
+static ScheduledExecutorService unconfigurableScheduledExecutorService(ScheduledExecutorService executor)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
 
 
 String, StringBuffer, StringBuilder 的区别是什么？String为什么是不可变的？
