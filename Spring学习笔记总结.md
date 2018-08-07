@@ -12,13 +12,13 @@ beanFactory生产bean时为了解决bean之间的依赖的一种技术而已。
 
 
 那么我们为什么需要Spring框架来给我们提供这个beanFactory的功能呢？原因是一般我们认为是，可以将原来硬编码的依赖，
-通过Spring这个beanFactory这个工长来注入依赖，也就是说原来只有依赖方和被依赖方，现在我们引入了第三方——spring这个
+通过Spring这个beanFactory这个工厂来注入依赖，也就是说原来只有依赖方和被依赖方，现在我们引入了第三方——spring这个
 beanFactory，由它来解决bean之间的依赖问题，达到了松耦合的效果；这个只是原因之一，还有一个更加重要的原因：在没有
 spring这个beanFactory之前，我们都是直接通过new来实例化各种对象，现在各种对象bean的生产都是通过beanFactory来
 实例化的，这样的话，spring这个beanFactory就可以在实例化bean的过程中，做一些小动作——在实例化bean的各个阶段进行
 一些额外的处理，也就是说beanFactory会在bean的生命周期的各个阶段中对bean进行各种管理，并且spring将这些阶段通过
 各种接口暴露给我们，让我们可以对bean进行各种处理，我们只要让bean实现对应的接口，那么spring就会在bean的生命周期
-调用我们实现的接口来处理该bean。下面我们看是如何实现这一点的。
+调用我们实现的接口来处理该bean。
 
 
 ```
@@ -26,7 +26,8 @@ spring这个beanFactory之前，我们都是直接通过new来实例化各种对
 
 Spring是一个开源框架，处于MVC模式中的控制层，它能应对需求快速的变化，其主要原因它有一种面向切面编程（AOP）的优势，
 其次它提升了系统性能，因为通过依赖倒置机制（IOC），系统中用到的对象不是在系统加载时就全部实例化，
-而是在调用到这个类时才会实例化该类的对象，从而提升了系统性能。这两个优秀的性能使得Spring受到许多J2EE公司的青睐，如阿里里中使用最多的也是Spring相关技术。
+而是在调用到这个类时才会实例化该类的对象，从而提升了系统性能。这两个优秀的性能使得Spring受到许多J2EE公司的青睐，
+如阿里里中使用最多的也是Spring相关技术。
 
 Spring的优点：
 
@@ -42,17 +43,10 @@ Spring中AOP技术是设计模式中的动态代理模式。只需实现jdk提�
 Spring中IOC则利用了Java强大的反射机制来实现。所谓依赖注入即组件之间的依赖关系由容器在运行期决定。
 其中依赖注入的方法有两种，通过构造函数注入，通过set方法进行注入。
 
-
-
-
-
-
-
 ```
 
 2.使用Spring框架的好处是什么？
 ```
-
 轻量：Spring 是轻量的，基本的版本大约2MB。
 控制反转：Spring通过控制反转实现了松散耦合，对象们给出它们的依赖，而不是创建或查找依赖的对象们。
 面向切面的编程(AOP)：Spring支持面向切面的编程，并且把应用业务逻辑和系统服务分开。
@@ -62,6 +56,7 @@ MVC框架：Spring的WEB框架是个精心设计的框架，是Web框架的一�
 异常处理：Spring 提供方便的API把具体技术相关的异常（比如由JDBC，Hibernate or JDO抛出的）转化为一致的unchecked 异常。
 
 ```
+
 3.Spring由哪些模块组成?
 ```        
 以下是Spring 框架的基本模块：
@@ -90,11 +85,7 @@ Spring 框架建立在此模块之上，它使Spring成为一个容器。
 5.BeanFactory – BeanFactory 实现举例。
 ```text
 Bean 工厂是工厂模式的一个实现，提供了控制反转功能，用来把应用的配置和依赖从正真的应用代码中分离。
-
 最常用的BeanFactory 实现是 XmlBeanFactory 类。
-
-
-
 
 ```
 
@@ -102,7 +93,6 @@ Bean 工厂是工厂模式的一个实现，提供了控制反转功能，用来
 ```text
 最常用的就是org.springframework.beans.factory.xml.XmlBeanFactory，它根据XML文件中的定义加载beans。
 该容器从XML 文件读取配置元数据并用它去创建一个完全配置的系统或应用。
-
 
 ```
 
@@ -163,9 +153,12 @@ ApplicationContext提供一种方法处理文本消息，一个通常的做法�
 另外，在容器或容器内的对象上执行的那些不得不由bean工厂以程序化方式处理的操作，可以在Application contexts中以声明的方式处理。
 Application contexts实现了MessageSource接口，该接口的实现以可插拔的方式提供获取本地化消息的方法。
 
-1.BeanFactroy采用的是延迟加载形式来注入Bean的，即只有在使用到某个Bean时(调用getBean())，才对该Bean进行加载实例化，这样，我们就不能发现一些存在的Spring的配置问题。而ApplicationContext则相反，它是在容器启动时，一次性创建了所有的Bean。这样，在容器启动时，我们就可以发现Spring中存在的配置错误。 相对于基本的BeanFactory，ApplicationContext 唯一的不足是占用内存空间。当应用程序配置Bean较多时，程序启动较慢。
+1.BeanFactroy采用的是延迟加载形式来注入Bean的，即只有在使用到某个Bean时(调用getBean())，才对该Bean进行加载实例化，这样，我们就不能发现一些存在的Spring的配置问题。
+而ApplicationContext则相反，它是在容器启动时，一次性创建了所有的Bean。这样，在容器启动时，我们就可以发现Spring中存在的配置错误。 
+相对于基本的BeanFactory，ApplicationContext 唯一的不足是占用内存空间。当应用程序配置Bean较多时，程序启动较慢。
 
-BeanFacotry延迟加载,如果Bean的某一个属性没有注入，BeanFacotry加载后，直至第一次使用调用getBean方法才会抛出异常；而ApplicationContext则在初始化自身是检验，这样有利于检查所依赖属性是否注入；所以通常情况下我们选择使用 ApplicationContext。
+BeanFacotry延迟加载,如果Bean的某一个属性没有注入，BeanFacotry加载后，直至第一次使用调用getBean方法才会抛出异常；
+而ApplicationContext则在初始化自身是检验，这样有利于检查所依赖属性是否注入；所以通常情况下我们选择使用 ApplicationContext。
 应用上下文则会在上下文启动后预载入所有的单实例Bean。通过预载入单实例bean ,确保当你需要的时候，你就不用等待，因为它们已经创建好了。
 
 2.BeanFactory和ApplicationContext都支持BeanPostProcessor、BeanFactoryPostProcessor的使用，
@@ -174,9 +167,8 @@ BeanFacotry延迟加载,如果Bean的某一个属性没有注入，BeanFacotry�
 而 Applicationcontext 可以通过配置实现。比如后处理 bean ， Applicationcontext 直接配置在配置文件即可而 
 beanFactory 这要在代码中显示的写出来才可以被容器识别。 ）
 
-3.beanFactory主要是面对与 spring 框架的基础设施，面对 spring 自己。而 Applicationcontex 主要面对与 spring 使用的开发者。基本都会使用 Applicationcontex 并非 beanFactory 。
-
-
+3.beanFactory主要是面对与 spring 框架的基础设施，面对 spring 自己。
+而 Applicationcontex 主要面对与 spring 使用的开发者。基本都会使用 Applicationcontex 并非 beanFactory 。
 
 ```
 
@@ -199,7 +191,7 @@ Spring 的XML 配置文件。
 
 19.有哪些不同类型的IOC（依赖注入）方式？
 ```text
-依赖注入的方式分为构造函数注入和setter方法注入：
+依赖注入的方式分为 构造函数注入 和 setter方法注入：
 构造器依赖注入：构造器依赖注入通过容器触发一个类的构造器来实现的，该类有一系列参数，每个参数代表一个对其他类的依赖。
     <bean id="car" class="com.mamh.spring.demo.beans.Car">
         <constructor-arg value="Audi" index="0"/>      <!-- 通过构造方法设置属性值 -->
@@ -356,6 +348,68 @@ Spring根据bean的定义填充所有的属性。
 如果bean实现IntializingBean了，调用它的afterPropertySet方法，如果bean声明了初始化方法，调用此初始化方法。
 如果有 BeanPostProcessors 和bean 关联，这些bean的postProcessAfterInitialization() 方法将被调用。
 如果bean实现了 DisposableBean，它将调用destroy()方法。
+
+
+        实例化BeanFactoryPostProcessor实现类
+                    ^
+                    |
+执行 BeanFactoryPostProcessor 的 postProcessBeanFactory方法
+                    ^
+                    |
+        实例化 BeanPostProcessor 实现类
+                    ^
+                    |
+实例化 InstantiationAwareBeanPostProcessorAdapter 实现类
+                    ^
+                    |
+执行 InstantiationAwareBeanPostProcessor  的 postProcessBeforeInstantiation方法
+                    ^
+                    |
+            执行bean构造方法
+                    ^
+                    |
+执行 InstantiationAwareBeanPostProcessor 的 postProcessPropertyValues 方法
+                    ^
+                    |
+            为 bean 注入属性
+                    ^
+                    |
+    调用 BeanNameAware 的 setBeanName 方法
+                    ^
+                    |
+    调用 BeanFactoryAware 的 setBeanFactory 方法
+                    ^
+                    |
+执行 BeanPostProcessor 的 postProcessBeforeInitialization 方法
+                    ^
+                    |
+调用 initializingBean 的 afterPropertiesSet 方法
+                    ^
+                    |
+    调用bean的 init-method 属性指定的方法
+                    ^
+                    |
+执行  BeanPostProcessor 的 postProcessAfterInitialization 方法
+                    ^
+                    |
+    容器初始化成功，执行正常调用后，下面销毁容器
+                    ^
+                    |
+    调用 DiposibleBean 的 destroy 方法
+                    ^
+                    |
+    调用bean的 destroy-method 属性指定的方法
+
+
+Bean的完整生命周期经历了各种方法调用，这些方法可以划分为以下几类：
+
+1、Bean自身的方法　　：　　这个包括了Bean本身调用的方法和通过配置文件中<bean>的init-method和destroy-method指定的方法
+
+2、Bean级生命周期接口方法　　：　　这个包括了BeanNameAware、BeanFactoryAware、InitializingBean和DiposableBean这些接口的方法
+
+3、容器级生命周期接口方法　　：　　这个包括了InstantiationAwareBeanPostProcessor 和 BeanPostProcessor 这两个接口实现，一般称它们的实现类为“后处理器”。
+
+4、工厂后处理器接口方法　　：　　这个包括了AspectJWeavingEnabler, ConfigurationClassPostProcessor, CustomAutowireConfigurer等等非常有用的工厂后处理器　　接口的方法。工厂后处理器也是容器级的。在应用上下文装配配置文件之后立即调用。
 ```
 
 
@@ -363,7 +417,7 @@ Spring根据bean的定义填充所有的属性。
 ```text
 有两个重要的bean 生命周期方法，第一个是setup ， 它是在容器加载bean的时候被调用。第二个方法是 teardown  它是在容器卸载类的时候被调用。
 
-The bean 标签有两个重要的属性（init-method和destroy-method）。用它们你可以自己定制初始化和注销方法。它们也有相应的注解（@PostConstruct和@PreDestroy）。
+bean 标签有两个重要的属性（init-method和destroy-method）。用它们你可以自己定制初始化和注销方法。它们也有相应的注解（@PostConstruct和@PreDestroy）。
 ```
 
 29.什么是Spring的内部bean？
@@ -457,13 +511,33 @@ Spring数据访问
 42.在Spring框架中如何更有效地使用JDBC? 
 ```
 使用SpringJDBC 框架，资源管理和错误处理的代价都会被减轻。所以开发者只需写statements 和 queries从数据存取数据，
-JDBC也可以在Spring框架提供的模板类的帮助下更有效地被使用，这个模板叫JdbcTemplate （例子见这里here）
+JDBC也可以在Spring框架提供的模板类的帮助下更有效地被使用，这个模板叫 JdbcTemplate  
+
+配置一个数据源
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="user" value="${jdbc.user}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="driverClass" value="${jdbc.driverClass}"/>
+        <property name="initialPoolSize" value="${jdbc.initPoolSize}"/>
+        <property name="maxPoolSize" value="${jdbc.maxPoolSize}"/>
+    </bean>
+
+配置一个jdbcTemplate就可以了
+    <!--配置spring 的jdbctemplate -->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
 ```
 
 43.JdbcTemplate
 ```
 JdbcTemplate 类提供了很多便利的方法解决诸如把数据库数据转变成基本数据类型或对象，
 执行写好的或可调用的数据库操作语句，提供自定义的数据错误处理。
+
+
+
 ```
 
 44.Spring对DAO的支持
@@ -477,6 +551,51 @@ Spring对数据访问对象（DAO）的支持旨在简化它和数据访问技�
 在Spring中有两种方式访问Hibernate：
 控制反转  Hibernate Template和 Callback。
 继承 HibernateDAOSupport提供一个AOP 拦截器。
+
+配置数据源
+    <!-- 配置数据源 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="user" value="${jdbc.user}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="driverClass" value="${jdbc.driverClass}"/>
+        <property name="initialPoolSize" value="${jdbc.initPoolSize}"/>
+        <property name="maxPoolSize" value="${jdbc.maxPoolSize}"/>
+    </bean>
+    
+配置hibernate的sessionFactory
+    <!--配置hibernate的sessionfactory -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+
+        <!--这个配置文件是可以不要的。使用hibernateProperties 来配置属性 -->
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+        <!-- 建议保留hibernate.cfg.xml 配置文件-->
+
+        <!-- -->
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                <!--<property name="dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>-->
+
+                <!--是否打印sql语句-->
+                <prop key="hibernate.show_sql">true</prop>
+
+                <!--是否对sql语句格式化-->
+                <prop key="hibernate.format_sql">true</prop>
+
+                <!--指定自动生成数据库表的策略，有4个值-->
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+
+        </property>
+
+        <property name="mappingLocations" value="classpath:com/mamh/spring/demo/beans/*.hbm.xml"/>
+    </bean>
+需要事务，在配置个事务管理器
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 ```
 
 
@@ -496,8 +615,11 @@ OJB
 用Spring的 SessionFactory 调用 LocalSessionFactory。集成过程分三步：
 
 配置the Hibernate SessionFactory。
-继承HibernateDaoSupport实现一个DAO。
+
+继承 HibernateDaoSupport 实现一个DAO。
+
 在AOP支持的事务中装配。
+
 ```
 
 48.Spring支持的事务管理类型
@@ -505,7 +627,11 @@ OJB
 Spring支持两种类型的事务管理：
 
 编程式事务管理：这意味你通过编程的方式管理事务，给你带来极大的灵活性，但是难维护。
+
 声明式事务管理：这意味着你可以将业务代码和事务管理分离，你只需用注解和XML配置来管理事务。
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 ```
 
 49.Spring框架的事务管理有哪些优点？
@@ -518,7 +644,8 @@ Spring支持两种类型的事务管理：
 
 50.你更倾向用那种事务管理类型？
 ```
-大多数Spring框架的用户选择声明式事务管理，因为它对应用代码的影响最小，因此更符合一个无侵入的轻量级容器的思想。声明式事务管理要优于编程式事务管理，虽然比编程式事务管理（这种方式允许你通过代码控制事务）少了一点灵活性。
+大多数Spring框架的用户选择声明式事务管理，因为它对应用代码的影响最小，因此更符合一个无侵入的轻量级容器的思想。
+声明式事务管理要优于编程式事务管理，虽然比编程式事务管理（这种方式允许你通过代码控制事务）少了一点灵活性。
 ```
 
 Spring面向切面编程（AOP）
@@ -561,15 +688,21 @@ Transactions 事务
 面向切面的编程，或AOP， 是一种编程技术，允许程序模块化横向切割关注点，或横切典型的责任划分，如日志和事务管理。
 
 AOP相关概念
-方面（Aspect）：一个关注点的模块化，这个关注点实现可能另外横切多个对象。事务管理是J2EE应用中一个很好的横切关注点例子。方面用Spring的 Advisor或拦截器实现。
+切面（Aspect）：一个关注点的模块化，这个关注点实现可能另外横切多个对象。事务管理是J2EE应用中一个很好的横切关注点例子。方面用Spring的 Advisor或拦截器实现。
 
 连接点（Joinpoint）: 程序执行过程中明确的点，如方法的调用或特定的异常被抛出。
 
-通知（Advice）: 在特定的连接点，AOP框架执行的动作。各种类型的通知包括“around”、“before”和“throws”通知。通知类型将在下面讨论。许多AOP框架包括Spring都是以拦截器做通知模型，维护一个“围绕”连接点的拦截器链。Spring中定义了四个advice: BeforeAdvice, AfterAdvice, ThrowAdvice和DynamicIntroductionAdvice
+通知（Advice）: 在特定的连接点，AOP框架执行的动作。各种类型的通知包括“around”、“before”和“throws”通知。
+通知类型将在下面讨论。许多AOP框架包括Spring都是以拦截器做通知模型，维护一个“围绕”连接点的拦截器链。
+Spring中定义了四个advice: BeforeAdvice, AfterAdvice, ThrowAdvice和DynamicIntroductionAdvice
 
-切入点（Pointcut）: 指定一个通知将被引发的一系列连接点的集合。AOP框架必须允许开发者指定切入点：例如，使用正则表达式。 Spring定义了Pointcut接口，用来组合MethodMatcher和ClassFilter，可以通过名字很清楚的理解， MethodMatcher是用来检查目标类的方法是否可以被应用此通知，而ClassFilter是用来检查Pointcut是否应该应用到目标类上
+切入点（Pointcut）: 指定一个通知将被引发的一系列连接点的集合。AOP框架必须允许开发者指定切入点：
+例如，使用正则表达式。 Spring定义了Pointcut接口，用来组合MethodMatcher和ClassFilter，可以通过名字很清楚的理解， 
+MethodMatcher是用来检查目标类的方法是否可以被应用此通知，而ClassFilter是用来检查Pointcut是否应该应用到目标类上
 
-引入（Introduction）: 添加方法或字段到被通知的类。 Spring允许引入新的接口到任何被通知的对象。例如，你可以使用一个引入使任何对象实现 IsModified接口，来简化缓存。Spring中要使用Introduction, 可有通过DelegatingIntroductionInterceptor来实现通知，通过DefaultIntroductionAdvisor来配置Advice和代理类要实现的接口
+引入（Introduction）: 添加方法或字段到被通知的类。 Spring允许引入新的接口到任何被通知的对象。
+例如，你可以使用一个引入使任何对象实现 IsModified接口，来简化缓存。Spring中要使用Introduction, 
+可有通过DelegatingIntroductionInterceptor来实现通知，通过DefaultIntroductionAdvisor来配置Advice和代理类要实现的接口
 
 目标对象（Target Object）: 包含连接点的对象。也被称作被通知或被代理对象。POJO
 
@@ -582,7 +715,8 @@ AOP代理（AOP Proxy）: AOP框架创建的对象，包含通知。 在Spring�
 
 52.Aspect 切面
 ```
-AOP核心就是切面，它将多个类的通用行为封装成可重用的模块，该模块含有一组API提供横切功能。比如，一个日志模块可以被称作日志的AOP切面。根据需求的不同，一个应用程序可以有若干切面。在Spring AOP中，切面通过带有@Aspect注解的类实现。
+AOP核心就是切面，它将多个类的通用行为封装成可重用的模块，该模块含有一组API提供横切功能。
+比如，一个日志模块可以被称作日志的AOP切面。根据需求的不同，一个应用程序可以有若干切面。在Spring AOP中，切面通过带有@Aspect注解的类实现。
 ```
 
 52.在Spring AOP 中，关注点和横切关注的区别是什么？
@@ -591,7 +725,7 @@ AOP核心就是切面，它将多个类的通用行为封装成可重用的模�
 横切关注点是一个关注点，此关注点是整个应用都会使用的功能，并影响整个应用，比如日志，安全和数据传输，几乎应用的每个模块都需要的功能。因此这些都属于横切关注点。
 ```
 
-54.连接点
+54.连接点 Joinpoint
 ```
 连接点代表一个应用程序的某个位置，在这个位置我们可以插入一个AOP切面，它实际上是个应用程序执行Spring AOP的位置。
 ```
@@ -609,7 +743,7 @@ after-throwing: 在方法抛出异常退出时执行的通知。
 around: 在方法执行之前和之后调用的通知。
 ```
 
-56.切点
+56.切点 Pointcut
 ```
 切入点是一个或一组连接点，通知将在这些位置执行。可以通过表达式或匹配的方式指明切入点。
 ```
@@ -661,21 +795,27 @@ Metadata autoproxying
 Spring 的MVC
 64.什么是Spring的MVC框架？
 ```
-Spring 配备构建Web 应用的全功能MVC框架。Spring可以很便捷地和其他MVC框架集成，如Struts，Spring 的MVC框架用控制反转把业务对象和控制逻辑清晰地隔离。它也允许以声明的方式把请求参数和业务对象绑定。
+Spring 配备构建Web 应用的全功能MVC框架。Spring可以很便捷地和其他MVC框架集成，
+如Struts，Spring 的MVC框架用控制反转把业务对象和控制逻辑清晰地隔离。
+它也允许以声明的方式把请求参数和业务对象绑定。
 ```
+
 65.DispatcherServlet
 ```
-Spring的MVC框架是围绕DispatcherServlet来设计的，它用来处理所有的HTTP请求和响应。
+Spring的MVC框架是围绕 DispatcherServlet 来设计的，它用来处理所有的HTTP请求和响应。
 ```
 
 66.WebApplicationContext
 ```
-WebApplicationContext 继承了ApplicationContext  并增加了一些WEB应用必备的特有功能，它不同于一般的ApplicationContext ，因为它能处理主题，并找到被关联的servlet。
+WebApplicationContext 继承了ApplicationContext  并增加了一些WEB应用必备的特有功能，
+它不同于一般的ApplicationContext ，因为它能处理主题，并找到被关联的servlet。
 ```
 
 67.什么是Spring MVC框架的控制器？
 ```
-控制器提供一个访问应用程序的行为，此行为通常通过服务接口实现。控制器解析用户输入并将其转换为一个由视图呈现给用户的模型。Spring用一个非常抽象的方式实现了一个控制层，允许用户创建多种用途的控制器。
+控制器提供一个访问应用程序的行为，此行为通常通过服务接口实现。
+控制器解析用户输入并将其转换为一个由视图呈现给用户的模型。
+Spring用一个非常抽象的方式实现了一个控制层，允许用户创建多种用途的控制器。
 ```
 
 68.@Controller 注解
