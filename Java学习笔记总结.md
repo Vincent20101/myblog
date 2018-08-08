@@ -605,6 +605,12 @@ Thread 是类，而Runnable是接口；Thread本身是实现了Runnable接口的
 start() 和 run()的区别说明
 start() : 它的作用是启动一个新线程，新线程会执行相应的run()方法。start()不能被重复调用。
 run()   : run()就和普通的成员方法一样，可以被重复调用。单独调用run()的话，会在当前线程中执行run()，而并不会启动新线程！
+
+
+方式一：继承Thread类
+方式二：实现Runnable接口
+方式三：实现Callable接口
+方式四：使用线程池的方式
 ```
 
 synchronized介绍
@@ -811,48 +817,81 @@ ScheduledThreadPoolExecutor类似于Timer，但是在高并发程序中，Schedu
 7. Executors
 
 Executors是个静态工厂类。它通过静态工厂方法返回ExecutorService、ScheduledExecutorService、ThreadFactory 和 Callable 等类的对象。
+
 // 返回 Callable 对象，调用它时可运行给定特权的操作并返回其结果。
 static Callable<Object> callable(PrivilegedAction<?> action)
+
 // 返回 Callable 对象，调用它时可运行给定特权的异常操作并返回其结果。
 static Callable<Object> callable(PrivilegedExceptionAction<?> action)
+
 // 返回 Callable 对象，调用它时可运行给定的任务并返回 null。
 static Callable<Object> callable(Runnable task)
+
 // 返回 Callable 对象，调用它时可运行给定的任务并返回给定的结果。
 static <T> Callable<T> callable(Runnable task, T result)
+
 // 返回用于创建新线程的默认线程工厂。
 static ThreadFactory defaultThreadFactory()
+
 // 创建一个可根据需要创建新线程的线程池，但是在以前构造的线程可用时将重用它们。
 static ExecutorService newCachedThreadPool()
+
 // 创建一个可根据需要创建新线程的线程池，但是在以前构造的线程可用时将重用它们，并在需要时使用提供的 ThreadFactory 创建新线程。
 static ExecutorService newCachedThreadPool(ThreadFactory threadFactory)
+
 // 创建一个可重用固定线程数的线程池，以共享的无界队列方式来运行这些线程。
 static ExecutorService newFixedThreadPool(int nThreads)
+
 // 创建一个可重用固定线程数的线程池，以共享的无界队列方式来运行这些线程，在需要时使用提供的 ThreadFactory 创建新线程。
 static ExecutorService newFixedThreadPool(int nThreads, ThreadFactory threadFactory)
+
 // 创建一个线程池，它可安排在给定延迟后运行命令或者定期地执行。
 static ScheduledExecutorService newScheduledThreadPool(int corePoolSize)
+
 // 创建一个线程池，它可安排在给定延迟后运行命令或者定期地执行。
 static ScheduledExecutorService newScheduledThreadPool(int corePoolSize, ThreadFactory threadFactory)
+
 // 创建一个使用单个 worker 线程的 Executor，以无界队列方式来运行该线程。
 static ExecutorService newSingleThreadExecutor()
+
 // 创建一个使用单个 worker 线程的 Executor，以无界队列方式来运行该线程，并在需要时使用提供的 ThreadFactory 创建新线程。
 static ExecutorService newSingleThreadExecutor(ThreadFactory threadFactory)
+
 // 创建一个单线程执行程序，它可安排在给定延迟后运行命令或者定期地执行。
 static ScheduledExecutorService newSingleThreadScheduledExecutor()
+
 // 创建一个单线程执行程序，它可安排在给定延迟后运行命令或者定期地执行。
 static ScheduledExecutorService newSingleThreadScheduledExecutor(ThreadFactory threadFactory)
+
 // 返回 Callable 对象，调用它时可在当前的访问控制上下文中执行给定的 callable 对象。
 static <T> Callable<T> privilegedCallable(Callable<T> callable)
+
 // 返回 Callable 对象，调用它时可在当前的访问控制上下文中，使用当前上下文类加载器作为上下文类加载器来执行给定的 callable 对象。
 static <T> Callable<T> privilegedCallableUsingCurrentClassLoader(Callable<T> callable)
+
 // 返回用于创建新线程的线程工厂，这些新线程与当前线程具有相同的权限。
 static ThreadFactory privilegedThreadFactory()
+
 // 返回一个将所有已定义的 ExecutorService 方法委托给指定执行程序的对象，但是使用强制转换可能无法访问其他方法。
 static ExecutorService unconfigurableExecutorService(ExecutorService executor)
+
 // 返回一个将所有已定义的 ExecutorService 方法委托给指定执行程序的对象，但是使用强制转换可能无法访问其他方法。
 static ScheduledExecutorService unconfigurableScheduledExecutorService(ScheduledExecutorService executor)
  
 
+- newSingleThreadExecutor：创建一个单线程的线程池。这个线程池只有一个线程在工作，也就是相当于单线程串行执行所有任务。
+如果这个唯一的线程因为异常结束，那么会有一个新的线程来替代它。此线程池保证所有任务的执行顺序按照任务的提交顺序执行。
+
+- newFixedThreadPool：创建固定大小的线程池。每次提交一个任务就创建一个线程，直到线程达到线程池的最大大小。
+线程池的大小一旦达到最大值就会保持不变，如果某个线程因为执行异常而结束，那么线程池会补充一个新线程。
+
+- newCachedThreadPool：创建一个可缓存的线程池。如果线程池的大小超过了处理任务所需要的线程，那么就会回收部分空闲（60秒不
+执行任务）的线程，当任务数增加时，此线程池又可以智能的添加新线程来处理任务。此线程池不会对线程池大小做限制，线程池大小完全依
+赖于操作系统（或者说JVM）能够创建的最大线程大小。
+
+- newScheduledThreadPool：创建一个大小无限的线程池。此线程池支持定时以及周期性执行任务的需求。
+
+- newSingleThreadScheduledExecutor：创建一个单线程的线程池。此线程池支持定时以及周期性执行任务的需求。
 ```
 
 
