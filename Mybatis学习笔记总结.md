@@ -1,3 +1,189 @@
+Mybatis 学习笔记
+
+
+mybatis中一对一关联关系
+```xml
+
+    <resultMap id="getClassMap" type="Classes">
+        <id property="id" column="c_id"/>
+        <result property="name" column="c_name"/>
+        <association property="teacher" javaType="Teacher">
+            <id property="id" column="t_id"/>
+            <result property="name" column="t_name"/>
+        </association>
+    </resultMap>
+
+    <select id="getClass" parameterType="int" resultMap="getClassMap">
+        SELECT *
+        FROM mb_class, mb_teacher
+        WHERE c_id = #{id} AND mb_teacher.t_id = mb_class.teacher_id;
+    </select>
+
+
+    <resultMap id="getClassMap2" type="Classes">
+        <id property="id" column="c_id"/>
+        <result property="name" column="c_name"/>
+        <association property="teacher" javaType="Teacher" column="teacher_id" select="getTeacher"/>
+    </resultMap>
+
+    <select id="getTeacher" parameterType="int" resultType="Teacher">
+        SELECT
+            t_id   id,
+            t_name name
+        FROM mb_teacher
+        WHERE t_id = #{id}
+    </select>
+
+    <select id="getClass2" parameterType="int" resultMap="getClassMap2">
+        SELECT *
+        FROM mb_class
+        WHERE c_id = #{id}
+    </select>
+
+```
+以上可以使用2中方式来处理这个关联关系，一个是连表查询，一个是多次查询。
+使用到了<association />
+
+```xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>mage</groupId>
+    <artifactId>mybatis</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <name>mybatis Maven Webapp</name>
+    <url>http://www.example.com</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+    </properties>
+
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/cglib/cglib -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>3.2.7</version>
+        </dependency>
+
+        <!-- mybatis核心包 -->
+        <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
+
+        <!-- mysql驱动包 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>6.0.6</version>
+        </dependency>
+        <!-- junit测试包 -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- 日志文件管理包 -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.12</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>mybatis</finalName>
+
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
+
+    </build>
+</project>
+
+
+```
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <properties resource="db.prop"/>
+
+    <settings>
+        <!--全局性设置懒加载。如果设为‘false’，则所有相关联的都会被初始化加载,默认值为false-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <!--当设置为‘true’的时候，懒加载的对象可能被任何懒属性全部加载。否则，每个属性都按需加载。默认值为true-->
+        <setting name="aggressiveLazyLoading" value="false"/>
+    </settings>
+
+    <typeAliases>
+        <!-- 其实就是将bean的替换成一个短的名字 -->
+        <!--<typeAlias type="com.mamh.mybatis.demo.model.User" alias="User"/>-->
+        <package name="com.mamh.mybatis.demo.model"/>
+    </typeAliases>
+
+    <!--对事务的管理和连接池的配置-->
+    <environments default="dev">
+        <environment id="dev">
+            <transactionManager type="JDBC"/>
+
+            <dataSource type="POOLED"><!--POOLED：使用Mybatis自带的数据库连接池来管理数据库连接-->
+                <property name="driver" value="${jdbc.driverClass}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.user}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+
+
+    </environments>
+
+    <!--mapping文件路径配置-->
+    <mappers>
+        <mapper resource="UserMapper.xml"/>
+        <mapper resource="OrderMapper.xml"/>
+        <mapper resource="ClassMapper.xml"/>
+        <mapper resource="StudentMapper.xml"/>
+        <mapper class="com.mamh.mybatis.demo.mapper.UserMapper"/>
+    </mappers>
+
+</configuration>
+
+```
+
+
 Mybatis 的常见面试题
 
 1、#{}和${}的区别是什么？
