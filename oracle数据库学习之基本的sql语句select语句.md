@@ -1,16 +1,16 @@
 马哥私房菜的github地址 https://github.com/mageSFC/myblog
 
-数据库学习oracle之基本的sql语句select语句
+# 数据库学习oracle之基本的sql语句select语句
 
 
-SQL语句分为以下三种类型：
+## SQL语句分为以下三种类型：
 
 * DML: Data Manipulation Language 数据操纵语言
 * DDL:  Data Definition Language 数据定义语言
 * DCL:  Data Control Language 数据控制语言
 
 
-DML用于查询与修改数据记录，包括如下SQL语句：
+## DML用于查询与修改数据记录，包括如下SQL语句：
 
 * INSERT：添加数据到数据库中
 * UPDATE：修改数据库中的数据
@@ -18,7 +18,7 @@ DML用于查询与修改数据记录，包括如下SQL语句：
 * SELECT：选择（查询）数据
 
 
-DDL用于定义数据库的结构，比如创建、修改或删除数据库对象，包括如下SQL语句：
+## DDL用于定义数据库的结构，比如创建、修改或删除数据库对象，包括如下SQL语句：
 
 * CREATE TABLE：创建数据库表
 * ALTER  TABLE：更改表结构、添加、删除、修改列长度
@@ -27,7 +27,7 @@ DDL用于定义数据库的结构，比如创建、修改或删除数据库对�
 * DROP INDEX：删除索引
 
 
-DCL用来控制数据库的访问，包括如下SQL语句：
+## DCL用来控制数据库的访问，包括如下SQL语句：
 
 * GRANT：授予访问权限
 * REVOKE：撤销访问权限
