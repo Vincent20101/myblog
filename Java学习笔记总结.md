@@ -1261,7 +1261,159 @@ JUC集合包中Queue的实现类包括: ArrayBlockingQueue, LinkedBlockingQueue,
 
 
 ```
+CopyOnWriteArrayList介绍
+```
+它相当于线程安全的ArrayList。和ArrayList一样，它是个可变数组；但是和ArrayList不同的时，它具有以下特性：
+1. 它最适合于具有以下特征的应用程序：List 大小通常保持很小，只读操作远多于可变操作，需要在遍历期间防止线程间的冲突。
+2. 它是线程安全的。
+3. 因为通常需要复制整个基础数组，所以可变操作（add()、set() 和 remove() 等等）的开销很大。
+4. 迭代器支持hasNext(), next()等不可变操作，但不支持可变 remove()等操作。
+5. 使用迭代器进行遍历的速度很快，并且不会与其他线程发生冲突。在构造迭代器时，迭代器依赖于不变的数组快照。
 
+说明：
+1. CopyOnWriteArrayList实现了List接口，因此它是一个队列。
+2. CopyOnWriteArrayList包含了成员lock。每一个CopyOnWriteArrayList都和一个互斥锁lock绑定，通过lock，实现了对CopyOnWriteArrayList的互斥访问。
+3. CopyOnWriteArrayList包含了成员array数组，这说明CopyOnWriteArrayList本质上通过数组实现的。
+
+下面从“动态数组”和“线程安全”两个方面进一步对CopyOnWriteArrayList的原理进行说明。
+1. CopyOnWriteArrayList的“动态数组”机制 -- 它内部有个“volatile数组”(array)来保持数据。在“添加/修改/删除”数据时，都会新建一个数组，并将更新后的数据拷贝到新建的数组中，最后再将该数组赋值给“volatile数组”。这就是它叫做CopyOnWriteArrayList的原因！CopyOnWriteArrayList就是通过这种方式实现的动态数组；不过正由于它在“添加/修改/删除”数据时，都会新建数组，所以涉及到修改数据的操作，CopyOnWriteArrayList效率很
+低；但是单单只是进行遍历查找的话，效率比较高。
+2. CopyOnWriteArrayList的“线程安全”机制 -- 是通过volatile和互斥锁来实现的。
+(01) CopyOnWriteArrayList是通过“volatile数组”来保存数据的。一个线程读取volatile数组时，总能看到其它线程对该volatile变量最后的写入；
+就这样，通过volatile提供了“读取到的数据总是最新的”这个机制的保证。
+(02) CopyOnWriteArrayList通过互斥锁来保护数据。在“添加/修改/删除”数据时，会先“获取互斥锁”，再修改完毕之后，先将数据更新到“volatile数组”中，
+然后再“释放互斥锁”；这样，就达到了保护数据的目的。 
+
+public CopyOnWriteArrayList() {
+    setArray(new Object[0]);
+}
+
+public CopyOnWriteArrayList(Collection<? extends E> c) {
+    Object[] elements = c.toArray();
+    if (elements.getClass() != Object[].class)
+        elements = Arrays.copyOf(elements, elements.length, Object[].class);
+    setArray(elements);
+}
+
+public CopyOnWriteArrayList(E[] toCopyIn) {
+    setArray(Arrays.copyOf(toCopyIn, toCopyIn.length, Object[].class));
+} 
+说明：这3个构造函数都调用了setArray()，setArray()的源码如下：
+
+private volatile transient Object[] array;
+
+final Object[] getArray() {
+    return array;
+}
+
+final void setArray(Object[] a) {
+    array = a;
+}
+
+说明：setArray()的作用是给array赋值；其中，array是volatile transient Object[]类型，即array是“volatile数组”。
+关于volatile关键字，我们知道“volatile能让变量变得可见”，即对一个volatile变量的读，总是能看到（任意线程）对这个volatile变量最后的写入。
+正在由于这种特性，每次更新了“volatile数组”之后，其它线程都能看到对它所做的更新。
+关于transient关键字，它是在序列化中才起作用，transient变量不会被自动序列化。transient不是本文关注的重点，了解即可。
+
+
+
+2. 添加
+
+以add(E e)为例，来对“CopyOnWriteArrayList的添加操作”进行说明。下面是add(E e)的代码：
+public boolean add(E e) {
+    final ReentrantLock lock = this.lock;
+    // 获取“锁”
+    lock.lock();
+    try {
+        // 获取原始”volatile数组“中的数据和数据长度。
+        Object[] elements = getArray();
+        int len = elements.length;
+        // 新建一个数组newElements，并将原始数据拷贝到newElements中；
+        // newElements数组的长度=“原始数组的长度”+1
+        Object[] newElements = Arrays.copyOf(elements, len + 1);
+        // 将“新增加的元素”保存到newElements中。
+        newElements[len] = e;
+        // 将newElements赋值给”volatile数组“。
+        setArray(newElements);
+        return true;
+    } finally {
+        // 释放“锁”
+        lock.unlock();
+    }
+}
+说明：
+add(E e)的作用就是将数据e添加到”volatile数组“中。它的实现方式是，新建一个数组，接着将原始的”volatile数组“的数据拷贝到新数组中，
+然后将新增数据也添加到新数组中；最后，将新数组赋值给”volatile数组“。
+在add(E e)中有两点需要关注。
+第一，在”添加操作“开始前，获取独占锁(lock)，若此时有需要线程要获取锁，则必须等待；在操作完毕后，释放独占锁(lock)，
+此时其它线程才能获取锁。通过独占锁，来防止多线程同时修改数据！lock的定义如下：
+transient final ReentrantLock lock = new ReentrantLock();
+
+第二，操作完毕时，会通过setArray()来更新”volatile数组“。而且，前面我们提过”即对一个volatile变量的读，
+总是能看到（任意线程）对这个volatile变量最后的写入“；这样，每次添加元素之后，其它线程都能看到新添加的元素。
+
+
+3. 获取
+
+以get(int index)为例，来对“CopyOnWriteArrayList的删除操作”进行说明。下面是get(int index)的代码：
+public E get(int index) {
+    return get(getArray(), index);
+}
+
+private E get(Object[] a, int index) {
+    return (E) a[index];
+}
+说明：get(int index)的实现很简单，就是返回”volatile数组“中的第index个元素。
+
+
+4. 删除
+
+以remove(int index)为例，来对“CopyOnWriteArrayList的删除操作”进行说明。下面是remove(int index)的代码：
+public E remove(int index) {
+    final ReentrantLock lock = this.lock;
+    // 获取“锁”
+    lock.lock();
+    try {
+        // 获取原始”volatile数组“中的数据和数据长度。
+        Object[] elements = getArray();
+        int len = elements.length;
+        // 获取elements数组中的第index个数据。
+        E oldValue = get(elements, index);
+        int numMoved = len - index - 1;
+        // 如果被删除的是最后一个元素，则直接通过Arrays.copyOf()进行处理，而不需要新建数组。
+        // 否则，新建数组，然后将”volatile数组中被删除元素之外的其它元素“拷贝到新数组中；最后，将新数组赋值给”volatile数组“。
+        if (numMoved == 0)
+            setArray(Arrays.copyOf(elements, len - 1));
+        else {
+            Object[] newElements = new Object[len - 1];
+            System.arraycopy(elements, 0, newElements, 0, index);
+            System.arraycopy(elements, index + 1, newElements, index,
+                             numMoved);
+            setArray(newElements);
+        }
+        return oldValue;
+    } finally {
+        // 释放“锁”
+        lock.unlock();
+    }
+}
+说明：remove(int index)的作用就是将”volatile数组“中第index个元素删除。它的实现方式是，如果被删除的是最后一个元素，则直接通过Arrays.copyOf()进行处理，而不需要新建数组。否则，新建数组，然后将”volatile数组中被删除元素之外的其它元素“拷贝到新数组中；最后，将新数组赋值给”volatile数组“。
+和add(E e)一样，remove(int index)也是”在操作之前，获取独占锁；操作完成之后，释放独占是“；并且”在操作完成时，会通过将数据更新到volatile数组中“。
+
+ 
+5. 遍历
+
+以iterator()为例，来对“CopyOnWriteArrayList的遍历操作”进行说明。下面是iterator()的代码：
+public Iterator<E> iterator() {
+    return new COWIterator<E>(getArray(), 0);
+}
+说明：iterator()会返回COWIterator对象。
+COWIterator实现额ListIterator接口，它的源码如下：
+说明：COWIterator不支持修改元素的操作。例如，对于remove(),set(),add()等操作，COWIterator都会抛出异常！
+另外，需要提到的一点是，CopyOnWriteArrayList返回迭代器不会抛出ConcurrentModificationException异常，即它不是fail-fast机制的！
+
+
+```
 
 
 
