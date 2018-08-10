@@ -3,7 +3,7 @@ awk学习之cookbook技巧.md
 
 马哥的淘宝店:https://shop592330910.taobao.com/
 
-#Awk One-Liners Explained, Part I: File Spacing, Numbering and Calculations
+# Part 1: File Spacing, Numbering and Calculations
 
 ##1.Line Spacing
 
@@ -421,7 +421,7 @@ awk '$NF > 4'  #马哥的淘宝店:https://shop592330910.taobao.com/
 
 
 
-#Awk One-Liners Explained, Part II: Text Conversion and Substitution
+# Part 2: Text Conversion and Substitution
 
 
 ##3. Text Conversion and Substitution
@@ -660,7 +660,7 @@ awk 'ORS=NR%5?",":"\n"'    #马哥的淘宝店:https://shop592330910.taobao.com/
 如果行号NR能被5整除，重新赋值ORS的值
 
 
-#Awk One-Liners Explained, Part III: Selective Printing and Deleting of Certain Lines
+# Part 3: Selective Printing and Deleting of Certain Lines
 
 ##4. Selective Printing of Certain Lines
 
@@ -840,8 +840,9 @@ awk '/./'     #马哥的淘宝店:https://shop592330910.taobao.com/
 ```
 模式/./会匹配一个字符，空行当然是不会被匹配上的啦。   #马哥的淘宝店:https://shop592330910.taobao.com/
 
+# Part 4: String and Array Creation
 
-#String Creation
+## String Creation
 
 1.创建一个固定长度的字符串.
 ```bash
@@ -918,7 +919,7 @@ awk 'BEGIN{ while(a++<49) s=s "x" }; { sub(/^....../,"&" s) }; 1
 注意：上面语句中的点并不是点本身的意思，而是代码任意一个字符，有点类似于bash脚本中用到字段?所代表的意思
 
 
-#Array Creation
+## Array Creation
 
 3.利用一个字符串创建一个数组.
 ```bash
