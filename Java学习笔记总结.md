@@ -13,6 +13,7 @@
 ```
 
 Java IO
+
 ```text
 字节流 InputStream     FilterInputStream,   BufferedInputStream, ByteArrayInputStream,   DataInputStream,  PrintStream  
 字节流 OutputStream    FilterOutputStream,  BufferedOutputStream, ByteArrayOutputStream, DataOutputStream, 
@@ -20,9 +21,11 @@ Java IO
 字符流 Writer  BufferedWriter,                  CharArrayWriter, OutputStreamWriter,  FileWriter,FilterWriter,                 PipedWriter, StringWriter, PrintWriter,
 
 RandomAccessFile 随机访问文件流
+```
 
-
-java.io包中的字节流。按照前篇文章所说，java.io包中的字节流中的类关系有用到GoF《设计模式》中的装饰者模式，
+java IO 之 FilterInputStream和FilterOutputStream
+```
+java.io包中的字节流。 java.io包中的字节流中的类关系有用到GoF《设计模式》中的装饰者模式，
 而这正体现在FilterInputStream和FilterOutputStream和它的子类上。
 首先，这两个都分别是InputStream和OutputStream的子类。而且，FilterInputStream和FilterOutputStream 是具体的子类，
 实现了InputStream和OutputStream这两个抽象类中为给出实现的方法。
@@ -48,9 +51,180 @@ write方法的实现：
         out.write(b);
     }
 
+FilterInputStream 的作用是用来“封装其它的输入流，并为它们提供额外的功能”。它的常用的子类有BufferedInputStream和DataInputStream。
+BufferedInputStream的作用就是为“输入流提供缓冲功能，以及mark()和reset()功能”。
+DataInputStream 是用来装饰其它输入流，它“允许应用程序以与机器无关方式从底层输入流中读取基本 Java 数据类型”。应用程序可以使用DataOutputStream(数据输出流)写入由DataInputStream(数据输入流)读取的数据
 
 
 
+FilterOutputStream 的作用是用来“封装其它的输出流，并为它们提供额外的功能”。它主要包括BufferedOutputStream, DataOutputStream和PrintStream。
+BufferedOutputStream的作用就是为“输出流提供缓冲功能”。
+DataOutputStream 是用来装饰其它输出流，将DataOutputStream和DataInputStream输入流配合使用，“允许应用程序以与机器无关方式从底层输入流中读写基本 Java 数据类型”。
+PrintStream 是用来装饰其它输出流。它能为其他输出流添加了功能，使它们能够方便地打印各种数据值表示形式。
+```
+
+
+java IO  之 FileInputStream 和 FileOutputStream
+```
+FileInputStream 和 FileOutputStream都是直接怼到文件上的，也就是直接访问文件使用的，在这2个流上我们可以包装其他的流。
+
+FileInputStream 是文件输入流，它继承于InputStream。通常，我们使用FileInputStream从某个文件中获得输入字节。
+
+FileInputStream(File file)         // 构造函数1：创建“File对象”对应的“文件输入流”
+FileInputStream(FileDescriptor fd) // 构造函数2：创建“文件描述符”对应的“文件输入流”
+FileInputStream(String path)       // 构造函数3：创建“文件(路径为path)”对应的“文件输入流”
+
+int      available()             // 返回“剩余的可读取的字节数”或者“skip的字节数”
+void     close()                 // 关闭“文件输入流”
+FileChannel      getChannel()    // 返回“FileChannel”
+final FileDescriptor     getFD() // 返回“文件描述符”
+int      read()                  // 返回“文件输入流”的下一个字节
+int      read(byte[] buffer, int byteOffset, int byteCount) // 读取“文件输入流”的数据并存在到buffer，从byteOffset开始存储，存储长度是byteCount。
+long     skip(long byteCount)    // 跳过byteCount个字节
+
+FileOutputStream 是文件输出流，它继承于OutputStream。通常，我们使用FileOutputStream 将数据写入 File 或 FileDescriptor 的输出流。
+
+FileOutputStream(File file)                   // 构造函数1：创建“File对象”对应的“文件输入流”；默认“追加模式”是false，即“写到输出的流内容”不是以追加的方式添加到文件中。
+FileOutputStream(File file, boolean append)   // 构造函数2：创建“File对象”对应的“文件输入流”；指定“追加模式”。
+FileOutputStream(FileDescriptor fd)           // 构造函数3：创建“文件描述符”对应的“文件输入流”；默认“追加模式”是false，即“写到输出的流内容”不是以追加的方式添加到文件中。
+FileOutputStream(String path)                 // 构造函数4：创建“文件(路径为path)”对应的“文件输入流”；默认“追加模式”是false，即“写到输出的流内容”不是以追加的方式添加到文件中。
+FileOutputStream(String path, boolean append) // 构造函数5：创建“文件(路径为path)”对应的“文件输入流”；指定“追加模式”。
+
+void                    close()      // 关闭“输出流”
+FileChannel             getChannel() // 返回“FileChannel”
+final FileDescriptor    getFD()      // 返回“文件描述符”
+void                    write(byte[] buffer, int byteOffset, int byteCount) // 将buffer写入到“文件输出流”中，从buffer的byteOffset开始写，写入长度是byteCount。
+void                    write(int oneByte)  // 写入字节oneByte到“文件输出流”中
+
+
+
+```
+
+
+java IO 之 FileDescriptor
+```
+FileDescriptor 是“文件描述符”。
+FileDescriptor 可以被用来表示开放文件、开放套接字等。
+以FileDescriptor表示文件来说：当FileDescriptor表示某文件时，我们可以通俗的将FileDescriptor看成是该文件。
+但是，我们不能直接通过FileDescriptor对该文件进行操作；若需要通过FileDescriptor对该文件进行操作，则需要新创建FileDescriptor对应的FileOutputStream，再对文件进行操作。
+
+in, out, err介绍
+
+(01) in  -- 标准输入(键盘)的描述符
+ 	public static final FileDescriptor in = standardStream(0);
+
+(02) out -- 标准输出(屏幕)的描述符
+    public static final FileDescriptor out = standardStream(1);
+
+(03) err -- 标准错误输出(屏幕)的描述符
+    public static final FileDescriptor err = standardStream(2);
+
+
+out 的作用和原理
+
+out是标准输出(屏幕)的描述符。但是它有什么作用呢？
+我们可以通俗理解，out就代表了标准输出(屏幕)。若我们要输出信息到屏幕上，即可通过out来进行操作；
+但是，out又没有提供输出信息到屏幕的接口(因为out本质是FileDescriptor对象，而FileDescriptor没有输出接口)。怎么办呢？
+很简单，我们创建out对应的“输出流对象”，然后通过“输出流”的write()等输出接口就可以将信息输出到屏幕上。如下代码：
+try {
+    FileOutputStream out = new FileOutputStream(FileDescriptor.out);
+    out.write('A');
+    out.close();
+} catch (IOException e) {
+}
+执行上面的程序，会在屏幕上输出字母'A'。
+
+为了方便我们操作，java早已为我们封装好了“能方便的在屏幕上输出信息的接口”：通过System.out，我们能方便的输出信息到屏幕上。
+因此，我们可以等价的将上面的程序转换为如下代码：
+System.out.print('A');
+
+
+```
+
+
+java IO之 字节数组流 ByteArrayInputStream 和 ByteArrayOutputStream
+```
+ByteArrayInputStream 是字节数组输入流。它继承于InputStream。
+它包含一个内部缓冲区，该缓冲区包含从流中读取的字节；通俗点说，它的内部缓冲区就是一个字节数组，而ByteArrayInputStream本质就是通过字节数组来实现的。
+我们都知道，InputStream通过read()向外提供接口，供它们来读取字节数据；而ByteArrayInputStream 的内部额外的定义了一个计数器，它被用来跟踪 read() 方法要读取的下一个字节。
+
+ByteArrayInputStream实际上是通过“字节数组”去保存数据。
+(01) 通过ByteArrayInputStream(byte buf[]) 或 ByteArrayInputStream(byte buf[], int offset, int length) ，我们可以根据buf数组来创建字节流对象。
+(02) read()的作用是从字节流中“读取下一个字节”。
+(03) read(byte[] buffer, int offset, int length)的作用是从字节流读取字节数据，并写入到字节数组buffer中。offset是将字节写入到buffer的起始位置，length是写入的字节的长度。
+(04) markSupported()是判断字节流是否支持“标记功能”。它一直返回true。
+(05) mark(int readlimit)的作用是记录标记位置。记录标记位置之后，某一时刻调用reset()则将“字节流下一个被读取的位置”重置到“mark(int readlimit)所标记的位置”；也就是说，reset()之后再读取字节流时，是从mark(int readlimit)所标记的位置开始读取。
+
+
+ByteArrayOutputStream 是字节数组输出流。它继承于OutputStream。
+ByteArrayOutputStream 中的数据被写入一个 byte 数组。缓冲区会随着数据的不断写入而自动增长。可使用 toByteArray() 和 toString() 获取数据。
+
+ByteArrayOutputStream实际上是将字节数据写入到“字节数组”中去。
+(01) 通过ByteArrayOutputStream()创建的“字节数组输出流”对应的字节数组大小是32。
+(02) 通过ByteArrayOutputStream(int size) 创建“字节数组输出流”，它对应的字节数组大小是size。
+(03) write(int oneByte)的作用将int类型的oneByte换成byte类型，然后写入到输出流中。
+(04) write(byte[] buffer, int offset, int len) 是将字节数组buffer写入到输出流中，offset是从buffer中读取数据的起始偏移位置，len是读取的长度。
+(05) writeTo(OutputStream out) 将该“字节数组输出流”的数据全部写入到“输出流out”中。
+
+ 
+
+```
+
+java IO 之   管道  PipedInputStream 和 PipedOutputStream 
+```
+PipedInputStream 是管道输入流，继承自InputStream。
+PipedOutputStream 是管道输出流 ， 继承自OutputStream。
+它们的作用是让多线程可以通过管道进行线程间的通讯。在使用管道通信时，必须将PipedOutputStream和PipedInputStream配套使用。
+使用管道通信时，大致的流程是：我们在线程A中向PipedOutputStream中写入数据，这些数据会自动的发送到与PipedOutputStream对应的PipedInputStream中，
+进而存储在PipedInputStream的缓冲中；此时，线程B通过读取PipedInputStream中的数据。就可以实现，线程A和线程B的通信。
+
+
+```
+
+java IO 之 对象流 ObjectInputStream 和 ObjectOutputStream 
+```
+ObjectInputStream 和 ObjectOutputStream 的作用是，对基本数据和对象进行序列化操作支持。
+
+创建“文件输出流”对应的ObjectOutputStream对象，该ObjectOutputStream对象能提供对“基本数据或对象”的持久存储；
+当我们需要读取这些存储的“基本数据或对象”时，可以创建“文件输入流”对应的ObjectInputStream，进而读取出这些“基本数据或对象”。
+
+通过ObjectInputStream, ObjectOutputStream操作的对象，必须是实现了Serializable或Externalizable序列化接口的类的实例。
+
+序列化，就是为了保存对象的状态；而与之对应的反序列化，则可以把保存的对象状态再读出来。
+简言之：序列化/反序列化，是Java提供一种专门用于的保存/恢复对象状态的机制。
+
+一般在以下几种情况下，我们可能会用到序列化：
+a）当你想把的内存中的对象状态保存到一个文件中或者数据库中时候； 
+b）当你想用套接字在网络上传送对象的时候； 
+c）当你想通过RMI传输对象的时候。
+
+(01) 序列化对static和transient变量，是不会自动进行状态保存的。
+transient的作用就是，用transient声明的变量，不会被自动序列化。
+(02) 对于Socket, Thread类，不支持序列化。若实现序列化的接口中，有Thread成员；在对该类进行序列化操作时，编译会出错！
+这主要是基于资源分配方面的原因。如果Socket，Thread类可以被序列化，但是被反序列化之后也无法对他们进行重新的资源分配；再者，也是没有必要这样实现。
+
+
+“序列化不会自动保存static和transient变量”，因此我们若要保存它们，则需要通过writeObject()和readObject()去手动读写。
+事实证明，不能对Thread进行序列化。若希望程序能编译通过，我们对Thread变量添加static或transient修饰即可。
+
+
+如果一个类要完全负责自己的序列化，则实现Externalizable接口，而不是Serializable接口。
+Externalizable接口定义包括两个方法writeExternal()与readExternal()。需要注意的是：声明类实现Externalizable接口会有重大的安全风险。
+writeExternal()与readExternal()方法声明为public，恶意类可以用这些方法读取和写入对象数据。如果对象包含敏感信息，则要格外小心。
+(01) 实现Externalizable接口的类，不会像实现Serializable接口那样，会自动将数据保存。
+(02) 实现Externalizable接口的类，必须实现writeExternal()和readExternal()接口！ 否则，程序无法正常编译！
+(03) 实现Externalizable接口的类，必须定义不带参数的构造函数！ 否则，程序无法正常编译！
+(04) writeExternal() 和 readExternal() 的方法都是public的，不是非常安全！
+
+
+
+```
+
+
+
+
+java NIO
+```
 NIO即New IO，这个库是在JDK1.4中才引入的。NIO和IO有相同的作用和目的，但实现方式不同，
 NIO主要用到的是块，所以NIO的效率要比IO高很多。在Java API中提供了两套NIO，一套是针对标准输入输出NIO，另一套就是网络编程NIO。
 
@@ -63,7 +237,58 @@ Java IO的各种流是阻塞的。这意味着，当一个线程调用read() 或
 Java NIO的非阻塞模式，使一个线程从某通道发送请求读取数据，但是它仅能得到目前可用的数据，如果目前没有数据可用时，就什么都不会获取，而不是保持线程阻塞，所以直至数据变的可以读取之前，该线程可以继续做其他的事情。 非阻塞写也是如此。一个线程请求写入一些数据到某通道，但不需要等待它完全写入，这个线程同时可以去做别的事情。 线程通常将非阻塞IO的空闲时间用于在其它通道上执行IO操作，所以一个单独的线程现在可以管理多个输入和输出通道（channel）。
 
 
-Java NIO的选择器允许一个单独的线程来监视多个输入通道，你可以注册多个通道使用一个选择器，然后使用一个单独的线程来“选择”通道：这些通道里已经有可以处理的输入，或者选择已准备写入的通道。这种选择机制，使得一个单独的线程很容易来管理多个通道。
+Java NIO的选择器允许一个单独的线程来监视多个输入通道，你可以注册多个通道使用一个选择器，然后使用一个单独的线程来“选择”通道：这些通道里已经有可以处理的输入，或者选择已准备写入的通道。这种选择机制，使得一个单独的线程很容易来管理多个通道。非阻塞是对于网络io的。
+
+
+NIO缓冲区，buffer，负责存取数据的，顶层是数组。
+allocate() 分配非直接缓冲区，建立在jvm的内存中。
+allocateDirect（）分配直接缓冲区。
+
+put（）存入数据到缓冲区
+get（）获取缓冲区中的数据
+flip()  切换读写模式    先设置limit为当前的position。 然后重置position为0
+rewind（）可重复读取数据  重置position为0
+clear（）重置position为0，limit为capacity。
+
+capacity 容量，缓冲区最大存储容量，一旦声明不能改变。
+limit 界限，缓冲区中可以操作数据的大小，limit后面的数据是不能进行读写操作的。
+position 位置，缓冲区中正在操作的数据的位置。
+mark 记录当前position的位置的，可以通过mark（）和reset（）来设置和恢复
+
+0 <= mark <= position <= limit <= capacity
+
+
+
+通道直接的数据传输
+inChannel.transferTo(0, inChannel.size(), outChannel);
+
+outChannel.transferFrom(inChannel, 0, inChannel.size());
+
+
+分散读取，聚集写入
+ByteBuffer[] bufs = {byteBuffer1, byteBuffer2};
+channel.read(bufs);
+        
+ByteBuffer[] bufs = {byteBuffer1, byteBuffer2};
+channel.write(bufs);  //GatheringByteChannel
+
+字符编码和解码
+编码是  字符串   转换为  字节数组
+解码是  字节数组  转换为 字符串
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ```
