@@ -263,10 +263,184 @@ prefix: $HOME/anaconda3/envs/py35
 
 ```
 
+# jupyter 环境的一些配置
+
+配置默认显示行号
+```
+
+在自己的家目录下面的 .jupyter\nbconfig 目录下面 新建个 nbconfig 文件。添加如下内容
+{
+  "Cell": {
+    "cm_config": {
+      "lineNumbers": true
+    }
+  }
+}
+
+```
+
+配置默认宽度
+```
+默认的cell宽度比较窄看代码不爽，可以调整为100% 浏览器宽度。
+在自己的家目录下面的 .jupyter\custom 目录下面新建  custom.css 文件
+
+/*
+ * Placeholder for custom user CSS mainly to be overridden
+ * in profile/static/custom/custom.css
+ * This will always be an empty file in IPython
+ */
+.CodeMirror pre {
+    font-family: Consolas;
+    font-size: 10pt;
+}
+
+* {
+    font-family: Consolas;
+}
+
+div.output_area pre {
+    font-family: Consolas;
+    font-size: 10pt;
+}
+
+div.input_prompt {
+    font-family: Consolas;
+    font-size: 10pt;
+}
+
+div.out_prompt_overlay {
+    font-family: Consolas;
+    font-size: 10pt;
+}
+
+div.prompt {
+    font-family: Consolas;
+    font-size: 10pt;
+}
+
+span.cm-comment {
+    font-family: Consolas !important;
+    font-style: normal !important;
+    color: #FFAE3C !important;
+}
+
+.container {
+    width: 100% !important;
+}
+
+
+```
+
+jupyter 配置 jupyter_notebook_config.py 文件
+
+```
+生成密码
+打开ipython，就是弹出来的网页里按右上角的 new，然后选python
+
+from notebook.auth import passwd
+passwd()
+
+按回车，它会提示你输入密码，记住！！！这就是你要设置的密码！！输一遍验证一遍是国际惯例，然后你就把密码设好了。
+
+据说下面跳出来的sha….要记着，不知道干嘛，反之我是记了。
+
+然后吧这个字符串 配置到.jupyter下面的 jupyter_notebook_config.py 文件中c.NotebookApp.password后面。大概260行左右
+
+#  The string should be of the form type:salt:hashed-password.
+c.NotebookApp.password = 'sha1:be508d594774:f1d0ff02b2e368b5b5e141110dc5f5b45b77fab9'
+
+
+配置起始工作目录，
+c.NotebookApp.notebook_dir = '/home/bright/work'
+
+配置notebook的ip。默认是localhost，改过之后就可以任意ip电脑都可以访问了
+c.NotebookApp.ip = '0.0.0.0'
+```
 
 
 
+# jupyter 配置不同的python环境
 
+```
+$ jupyter-kernelspec list
+
+Available kernels:
+  python2.7.6    /home/bright/.local/share/jupyter/kernels/python2.7.6
+  python3        /home/bright/.local/share/jupyter/kernels/python3
+  python3.7.0    /home/bright/.local/share/jupyter/kernels/python3.7.0
+
+
+source activate learn-python2.7.6
+python -m ipykernel install --user --name python2.7.6 --display-name "Python 2.7.6"
+
+
+
+source activate learn-python3.7.0
+python -m ipykernel install --user --name python3.7.0 --display-name "Python 3.7.0"
+
+
+$ tree .local/share/jupyter
+
+.local/share/jupyter
+├── kernels
+│   ├── python2.7.6
+│   │   ├── kernel.json
+│   │   ├── logo-32x32.png
+│   │   └── logo-64x64.png
+│   ├── python3
+│   │   ├── kernel.json
+│   │   ├── logo-32x32.png
+│   │   └── logo-64x64.png
+│   └── python3.7.0
+│       ├── kernel.json
+│       ├── logo-32x32.png
+│       └── logo-64x64.png
+├── nbsignatures.db
+└── notebook_secret
+
+4 directories, 11 files
+
+$ cat .local/share/jupyter/kernels/python*/kernel.json
+
+{
+ "display_name": "Python 2.7.6",
+ "language": "python",
+ "argv": [
+  "/home/bright/anaconda3/envs/learn-python2.7.6/bin/python",
+  "-m",
+  "ipykernel_launcher",
+  "-f",
+  "{connection_file}"
+ ]
+}
+
+{
+ "argv": [
+  "/home/bright/anaconda3/envs/learn-python3.7.0/bin/python",
+  "-m",
+  "ipykernel_launcher",
+  "-f",
+  "{connection_file}"
+ ],
+ "display_name": "Python 3.7.0",
+ "language": "python"
+}
+
+{
+ "argv": [
+  "python",
+  "-m",
+  "ipykernel_launcher",
+  "-f",
+  "{connection_file}"
+ ],
+ "display_name": "Python 3",
+ "language": "python"
+}
+
+
+
+```
 
 
 
