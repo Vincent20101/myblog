@@ -115,7 +115,48 @@ Reloaded plugin replication, version v2.12 ，看样子插件总是被重新加�
 
 目前还不确定是否和这个插件重新被加载有关系。 
 
+今天看到了gerrit-2.12.1 版本的更新说明，其中有一个bug的fix如下
+Issue 3821: Fix repeated reloading of plugins when running on OpenJDK 8. 
+OpenJDK 8 uses nanotime precision for file modification time on systems 
+that are POSIX 2008 compatible. This leads to precision incompatibility 
+when comparing the plugin’s JAR file timestamp, resulting in the plugin 
+being reloaded every minute.
+这个说明基本上验证了我上面的猜测，就是插件总是重新被加载导致同步出问题了。
+
 ```
+
+修复这个bug的提交
+
+```java
+这个bug的报告地址https://bugs.chromium.org/p/gerrit/issues/detail?id=3821
+
+通过gerrit官网找到了这个bug的修复提交，可以来欣赏一下
+
+https://gerrit-review.googlesource.com/c/gerrit/+/72518
+
+Don't reload plugins every minute
+
+OpenJDK8 uses nanotime precision for file lastModifiedTime() [1] on
+systems that are POSIX 2008 compatible. This leads to "precision"
+incompatibility while comparing plugin JAR file timestamp eg:
+
+ FileUtil.lastModified():     1454235705799
+ FileSnapshot.lastModified(): 1454235705000
+
+Instead of relying on the numerical compare, we now use isModified()
+method from the FileSnapshot class of JGit.
+
+[1] http://hg.openjdk.java.net/jdk8/jdk8/jdk/rev/06da87777d0e
+
+Bug: Issue 3821
+Change-Id: Ib020bd261f962ea831c66f05bd17afdcdbe78ff9
+
+简单翻译一下，就是jdk8有个更新，就是文件修改时间更加精确了。导致gerrit判断插件jar包文件是否被修改过出错了。
+```
+
+
+
+下面是我的gerrit的配置
 
 ```bash
 my gerrit version is 2.12 and replication plugin is 2.12
@@ -159,6 +200,8 @@ mage@gerrit-master:/home/gerrit2/review_site$ cat etc/replication.config
     replicationDelay = 5
 
 ```
+
+gerrit日志
 
 
 ```bash
