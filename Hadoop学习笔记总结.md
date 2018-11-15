@@ -35,6 +35,96 @@ Hadoop部署模式有：本地模式、伪分布模式、完全分布式模式�
 
 区分的依据是NameNode、DataNode、ResourceManager、NodeManager等模块运行在几个JVM进程、几个机器。
 
+
+
+# 安装hadoop准备
+
+1.创建hadoop系统账号
+```bash
+# 这里创建一个普通的linux系统账号，让hadoop运行在这个账号下面，不要直接运行在root账号下面
+# 账号的home目录可以根据需要指定，这里默认使用/home/hadoop
+
+sudo useradd -m -s /bin/bash hadoop
+
+# 也不要设置密码，切换就用 su 来切换
+sudo su - hadoop
+```
+
+2.安装 JAVA
+```bash
+
+java -version
+openjdk version "1.8.0_91"
+OpenJDK Runtime Environment (build 1.8.0_91-b14)
+OpenJDK 64-Bit Server VM (build 25.91-b14, mixed mode)
+```
+
+3.安装 SSH
+```bash
+这个基本上是系统都自带的有了
+
+```
+
+4.生成ssh key
+```bash
+ssh-keygen -t rsa -C 'hadoop-master'
+
+# 配置免密码的ssh登录
+cat .ssh/id_rsa.pub >> .ssh/authorized_keys
+
+chmod 0600 .ssh/authorized_keys
+
+```
+
+5.下载 hadoop-2.9.1.tar.gz
+```bash
+# 有个345M 大小
+http://mirrors.shu.edu.cn/apache/hadoop/common/hadoop-2.9.1/hadoop-2.9.1.tar.gz
+
+#解压
+tar xvzf hadoop-2.9.1.tar.gz
+
+[hadoop@localhost ~]$ ls
+hadoop-2.9.1  hadoop-2.9.1.tar.gz
+
+[hadoop@localhost ~]$ ls hadoop-2.9.1
+bin  etc  include  lib  libexec  LICENSE.txt  NOTICE.txt  README.txt  sbin  share
+
+
+[hadoop@localhost ~]$ ll hadoop-2.9.1
+总用量 152
+drwxr-xr-x. 2 hadoop hadoop   4096 4月  16 2018 bin
+drwxr-xr-x. 3 hadoop hadoop   4096 4月  16 2018 etc
+drwxr-xr-x. 2 hadoop hadoop   4096 4月  16 2018 include
+drwxr-xr-x. 3 hadoop hadoop   4096 4月  16 2018 lib
+drwxr-xr-x. 2 hadoop hadoop   4096 4月  16 2018 libexec
+-rw-r--r--. 1 hadoop hadoop 106210 4月  16 2018 LICENSE.txt
+-rw-r--r--. 1 hadoop hadoop  15915 4月  16 2018 NOTICE.txt
+-rw-r--r--. 1 hadoop hadoop   1366 4月  16 2018 README.txt
+drwxr-xr-x. 3 hadoop hadoop   4096 4月  16 2018 sbin
+drwxr-xr-x. 4 hadoop hadoop   4096 4月  16 2018 share
+
+# 下载到/home/hadoop家目录下面就可以了，解压也放到这个目录下面
+```
+
+
+6.启动hadoop
+```bash
+
+  ├─java,28743 -Dproc_namenode -Xmx1000m -Djava.library.path=/home/hadoop/hadoop-2.9.1/lib -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=hadoop.log -Dhadoop.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.id.str=hadoop -Dhadoop.root.logger=INFO,console -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=hadoop-hadoop-namenode-localhost.localdomain.log -Dhadoop.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.id.str=hadoop -Dhadoop.root.logger=INFO,RFA -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -Dhadoop.security.logger=INFO,RFAS -Dhdfs.audit.logger=INFO,NullAppender -Dhadoop.security.logger=INFO,RFAS -Dhdfs.audit.logger=INFO,NullAppender -Dhadoop.security.logger=INFO,RFAS -Dhdfs.audit.logger=INFO,NullAppender -Dhadoop.security.logger=INFO,RFAS org.apache.hadoop.hdfs.server.namenode.NameNode
+
+
+  ├─java,28994 -Dproc_datanode -Xmx1000m -Djava.library.path=/home/hadoop/hadoop-2.9.1/lib -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=hadoop.log -Dhadoop.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.id.str=hadoop -Dhadoop.root.logger=INFO,console -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=hadoop-hadoop-datanode-localhost.localdomain.log -Dhadoop.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.id.str=hadoop -Dhadoop.root.logger=INFO,RFA -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -server -Dhadoop.security.logger=ERROR,RFAS -Dhadoop.security.logger=ERROR,RFAS -Dhadoop.security.logger=ERROR,RFAS -Dhadoop.security.logger=INFO,RFAS org.apache.hadoop.hdfs.server.datanode.DataNode
+
+
+  ├─java,29350 -Dproc_secondarynamenode -Xmx1000m -Djava.library.path=/home/hadoop/hadoop-2.9.1/lib -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=hadoop.log -Dhadoop.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.id.str=hadoop -Dhadoop.root.logger=INFO,console -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=hadoop-hadoop-secondarynamenode-localhost.localdomain.log -Dhadoop.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.id.str=hadoop -Dhadoop.root.logger=INFO,RFA -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -Dhadoop.security.logger=INFO,RFAS -Dhdfs.audit.logger=INFO,NullAppender -Dhadoop.security.logger=INFO,RFAS -Dhdfs.audit.logger=INFO,NullAppender -Dhadoop.security.logger=INFO,RFAS -Dhdfs.audit.logger=INFO,NullAppender -Dhadoop.security.logger=INFO,RFAS org.apache.hadoop.hdfs.server.namenode.SecondaryNameNode
+
+  ├─java,29606 -Dproc_resourcemanager -Xmx1000m -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dyarn.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=yarn-hadoop-resourcemanager-localhost.localdomain.log -Dyarn.log.file=yarn-hadoop-resourcemanager-localhost.localdomain.log -Dyarn.home.dir= -Dyarn.id.str=hadoop -Dhadoop.root.logger=INFO,RFA -Dyarn.root.logger=INFO,RFA -Dyarn.policy.file=hadoop-policy.xml -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dyarn.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=yarn-hadoop-resourcemanager-localhost.localdomain.log -Dyarn.log.file=yarn-hadoop-resourcemanager-localhost.localdomain.log -Dyarn.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.root.logger=INFO,RFA -Dyarn.root.logger=INFO,RFA -classpath /home/hadoop/hadoop-2.9.1/etc/hadoop:/home/hadoop/hadoop-2.9.1/etc/hadoop:/home/hadoop/hadoop-2.9.1/etc/hadoop:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/*:/home/hadoop/hadoop-2.9.1/share/hadoop/common/*:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/*:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/*:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/*:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/*:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/*:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/*:/home/hadoop/hadoop-2.9.1/contrib/capacity-scheduler/*.jar:/home/hadoop/hadoop-2.9.1/contrib/capacity-scheduler/*.jar:/home/hadoop/hadoop-2.9.1/contrib/capacity-scheduler/*.jar:/home/hadoop/hadoop-2.9.1/contrib/capacity-scheduler/*.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/*:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/*:/home/hadoop/hadoop-2.9.1/etc/hadoop/rm-config/log4j.properties:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/timelineservice/*:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/timelineservice/lib/* org.apache.hadoop.yarn.server.resourcemanager.ResourceManager
+
+  ├─java,29930 -Dproc_nodemanager -Xmx1000m -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dyarn.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=yarn-hadoop-nodemanager-localhost.localdomain.log -Dyarn.log.file=yarn-hadoop-nodemanager-localhost.localdomain.log -Dyarn.home.dir= -Dyarn.id.str=hadoop -Dhadoop.root.logger=INFO,RFA -Dyarn.root.logger=INFO,RFA -Dyarn.policy.file=hadoop-policy.xml -server -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dyarn.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=yarn-hadoop-nodemanager-localhost.localdomain.log -Dyarn.log.file=yarn-hadoop-nodemanager-localhost.localdomain.log -Dyarn.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.root.logger=INFO,RFA -Dyarn.root.logger=INFO,RFA -classpath /home/hadoop/hadoop-2.9.1/etc/hadoop:/home/hadoop/hadoop-2.9.1/etc/hadoop:/home/hadoop/hadoop-2.9.1/etc/hadoop:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/*:/home/hadoop/hadoop-2.9.1/share/hadoop/common/*:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/*:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/*:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/*:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/*:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/*:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/*:/home/hadoop/hadoop-2.9.1/contrib/capacity-scheduler/*.jar:/home/hadoop/hadoop-2.9.1/contrib/capacity-scheduler/*.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/*:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/*:/home/hadoop/hadoop-2.9.1/etc/hadoop/nm-config/log4j.properties:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/timelineservice/*:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/timelineservice/lib/* org.apache.hadoop.yarn.server.nodemanager.NodeManager
+
+```
+
 # 本地模式部署
 
 本地模式是最简单的模式，所有模块都运行与一个JVM进程中，使用的本地文件系统，而不是HDFS，本地模式主要是用于本地开发过程中的运行调试用。下载hadoop安装包后不用任何设置，默认的就是本地模式。
@@ -278,7 +368,7 @@ STARTUP_MSG: Starting NameNode
 STARTUP_MSG:   host = localhost.localdomain/127.0.0.1
 STARTUP_MSG:   args = [-format]
 STARTUP_MSG:   version = 2.9.1
-STARTUP_MSG:   classpath = /home/hadoop/hadoop-2.9.1/etc/hadoop:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/xz-1.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/avro-1.7.7.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/hadoop-annotations-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/guava-11.0.2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/commons-math3-3.1.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/commons-collections-3.2.2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/hadoop-auth-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/mockito-all-1.8.5.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/commons-digester-1.8.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/java-xmlbuilder-0.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jackson-core-asl-1.9.13.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/zookeeper-3.4.6.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jackson-xc-1.9.13.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/slf4j-api-1.7.25.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jets3t-0.9.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/commons-lang-2.6.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/httpclient-4.5.2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/snappy-java-1.0.5.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jersey-core-1.9.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jaxb-api-2.2.2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/commons-logging-1.1.3.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/xmlenc-0.52.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/api-util-1.0.0-M20.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/log4j-1.2.17.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/apacheds-i18n-2.0.0-M15.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/asm-3.2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/commons-cli-1.2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jetty-util-6.1.26.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/httpcore-4.4.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jetty-6.1.26.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/commons-beanutils-core-1.8.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/commons-io-2.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/woodstox-core-5.0.3.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/junit-4.11.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/commons-net-3.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/protobuf-java-2.5.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jettison-1.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/curator-framework-2.7.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/activation-1.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/apacheds-kerberos-codec-2.0.0-M15.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/nimbus-jose-jwt-4.41.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/paranamer-2.3.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jetty-sslengine-6.1.26.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/commons-lang3-3.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jsr305-3.0.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jsp-api-2.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/curator-recipes-2.7.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/curator-client-2.7.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/commons-compress-1.4.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jsch-0.1.54.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jaxb-impl-2.2.3-1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/servlet-api-2.5.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/api-asn1-api-1.0.0-M20.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/commons-beanutils-1.7.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/commons-codec-1.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jackson-jaxrs-1.9.13.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/stax2-api-3.1.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/json-smart-1.3.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/hamcrest-core-1.3.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/gson-2.2.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jersey-server-1.9.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/stax-api-1.0-2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jcip-annotations-1.0-1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/htrace-core4-4.1.0-incubating.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jackson-mapper-asl-1.9.13.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/jersey-json-1.9.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/commons-configuration-1.6.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/netty-3.6.2.Final.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/hadoop-nfs-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/hadoop-common-2.9.1-tests.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/common/hadoop-common-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/guava-11.0.2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/okhttp-2.7.5.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/leveldbjni-all-1.8.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/jackson-core-asl-1.9.13.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/jackson-core-2.7.8.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/commons-lang-2.6.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/commons-daemon-1.0.13.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/jersey-core-1.9.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/netty-all-4.0.23.Final.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/commons-logging-1.1.3.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/okio-1.6.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/xmlenc-0.52.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/log4j-1.2.17.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/asm-3.2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/commons-cli-1.2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/jetty-util-6.1.26.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/jetty-6.1.26.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/commons-io-2.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/xml-apis-1.3.04.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/protobuf-java-2.5.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/jsr305-3.0.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/servlet-api-2.5.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/jackson-databind-2.7.8.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/xercesImpl-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/commons-codec-1.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/jackson-annotations-2.7.8.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/hadoop-hdfs-client-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/jersey-server-1.9.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/htrace-core4-4.1.0-incubating.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/jackson-mapper-asl-1.9.13.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/netty-3.6.2.Final.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/hadoop-hdfs-native-client-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/hadoop-hdfs-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/hadoop-hdfs-native-client-2.9.1-tests.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/hadoop-hdfs-rbf-2.9.1-tests.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/hadoop-hdfs-rbf-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/hadoop-hdfs-2.9.1-tests.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/hadoop-hdfs-client-2.9.1-tests.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/hadoop-hdfs-client-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/hadoop-hdfs-nfs-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/xz-1.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/avro-1.7.7.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/guava-11.0.2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/commons-math3-3.1.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/commons-collections-3.2.2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/fst-2.50.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/guice-3.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/leveldbjni-all-1.8.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/commons-digester-1.8.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/java-xmlbuilder-0.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/mssql-jdbc-6.2.1.jre7.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jackson-core-asl-1.9.13.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/zookeeper-3.4.6.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jackson-xc-1.9.13.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jersey-guice-1.9.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jets3t-0.9.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/commons-lang-2.6.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/httpclient-4.5.2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/snappy-java-1.0.5.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jersey-core-1.9.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jaxb-api-2.2.2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/commons-logging-1.1.3.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/xmlenc-0.52.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/metrics-core-3.0.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/guice-servlet-3.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/api-util-1.0.0-M20.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/geronimo-jcache_1.0_spec-1.0-alpha-1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/log4j-1.2.17.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/apacheds-i18n-2.0.0-M15.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/asm-3.2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/commons-cli-1.2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jetty-util-6.1.26.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/httpcore-4.4.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jetty-6.1.26.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/java-util-1.9.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/commons-beanutils-core-1.8.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/commons-io-2.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/woodstox-core-5.0.3.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/commons-net-3.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/protobuf-java-2.5.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jettison-1.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/curator-framework-2.7.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/HikariCP-java7-2.4.12.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/activation-1.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/apacheds-kerberos-codec-2.0.0-M15.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/nimbus-jose-jwt-4.41.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/paranamer-2.3.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jetty-sslengine-6.1.26.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/commons-lang3-3.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jsr305-3.0.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jsp-api-2.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/json-io-2.5.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/curator-recipes-2.7.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/curator-client-2.7.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/commons-compress-1.4.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jsch-0.1.54.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jaxb-impl-2.2.3-1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/servlet-api-2.5.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/api-asn1-api-1.0.0-M20.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/commons-beanutils-1.7.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/commons-codec-1.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jackson-jaxrs-1.9.13.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/javax.inject-1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/stax2-api-3.1.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/json-smart-1.3.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/gson-2.2.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jersey-server-1.9.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/aopalliance-1.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/stax-api-1.0-2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/ehcache-3.3.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jcip-annotations-1.0-1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/htrace-core4-4.1.0-incubating.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jackson-mapper-asl-1.9.13.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jersey-json-1.9.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/commons-configuration-1.6.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/netty-3.6.2.Final.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/jersey-client-1.9.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/hadoop-yarn-server-router-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/hadoop-yarn-api-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/hadoop-yarn-server-web-proxy-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/hadoop-yarn-client-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/hadoop-yarn-server-tests-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/hadoop-yarn-server-sharedcachemanager-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/hadoop-yarn-registry-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/hadoop-yarn-applications-unmanaged-am-launcher-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/hadoop-yarn-applications-distributedshell-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/hadoop-yarn-server-common-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/hadoop-yarn-common-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/hadoop-yarn-server-nodemanager-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/hadoop-yarn-server-resourcemanager-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/hadoop-yarn-server-timeline-pluginstorage-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/hadoop-yarn-server-applicationhistoryservice-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/xz-1.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/avro-1.7.7.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/hadoop-annotations-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/guice-3.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/leveldbjni-all-1.8.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/jackson-core-asl-1.9.13.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/jersey-guice-1.9.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/snappy-java-1.0.5.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/jersey-core-1.9.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/guice-servlet-3.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/log4j-1.2.17.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/asm-3.2.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/commons-io-2.4.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/junit-4.11.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/protobuf-java-2.5.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/paranamer-2.3.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/commons-compress-1.4.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/javax.inject-1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/hamcrest-core-1.3.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/jersey-server-1.9.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/aopalliance-1.0.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/jackson-mapper-asl-1.9.13.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/netty-3.6.2.Final.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/hadoop-mapreduce-client-core-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.9.1-tests.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-plugins-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/hadoop-mapreduce-client-app-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/hadoop-mapreduce-client-common-2.9.1.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/hadoop-mapreduce-client-shuffle-2.9.1.jar:/home/hadoop/hadoop-2.9.1/contrib/capacity-scheduler/*.jar
+STARTUP_MSG:   classpath = *.jar
 STARTUP_MSG:   build = https://github.com/apache/hadoop.git -r e30710aea4e6e55e69372929106cf119af06fd0e; compiled by 'root' on 2018-04-16T09:33Z
 STARTUP_MSG:   java = 1.8.0_91
 ************************************************************/
@@ -501,96 +591,182 @@ drwxr-xr-x   - hadoop supergroup          0 2018-10-22 18:15 /demo1
 [hadoop@localhost ~]$ hdfs dfs -get /demo1/hadoop
 ```
 
+配置、启动YARN
 
-
-
-
-
-
-
-
-## 创建hadoop系统账号
+1、 配置mapred-site.xml
 ```bash
-# 这里创建一个普通的linux系统账号，让hadoop运行在这个账号下面，不要直接运行在root账号下面
-# 账号的home目录可以根据需要指定，这里默认使用/home/hadoop
+# 默认没有mapred-site.xml文件，但是有个mapred-site.xml.template配置模板文件。复制模板生成mapred-site.xml。
+[hadoop@localhost hadoop]$ cp mapred-site.xml.template  mapred-site.xml
+[hadoop@localhost hadoop]$ vi mapred-site.xml
+[hadoop@localhost hadoop]$ cat mapred-site.xml
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
 
-sudo useradd -m -s /bin/bash hadoop
+    http://www.apache.org/licenses/LICENSE-2.0
 
-# 也不要设置密码，切换就用 su 来切换
-sudo su - hadoop
-```
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
 
-## 安装 JAVA
-```bash
+<!-- Put site-specific property overrides in this file. -->
 
-java -version
-openjdk version "1.8.0_91"
-OpenJDK Runtime Environment (build 1.8.0_91-b14)
-OpenJDK 64-Bit Server VM (build 25.91-b14, mixed mode)
-```
-
-## 安装 SSH
-```bash
-
-
-```
-
-## 生成ssh key
-```bash
-ssh-keygen -t rsa -C 'hadoop-master'
-
-# 配置免密码的ssh登录
-cat .ssh/id_rsa.pub >> .ssh/authorized_keys
-
-chmod 0600 .ssh/authorized_keys
+<configuration>指定mapreduce运行在yarn框架上。
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+</configuration>
+[hadoop@localhost hadoop]$
 
 ```
-
-## 下载 hadoop-2.9.1.tar.gz
+2、 配置yarn-site.xml
 ```bash
-# 有个345M 大小
-http://mirrors.shu.edu.cn/apache/hadoop/common/hadoop-2.9.1/hadoop-2.9.1.tar.gz
+添加配置如下：
+<property>
+  <name>yarn.nodemanager.aux-services</name>
+  <value>mapreduce_shuffle</value>
+</property>
+<property>
+    <name>yarn.resourcemanager.hostname</name>
+    <value>your ip</value>
+ </property>
+```
 
-#解压
-tar xvzf hadoop-2.9.1.tar.gz
+3、 启动Resourcemanager
+```bash
+[hadoop@localhost hadoop]$ yarn-daemon.sh start resourcemanager
+starting resourcemanager, logging to /home/hadoop/hadoop-2.9.1/logs/yarn-hadoop-resourcemanager-localhost.localdomain.out
+```
 
-[hadoop@localhost ~]$ ls
-hadoop-2.9.1  hadoop-2.9.1.tar.gz
+4、 启动nodemanager
+```bash
 
-[hadoop@localhost ~]$ ls hadoop-2.9.1
-bin  etc  include  lib  libexec  LICENSE.txt  NOTICE.txt  README.txt  sbin  share
+[hadoop@localhost hadoop]$ yarn-daemon.sh start nodemanager
+starting nodemanager, logging to /home/hadoop/hadoop-2.9.1/logs/yarn-hadoop-nodemanager-localhost.localdomain.out
+
+```
+5、 查看是否启动成功
+```bash
+[hadoop@localhost hadoop]$ jps
+7255 ResourceManager
+6105 DataNode
+5834 NameNode
+7532 NodeManager
+6412 SecondaryNameNode
+7678 Jps  # 可以看到ResourceManager、NodeManager已经启动成功了。
+```
+6、 YARN的Web页面
+```bash
+YARN的Web客户端端口号是8088，
+
+http://10.0.63.48:8088/cluster
 
 
-[hadoop@localhost ~]$ ll hadoop-2.9.1
-总用量 152
-drwxr-xr-x. 2 hadoop hadoop   4096 4月  16 2018 bin
-drwxr-xr-x. 3 hadoop hadoop   4096 4月  16 2018 etc
-drwxr-xr-x. 2 hadoop hadoop   4096 4月  16 2018 include
-drwxr-xr-x. 3 hadoop hadoop   4096 4月  16 2018 lib
-drwxr-xr-x. 2 hadoop hadoop   4096 4月  16 2018 libexec
--rw-r--r--. 1 hadoop hadoop 106210 4月  16 2018 LICENSE.txt
--rw-r--r--. 1 hadoop hadoop  15915 4月  16 2018 NOTICE.txt
--rw-r--r--. 1 hadoop hadoop   1366 4月  16 2018 README.txt
-drwxr-xr-x. 3 hadoop hadoop   4096 4月  16 2018 sbin
-drwxr-xr-x. 4 hadoop hadoop   4096 4月  16 2018 share
-
-# 下载到/home/hadoop家目录下面就可以了，解压也放到这个目录下面
 ```
 
 
-## 启动hadoop
+
+
+# 完全分布式安装
+
+
+
+
+
+
+
+
+# 高可用模式安装
 ```bash
 
-  ├─java,28743 -Dproc_namenode -Xmx1000m -Djava.library.path=/home/hadoop/hadoop-2.9.1/lib -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=hadoop.log -Dhadoop.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.id.str=hadoop -Dhadoop.root.logger=INFO,console -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=hadoop-hadoop-namenode-localhost.localdomain.log -Dhadoop.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.id.str=hadoop -Dhadoop.root.logger=INFO,RFA -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -Dhadoop.security.logger=INFO,RFAS -Dhdfs.audit.logger=INFO,NullAppender -Dhadoop.security.logger=INFO,RFAS -Dhdfs.audit.logger=INFO,NullAppender -Dhadoop.security.logger=INFO,RFAS -Dhdfs.audit.logger=INFO,NullAppender -Dhadoop.security.logger=INFO,RFAS org.apache.hadoop.hdfs.server.namenode.NameNode
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://sxt</value>
+    </property>
+    <property>
+        <name>hadoop.tmp.dir</name>
+        <value>/home/hadoop/hadoop-2.9.1/data</value>
+    </property>
+
+    <property>
+        <name>ha.zookeeper.quorum</name>
+        <value>namenode1:2181,namenode2:2181,namenode3:2181</value>
+    </property>
+</configuration>
+
+```
+
+```bash
+
+<configuration>
+    <!-- http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HDFSHighAvailabilityWithQJM.html -->
+    <property>
+        <name>dfs.nameservices</name>
+        <value>sxt</value>
+    </property>
+
+    <property>
+        <name>dfs.ha.namenodes.sxt</name>
+        <value>namenode1,namenode2</value>
+    </property>
+
+    <!-- 配置rpc通信接口的 -->
+    <property>
+        <name>dfs.namenode.rpc-address.sxt.namenode1</name>
+        <value>namenode1:8020</value>
+    </property>
+    <property>
+        <name>dfs.namenode.rpc-address.sxt.namenode2</name>
+        <value>namenode2:8020</value>
+    </property>
+
+    <property>
+        <name>dfs.namenode.http-address.sxt.namenode1</name>
+        <value>namenode1:50070</value>
+    </property>
+    <property>
+        <name>dfs.namenode.http-address.sxt.namenode2</name>
+        <value>namenode2:50070</value>
+    </property>
+
+    <!-- -->
+    <property>
+        <name>dfs.namenode.shared.edits.dir</name>
+        <value>qjournal://namenode1:8485;namenode2:8485;namenode3:8485/sxt</value>
+    </property>
+
+    <property>
+        <name>dfs.client.failover.proxy.provider.sxt</name>
+        <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+    </property>
+
+    <property>
+        <name>dfs.journalnode.edits.dir</name>
+        <value>/home/hadoop/hadoop-2.9.1/journal</value>
+    </property>
+
+     <property>
+        <name>dfs.ha.automatic-failover.enabled</name>
+        <value>true</value>
+    </property>
 
 
-  ├─java,28994 -Dproc_datanode -Xmx1000m -Djava.library.path=/home/hadoop/hadoop-2.9.1/lib -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=hadoop.log -Dhadoop.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.id.str=hadoop -Dhadoop.root.logger=INFO,console -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=hadoop-hadoop-datanode-localhost.localdomain.log -Dhadoop.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.id.str=hadoop -Dhadoop.root.logger=INFO,RFA -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -server -Dhadoop.security.logger=ERROR,RFAS -Dhadoop.security.logger=ERROR,RFAS -Dhadoop.security.logger=ERROR,RFAS -Dhadoop.security.logger=INFO,RFAS org.apache.hadoop.hdfs.server.datanode.DataNode
 
+    <property>
+        <name>dfs.ha.fencing.methods</name>
+        <value>sshfence</value>
+    </property>
 
-  ├─java,29350 -Dproc_secondarynamenode -Xmx1000m -Djava.library.path=/home/hadoop/hadoop-2.9.1/lib -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=hadoop.log -Dhadoop.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.id.str=hadoop -Dhadoop.root.logger=INFO,console -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=hadoop-hadoop-secondarynamenode-localhost.localdomain.log -Dhadoop.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.id.str=hadoop -Dhadoop.root.logger=INFO,RFA -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -Dhadoop.security.logger=INFO,RFAS -Dhdfs.audit.logger=INFO,NullAppender -Dhadoop.security.logger=INFO,RFAS -Dhdfs.audit.logger=INFO,NullAppender -Dhadoop.security.logger=INFO,RFAS -Dhdfs.audit.logger=INFO,NullAppender -Dhadoop.security.logger=INFO,RFAS org.apache.hadoop.hdfs.server.namenode.SecondaryNameNode
-
-  ├─java,29606 -Dproc_resourcemanager -Xmx1000m -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dyarn.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=yarn-hadoop-resourcemanager-localhost.localdomain.log -Dyarn.log.file=yarn-hadoop-resourcemanager-localhost.localdomain.log -Dyarn.home.dir= -Dyarn.id.str=hadoop -Dhadoop.root.logger=INFO,RFA -Dyarn.root.logger=INFO,RFA -Dyarn.policy.file=hadoop-policy.xml -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dyarn.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=yarn-hadoop-resourcemanager-localhost.localdomain.log -Dyarn.log.file=yarn-hadoop-resourcemanager-localhost.localdomain.log -Dyarn.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.root.logger=INFO,RFA -Dyarn.root.logger=INFO,RFA -classpath /home/hadoop/hadoop-2.9.1/etc/hadoop:/home/hadoop/hadoop-2.9.1/etc/hadoop:/home/hadoop/hadoop-2.9.1/etc/hadoop:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/*:/home/hadoop/hadoop-2.9.1/share/hadoop/common/*:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/*:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/*:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/*:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/*:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/*:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/*:/home/hadoop/hadoop-2.9.1/contrib/capacity-scheduler/*.jar:/home/hadoop/hadoop-2.9.1/contrib/capacity-scheduler/*.jar:/home/hadoop/hadoop-2.9.1/contrib/capacity-scheduler/*.jar:/home/hadoop/hadoop-2.9.1/contrib/capacity-scheduler/*.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/*:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/*:/home/hadoop/hadoop-2.9.1/etc/hadoop/rm-config/log4j.properties:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/timelineservice/*:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/timelineservice/lib/* org.apache.hadoop.yarn.server.resourcemanager.ResourceManager
-
-  ├─java,29930 -Dproc_nodemanager -Xmx1000m -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dyarn.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=yarn-hadoop-nodemanager-localhost.localdomain.log -Dyarn.log.file=yarn-hadoop-nodemanager-localhost.localdomain.log -Dyarn.home.dir= -Dyarn.id.str=hadoop -Dhadoop.root.logger=INFO,RFA -Dyarn.root.logger=INFO,RFA -Dyarn.policy.file=hadoop-policy.xml -server -Dhadoop.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dyarn.log.dir=/home/hadoop/hadoop-2.9.1/logs -Dhadoop.log.file=yarn-hadoop-nodemanager-localhost.localdomain.log -Dyarn.log.file=yarn-hadoop-nodemanager-localhost.localdomain.log -Dyarn.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.home.dir=/home/hadoop/hadoop-2.9.1 -Dhadoop.root.logger=INFO,RFA -Dyarn.root.logger=INFO,RFA -classpath /home/hadoop/hadoop-2.9.1/etc/hadoop:/home/hadoop/hadoop-2.9.1/etc/hadoop:/home/hadoop/hadoop-2.9.1/etc/hadoop:/home/hadoop/hadoop-2.9.1/share/hadoop/common/lib/*:/home/hadoop/hadoop-2.9.1/share/hadoop/common/*:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/lib/*:/home/hadoop/hadoop-2.9.1/share/hadoop/hdfs/*:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/*:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/*:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/lib/*:/home/hadoop/hadoop-2.9.1/share/hadoop/mapreduce/*:/home/hadoop/hadoop-2.9.1/contrib/capacity-scheduler/*.jar:/home/hadoop/hadoop-2.9.1/contrib/capacity-scheduler/*.jar:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/*:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/lib/*:/home/hadoop/hadoop-2.9.1/etc/hadoop/nm-config/log4j.properties:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/timelineservice/*:/home/hadoop/hadoop-2.9.1/share/hadoop/yarn/timelineservice/lib/* org.apache.hadoop.yarn.server.nodemanager.NodeManager
-
+    <property>
+        <name>dfs.ha.fencing.ssh.private-key-files</name>
+        <value>/home/hadoop/.ssh/id_rsa</value>
+    </property>
 ```
