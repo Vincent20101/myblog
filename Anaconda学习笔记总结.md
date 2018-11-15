@@ -72,8 +72,34 @@ conda upgrade --all 先把所有工具包进行升级
 ```
 
 
+```bash
+$ conda env -h  
+usage: conda-env [-h] {attach,create,export,list,remove,upload,update} ...
+
+positional arguments:
+  {attach,create,export,list,remove,upload,update}
+    attach              WARNING: This command is deprecated in conda 4.4 and
+                        scheduled for removal in conda 4.5. Embeds information
+                        describing your conda environment into the notebook
+                        metadata
+    create              Create an environment based on an environment file
+    export              Export a given environment
+    list                List the Conda environments
+    remove              Remove an environment
+    upload              WARNING: This command is deprecated in conda 4.4 and
+                        scheduled for removal in conda 4.5. Upload an
+                        environment to anaconda.org
+    update              Update the current environment based on environment
+                        file
+
+optional arguments:
+  -h, --help            Show this help message and exit.
+
+
 ```
 
+```  
+# 创建新的环境，
 $ conda env create --help
 usage: conda-env create [-h] [-f FILE] [-n ENVIRONMENT | -p PATH] [-q]
                         [--force] [--json] [--debug] [--verbose]
@@ -113,6 +139,43 @@ examples:
 
 $ conda env create -f py35.yml
 
+
+# 更新环境
+$ conda env update -h 
+usage: conda-env update [-h] [-n ENVIRONMENT | -p PATH] [-f FILE] [--prune]
+                        [-q] [--json] [--debug] [--verbose]
+                        [remote_definition]
+
+Update the current environment based on environment file
+
+Options:
+
+positional arguments:
+  remote_definition     remote environment definition / IPython notebook
+
+optional arguments:
+  -h, --help            Show this help message and exit.
+  -n ENVIRONMENT, --name ENVIRONMENT
+                        Name of environment.
+  -p PATH, --prefix PATH
+                        Full path to environment prefix.
+  -f FILE, --file FILE  environment definition (default: environment.yml)
+  --prune               remove installed packages not defined in
+                        environment.yml
+  -q, --quiet
+  --json                Report all output as json. Suitable for using conda
+                        programmatically.
+  --debug               Show debug output.
+  --verbose, -v         Use once for info, twice for debug, three times for
+                        trace.
+
+examples:
+    conda env update
+    conda env update -n=foo
+    conda env update -f=/path/to/environment.yml
+    conda env update --name=foo --file=environment.yml
+    conda env update vader/deathstar
+$                                         
 
 ```
 
