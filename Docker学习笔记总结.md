@@ -382,6 +382,63 @@ docker run -it \
 bs-ubuntu-14.04 /bin/bash
 
 ````
+docker attach
+````
+
+````
+
+
+docker 之 Dockerfile
+```
+
+FROM  指定一个base镜像
+
+MAINTAINER 设置作者维护者
+
+COPY 复制文件到镜像
+
+ADD 添加文件到镜像，如果源文件是压缩文件，是会解压到目标路径的
+
+ENV 设置环境变量
+
+EXPOSE 指定要暴露容器中的哪个端口
+
+VOLUME 将文件或目录声明为volume。
+
+WORKDIR 工作初始目录
+
+RUN 在容器中运行命令，RUN 指令通常用于安装应用和软件包。
+
+
+
+CMD 容器启动时候运行的命令
+
+ENTRYPOINT 
+
+RUN、CMD 和 ENTRYPOINT 这三个 Dockerfile 指令看上去很类似，很容易混淆。
+
+简单的说：
+RUN 执行命令并创建新的镜像层，RUN 经常用于安装软件包。
+CMD 设置容器启动后默认执行的命令及其参数，但 CMD 能够被 docker run 后面跟的命令行参数替换。
+ENTRYPOINT 配置容器启动时运行的命令。
+
+我们可用两种方式指定 RUN、CMD 和 ENTRYPOINT 要运行的命令：Shell 格式和 Exec 格式
+
+Shell 格式 例如：
+RUN apt-get install python3  
+CMD echo "Hello world"  
+ENTRYPOINT echo "Hello world" 
+
+
+Exec 格式 例如：
+RUN ["apt-get", "install", "python3"]  
+CMD ["/bin/echo", "Hello world"]  
+ENTRYPOINT ["/bin/echo", "Hello world"]
+
+CMD 和 ENTRYPOINT 推荐使用 Exec 格式，因为指令可读性更强，更容易理解。RUN 则两种格式都可以。
+
+
+```
 
 
 
